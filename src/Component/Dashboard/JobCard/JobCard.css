@@ -1,0 +1,127 @@
+/* General Styles */
+
+  .jobcard-content {
+    display: flex;
+    background: #e3f2fd;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 100%;
+    padding: 20px;
+    
+  }
+  
+  /* Left Section */
+  .jobcard-left {
+    flex: 1;
+    padding: 20px;
+    background: white;
+    border-right: 2px solid #bbdefb;
+    border-radius: 20px;
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .filter-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+  }
+  
+  .filter-container input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #90caf9;
+    border-radius: 5px;
+  }
+  
+  .btn-primary {
+    padding: 10px 15px;
+    background-color: #64b5f6;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+  }
+  
+  .btn-primary:hover {
+    background-color: #42a5f5;
+  }
+  
+  /* Job Table */
+  .job-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+  }
+  
+  .job-table th,
+  .job-table td {
+    padding: 12px;
+    border: 1px solid #bbdefb;
+    text-align: center;
+  }
+  
+  .job-table th {
+    background: #79abd4;
+    color: white;
+  }
+  
+  .btn-secondary {
+    width: 100%;
+    padding: 10px;
+    margin-top: 15px;
+    background-color: #64b5f6;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .btn-secondary:hover {
+    background-color: #42a5f5;
+  }
+  
+  /* Right Section */
+  .jobcard-right {
+    flex: 1;
+    padding: 20px;
+    background-color: white;
+    border-radius: 20px;
+    margin-left: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+  }
+  
+  .info-box {
+    padding: 15px;
+    background: #e3f2fd;
+    border-radius: 8px;
+    margin-bottom: 15px;
+  }
+  
+  .job-details {
+    margin-top: 10px;
+  }
+  
+  .details-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+  }
+  
+  .details-table th,
+  .details-table td {
+    padding: 12px;
+    border: 1px solid #bbdefb;
+    text-align: center;
+  }
+  
+  .details-table th {
+    background: #90caf9;
+    color: white;
+  }
+  
+  .status-btn.incomplete {
+    background-color: rgba(190, 112, 112, 0.903);
+  }

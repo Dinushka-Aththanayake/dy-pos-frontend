@@ -1,0 +1,100 @@
+/* Employee.css */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f8ff;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    /* align-items: center; */
+    height: 100vh;
+    width: 100%;
+  }
+  
+  .employee-layout {
+    background: #ffffff;
+    width: 100%;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  
+  .table-section {
+    margin-bottom: 20px;
+    width: 100%;
+  }
+  
+  .employee-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #e6f7ff;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .employee-table th, .employee-table td {
+    padding: 12px;
+    border: 1px solid #b3daff;
+    text-align: left;
+  }
+  
+  .employee-table th {
+    background: #80cfff;
+    color: #ffffff;
+  }
+  
+  .employee-table tr:nth-child(even) {
+    background: #f2f9ff;
+  }
+  
+  .employee-table tr:hover {
+    background: #d9f1ff;
+  }
+  
+  .emfilter-section {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    width: 100%;
+  }
+  
+  .filter-input, .inout-input {
+    padding: 10px;
+    border: 1px solid #80cfff;
+    border-radius: 5px;
+    outline: none;
+    font-size: 16px;
+    margin-right: 10px;
+    width: 100%;
+  }
+  
+  .search-btn, .search-btn1 {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    background: #4da6ff;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    width: 150px;
+  }
+  
+  .search-btn:hover, .search-btn1:hover {
+    background: #1a8cff;
+  }
+  
+  .form-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 20px;
+    background: #e6f7ff;
+    border-radius: 10px;
+    width: 30%;
+    margin-left: 20px;
+  }

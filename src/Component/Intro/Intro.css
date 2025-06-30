@@ -1,0 +1,95 @@
+.intro-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(185deg, #990000, #000);
+    color: white;
+    text-align: center;
+}
+
+.intro-container::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0,0.2); /* Adds a semi-transparent black overlay */
+}
+
+  
+  .content {
+    max-width: 1000px;
+  }
+  
+  .title {
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    margin-bottom: 30px;
+    font-size: 60px;
+    color: #b3ff00; /* Red color */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Shadow effect */
+    animation: fadeIn 1.5s ease-in-out; /* Animation */
+    transition: transform 0.3s ease; /* Transition for hover effect */
+    border-color: black; 
+    
+}
+
+.title span{
+    font-size: 40px;
+}
+
+.title:hover {
+    transform: scale(1.05); /* Scale effect on hover */
+}
+
+/* Keyframes for fade-in animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+  
+  .subtitle {
+    font-style: italic;
+    opacity: 0.8;
+    margin-bottom: 20px;
+  }
+  
+  .icons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    font-size: 40px;
+    margin-bottom: 20px;
+  }
+  
+  .icon {
+    color: #ff0000;
+  }
+  
+  .explore-btn {
+    background-color: #ff0000 !important;
+    padding: 12px 24px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 30px;
+    transition: transform 0.3s ease-in-out;
+    width: 150px;
+    cursor: pointer;
+  }
+  
+  .explore-btn:hover {
+    transform: scale(1.1);
+    background-color: #cc0000;
+  }
+  

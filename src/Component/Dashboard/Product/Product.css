@@ -1,0 +1,9 @@
+.form-group2 input,
+.form-group2 select {
+    
+    padding: 6px;
+    border: 2px solid #aaccee;
+    border-radius: 8px;
+    background-color: #f0f8ff;
+    font-size: 16px;
+}

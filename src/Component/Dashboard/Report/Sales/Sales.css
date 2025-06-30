@@ -1,0 +1,59 @@
+/* SalesReport.css */
+.sales-report-container {
+    font-family: Arial, sans-serif;
+    background-color: #f0f8ff;
+    padding: 30px;
+    border-radius: 8px;
+  }
+  
+  .sales-filter-section {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .date-picker, .branch-dropdown, .searchbutton, .print-button {
+    padding: 8px;
+    border: 1px solid #87ceeb;
+    border-radius: 4px;
+  }
+
+  .searchbar{
+    padding: 8px;
+    border: 1px solid #87ceeb;
+    border-radius: 4px;
+    width: 100%;
+  }
+  
+  .sales-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+  }
+  
+  .sales-table th, .sales-table td {
+    border: 1px solid #87ceeb;
+    padding: 10px;
+    text-align: left;
+  }
+  
+  .sales-table th {
+    background-color: #add8e6;
+  }
+  
+  .summary {
+    margin-top: 20px;
+    font-weight: bold;
+  }
+  
+  .print-button2 {
+    background-color: #1964a2;
+    color: white;
+    cursor: pointer;
+    float: right;
+  }
+  
+  .print-button2:hover {
+    background-color: #5a9bd4;
+  }
+  

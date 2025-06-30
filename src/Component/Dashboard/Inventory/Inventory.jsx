@@ -1,0 +1,158 @@
+import "./Inventory.css";
+import React, { useState, useEffect } from "react";
+
+function Inventory() {
+  const [branchFilter, setBranchFilter] = useState("All");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [inventory, setInventory] = useState([]);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const token = localStorage.getItem("access_token");
+
+  useEffect(() => {
+    fetch("http://localhost:3000/inventories/search", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setInventory(data);
+        } else {
+          console.error("Unexpected response format: " + JSON.stringify(data));
+          setInventory([]);
+        }
+      })
+      .catch((error) => console.error("Error fetching inventories!", error));
+  }, []);
+
+  // Filtered inventory based on search and branch selection
+  const filteredInventory = inventory.filter((item) => {
+    const matchesSearch =
+      item.product.barCode.toString().includes(searchTerm) ||
+      item.product.name.toLowerCase().includes(searchTerm.toLowerCase());
+
+    const matchesBranch =
+      branchFilter === "All" || item.branch.name === branchFilter;
+
+    return matchesSearch && matchesBranch;
+  });
+
+  return (
+    <div className="inventory-container">
+      {/* Inventory Header */}
+      <div className="inventory-header">
+        <h2>Inventory Management</h2>
+      </div>
+
+      <div className="inventory-content">
+        <div className="part1">
+          <div className="filter-section">
+            <input
+              type="text"
+              placeholder="Search by Code or Name..."
+              className="search-input1"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <button className="search-button">Search</button>
+            <select
+              className="branch-filter"
+              value={branchFilter}
+              onChange={(e) => setBranchFilter(e.target.value)}
+            >
+              <option value="All">All</option>
+              <option value="Kadawatha">Kadawatha</option>
+              <option value="Ganemulla">Ganemulla</option>
+            </select>
+          </div>
+
+          {/* Table Section */}
+          <div className="table-section">
+            <table className="inventory-table">
+              <thead>
+                <tr>
+                  <th>Barcode</th>
+                  <th>Name</th>
+                  <th>Price</th>
+                  <th>Rem Qnty</th>
+                  <th>Branch</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredInventory.map((item) => (
+                  <tr key={item.id} onClick={() => setSelectedItem(item)} className="clickable-row">
+                    <td>{item.product.barCode}</td>
+                    <td>{item.product.name}</td>
+                    <td>{`Rs. ${item.sellPrice}`}</td>
+                    <td>{item.remainingQuantity}</td>
+                    <td>{item.branch.name}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Form Section */}
+        <div className="form-section-inventory">
+          <div className="image-placeholder">Image</div>
+          <form className="inventory-form">
+            <div className="form-group11">
+              <label>Barcode:</label>
+              <input type="text" value={selectedItem?.product.barCode || ""} readOnly />
+            </div>
+            <div className="form-group11">
+              <label>Buy Price:</label>
+              <input type="text"  value={selectedItem ? `Rs. ${selectedItem.buyPrice}` : ""} readOnly />
+            </div>
+            <div className="form-group11">
+              <label>Sell Price:</label>
+              <input type="text" value={selectedItem ? `Rs. ${selectedItem.sellPrice}` : ""} readOnly />
+            </div>
+            <div className="form-group11">
+  <label>Added Date:</label>
+  <input
+    type="text"
+    value={
+      selectedItem?.created
+        ? new Date(selectedItem.created).toLocaleString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+            
+            hour12: true,
+          })
+        : ""
+    }
+    readOnly
+  />
+</div>
+            <div className="form-group11">
+              <label>Rem Qty:</label>
+              <input type="text" value={selectedItem?.remainingQuantity || ""} readOnly />
+            </div>
+            <div className="form-group11">
+              <label>Added Qty:</label>
+              <input type="text" value={selectedItem?.buyQuantity || ""} readOnly />
+            </div>
+            <div className="form-group11">
+              <label>Branch:</label>
+              <input type="text" value={selectedItem?.branch.name || ""} readOnly />
+            </div>
+            <div className="form-group11">
+              <label>Category:</label>
+              <input type="text" value={selectedItem?.product.category || ""} readOnly />
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default Inventory;
