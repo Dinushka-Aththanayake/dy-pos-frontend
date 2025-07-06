@@ -8,7 +8,7 @@ import Intro from "./Component/Intro/Intro";
 import Login from "./Component/Login/Login";
 import Signin from "./Component/Signin/Signin";
 import Dashboardlayout from "./Component/Dashboardlayout/Dashboardlayout";
-
+import SalaryCalculator from "./Component/Dashboard/Report/Salary/SalaryCalculator/SalaryCalculator";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -23,7 +23,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboardlayout />} />
         <Route path="/newjobcard" element={<NewJobcards/>} />
         <Route path="/newappoinment" element={<NewAppoinment/>} />
-        
+        <Route path="/salarycalculator" element={<SalaryCalculator/>} />
       </Routes>
     </Router>
     </>

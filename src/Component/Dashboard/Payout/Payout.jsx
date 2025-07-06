@@ -1,112 +1,161 @@
-import React from 'react'
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 function Payout() {
-   const [records, setRecords] = useState([
-      { name: "Kamal", date: "20/01/2025", time: "4:00 pm", status: "Out" },
-      { name: "Ravi", date: "20/01/2025", time: "4:00 pm", status: "Out" },
-      { name: "Kamal", date: "20/01/2025", time: "8:30 am", status: "In" },
-      { name: "Ravi", date: "20/01/2025", time: "8:00 am", status: "In" },
-      { name: "Ahmed", date: "19/01/2025", time: "3:00 pm", status: "Out" },
-      { name: "Sara", date: "19/01/2025", time: "9:00 am", status: "In" },
-      { name: "John", date: "18/01/2025", time: "5:00 pm", status: "Out" },
-      { name: "Emily", date: "18/01/2025", time: "8:00 am", status: "In" },
-    ]);
-  
-    const [filterName, setFilterName] = useState("");
-    const [currentName, setCurrentName] = useState("");
-    const [password, setPassword] = useState("");
-  
-    const handleInOut = () => {
-      if (!currentName || !password) {
-        alert("Please enter your name and password.");
-        return;
-      }
-  
-      const latestRecord = records.find((record) => record.name === currentName);
-      const newStatus =
-        latestRecord && latestRecord.status === "In" ? "Out" : "In";
-  
-      const newRecord = {
-        name: currentName,
-        date: new Date().toLocaleDateString(),
-        time: new Date().toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
-        status: newStatus,
-      };
-  
-      setRecords([newRecord, ...records]); // Add new record to the top of the list
-      setCurrentName("");
-      setPassword("");
-    };
-  
-    const filteredRecords = filterName
-      ? records.filter((record) =>
-          record.name.toLowerCase().includes(filterName.toLowerCase())
-        )
-      : records;
-  
-    return (
-      <div className="employee-layout">
-        <div className="table-section">
-          <div className="emfilter-section">
-            <input
-              type="text"
-              placeholder="Filter by name"
-              value={filterName}
-              onChange={(e) => setFilterName(e.target.value)}
-              className="filter-input"
-            />
-            <button className="search-btn1">Search</button>
-          </div>
-  
-          <table className="employee-table">
-            <thead>
-              <tr>
-                <th>Description</th>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Amount</th>
-                <th>Employee</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredRecords.map((record, index) => (
-                <tr key={index}>
-                  <td>{record.name}</td>
-                  <td>{record.date}</td>
-                  <td>{record.time}</td>
-                  <td>{record.status}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-  
-        <div className="form-section">
-          <input
-            type="text"
-            placeholder="Description"
-            value={currentName}
-            onChange={(e) => setCurrentName(e.target.value)}
-            className="inout-input"
-          />
-          <input
-            type="password"
-            placeholder="Amount"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="inout-input"
-          />
-          <button onClick={handleInOut} className="search-btn">
-            Done
-          </button>
-        </div>
-      </div>
-    );
+  const token = localStorage.getItem("access_token");
+
+  const [employee, setEmployee] = useState([]);
+  const [fetchedPayouts, setfetchedPayouts] = useState([]);
+  const [payout, setPayout] = useState({
+    collectedEmployeeId: "",
+    amount: "",
+  });
+  const [filterName, setFilterName] = useState("");
+
+  useEffect(() => {
+    fetch("http://localhost:3000/employees/findAll", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => setEmployee(Array.isArray(data) ? data : []))
+      .catch((error) => console.error("Error fetching employees!", error));
+  }, []);
+
+  const fetchPayouts = () => {
+    fetch("http://localhost:3000/payouts/search", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => setfetchedPayouts(Array.isArray(data) ? data : []))
+      .catch((error) => console.error("Error fetching payouts!", error));
   };
 
+  useEffect(() => {
+    fetchPayouts();
+  }, []);
 
-export default Payout
+  const handleCreatePayout = () => {
+    if (!payout.collectedEmployeeId || !payout.amount) {
+      alert("Please fill all required fields");
+      return;
+    }
+
+    fetch("http://localhost:3000/payouts/create", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(payout),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to create payout");
+        }
+        
+      })
+      .then(() => {
+        alert("Payout created successfully!");
+        setPayout({ collectedEmployeeId: "", amount: "" });
+        fetchPayouts();
+      })
+      .catch((error) => {
+        console.error("Error creating payout:", error);
+        alert("Error creating payout!");
+      });
+  };
+
+  return (
+    <div className="employee-layout">
+      <div className="table-section">
+        <div className="emfilter-section">
+          <input
+            type="date"
+            value={filterName}
+            onChange={(e) => setFilterName(e.target.value)}
+            className="filter-input"
+          />
+          <input
+            type="date"
+            value={filterName}
+            onChange={(e) => setFilterName(e.target.value)}
+            className="filter-input"
+          />
+          <button className="search-btn1">Search</button>
+        </div>
+
+        <table className="employee-table">
+          <thead>
+            <tr>
+              <th>Date & Time</th>
+              <th>Amount</th>
+              <th>Description</th>
+              <th>Collected Employee</th>
+              <th>Logged Employee</th>
+            </tr>
+          </thead>
+          <tbody>
+            {fetchedPayouts.map((payout, index) => (
+              <tr key={index}>
+                <td>{new Date(payout.date).toLocaleString()}</td>
+                <td>{payout.amount}</td>
+                <td>{payout.description}</td>
+                <td>{payout.collectedEmployee?.firstName || "-"}</td>
+                <td>{payout.loggedInEmployee?.firstName || "-"}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="form-section">
+        <input
+          type="text"
+          placeholder="Description (optional)"
+          className="inout-input"
+          onChange={(e) =>
+            setPayout({ ...payout, description: e.target.value })
+          }
+        />
+        <input
+          type="number"
+          placeholder="Amount"
+          className="inout-input"
+          value={payout.amount}
+          onChange={(e) =>
+            setPayout({ ...payout, amount: parseFloat(e.target.value) })
+          }
+        />
+        <select
+          className="inout-input"
+          value={payout.collectedEmployeeId}
+          onChange={(e) =>
+            setPayout({ ...payout, collectedEmployeeId: e.target.value })
+          }
+          style={{ paddingRight: "5px" }}
+        >
+          <option value="" disabled>
+            Select an Employee
+          </option>
+          {employee.map((emp) => (
+            <option key={emp.id} value={emp.id}>
+              {emp.firstName}
+            </option>
+          ))}
+        </select>
+        <button onClick={handleCreatePayout} className="search-btn">
+          Done
+        </button>
+      </div>
+    </div>
+  );
+}
+
+export default Payout;

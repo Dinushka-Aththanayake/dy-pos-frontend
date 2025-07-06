@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 import "./Billing.css";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
+import { color } from "framer-motion";
 
 function Billing() {
   const [inventory, setInventory] = useState([]);
   const token = localStorage.getItem("access_token");
-  const [filteredInventory,setFilteredInventory] =useState([]);
+  const [filteredInventory, setFilteredInventory] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [customerTelephone, setCustomerTelephone] = useState("");
@@ -16,7 +17,7 @@ function Billing() {
       barcode: "",
       name: "",
       unitPrice: 0,
-      discount: 0,  
+      discount: 0,
       quantity: 0,
     })
   );
@@ -104,16 +105,10 @@ function Billing() {
   };
 
   const handleDelete = (index) => {
-    const updatedProducts = [...products];
-    updatedProducts[index] = {
-      barcode: "",
-      name: "",
-      price: 0,
-      discount: 0,
-      quantity: 0,
-    }; // Reset row
-    setProducts(updatedProducts);
-  };
+  const updatedProducts = [...products];
+  updatedProducts.splice(index, 1); // remove the row completely
+  setProducts(updatedProducts);
+};
 
   const totalPrice = products.reduce(
     (sum, item) => sum + item.price * item.quantity,
@@ -168,12 +163,10 @@ function Billing() {
       setProducts([]);
       setCustomerName("");
       setCustomerTelephone("");
-      
     } catch (error) {
       console.error("Error saving bill: ", error);
     }
   };
-
 
   return (
     <div className="pos-container">
@@ -187,7 +180,8 @@ function Billing() {
               type="text"
               className="info-input"
               placeholder="Enter Customer Name"
-              value={customerName} onChange={(e) => setCustomerName(e.target.value)} 
+              value={customerName}
+              onChange={(e) => setCustomerName(e.target.value)}
             />
           </div>
 
@@ -199,116 +193,211 @@ function Billing() {
               type="text"
               className="info-input"
               placeholder="Enter Mobile Number"
-              value={customerTelephone} onChange={(e) => setCustomerTelephone(e.target.value)}
+              value={customerTelephone}
+              onChange={(e) => setCustomerTelephone(e.target.value)}
             />
           </div>
         </div>
-
-        <div className="search-bar" style={{ width: "100%" }}>
-          <Autocomplete
-            options={inventory}
-            getOptionLabel={(item) =>
-              `${item.product.barCode} - ${item.product.name} - Rs.${item.sellPrice} - ${item.remainingQuantity} - ${item.branch.name} `
-            }
-            value={selectedProduct}
-            onChange={(event, newValue) => setSelectedProduct(newValue)}
-            inputValue={searchTerm}
-            onInputChange={(event, newInputValue) =>
-              setSearchTerm(newInputValue)
-            }
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Search (Barcode or Name)..."
-                variant="outlined"
-                fullWidth
-                size="small"
-                onKeyDown={(e) => e.key === "Enter" && handleAddProduct()}
-              />
-            )}
-          />
-          <button className="search-btn" onClick={handleAddProduct}>
-            Add
-          </button>
-        </div>
-        <div className="pos-table-div">
-          <table className="pos-table">
-            <thead>
-              <tr>
-                <th>Barcode</th>
-                <th>Name</th>
-                <th>Unit Price</th>
-                <th>Discount</th>
-                <th>Quantity</th>
-                <th>Total Price</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {products.map((item, index) => (
-                <tr key={index}>
-                  <td>{item.barcode || "-"}</td>
-                  <td>{item.name || "-"}</td>
-                  <td>Rs.
-                    <input
-                      type="number"
-                      value={item.price}
-                      onChange={(e) =>
-                        handleUpdateProduct(index, "UnitPrice", e.target.value)
-                      }
-                    />
-                  </td>
-                  <td> Rs. 
-                    <input
-                      type="number"
-                      value={item.discount}
-                      onChange={(e) =>
-                        handleUpdateProduct(index, "discount", e.target.value)
-                      }
-                    />
-                  </td>
-                  <td>
-                    <input
-                      type="number"
-                      value={item.quantity}
-                      onChange={(e) =>
-                        handleUpdateProduct(index, "quantity", e.target.value)
-                      }
-                    />
-                  </td>
-                  <td>
-                    Rs.
-                    {(
-                      item.price * item.quantity -
-                      item.discount * item.quantity
-                    ).toFixed(2)}
-                  </td>
-                  <td>
-                    {item.barcode && (
-                      <button
-                        className="delete-btn"
-                        onClick={() => handleDelete(index)}
-                      >
-                        Delete
-                      </button>
-                    )}
-                  </td>
+        <div className="item-table-container">
+          <div className="search-bar" style={{ width: "100%" }}>
+            <Autocomplete
+              options={inventory}
+              getOptionLabel={(item) =>
+                `${item.product.barCode} - ${item.product.name} - Rs.${item.sellPrice} - ${item.remainingQuantity} - ${item.branch.name} `
+              }
+              value={selectedProduct}
+              onChange={(event, newValue) => setSelectedProduct(newValue)}
+              inputValue={searchTerm}
+              onInputChange={(event, newInputValue) =>
+                setSearchTerm(newInputValue)
+              }
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Search (Barcode or Name)..."
+                  variant="outlined"
+                  fullWidth
+                  size="small"
+                  onKeyDown={(e) => e.key === "Enter" && handleAddProduct()}
+                />
+              )}
+            />
+            <button className="search-btn" onClick={handleAddProduct}>
+              Add Item
+            </button>
+          </div>
+          <div className="pos-table-div">
+            <table className="pos-table">
+              <thead>
+                <tr>
+                  <th>Barcode</th>
+                  <th>Name</th>
+                  <th>Unit Price</th>
+                  <th>Discount</th>
+                  <th>Quantity</th>
+                  <th>Total Price</th>
+                  <th>Action</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {products.map((item, index) => (
+                  <tr key={index}>
+                    <td>{item.barcode || "-"}</td>
+                    <td>{item.name || "-"}</td>
+                    <td>
+                      Rs.
+                      <input
+                        type="number"
+                        value={item.price}
+                        onChange={(e) =>
+                          handleUpdateProduct(
+                            index,
+                            "UnitPrice",
+                            e.target.value
+                          )
+                        }
+                      />
+                    </td>
+                    <td>
+                      {" "}
+                      Rs.
+                      <input
+                        type="number"
+                        value={item.discount}
+                        onChange={(e) =>
+                          handleUpdateProduct(index, "discount", e.target.value)
+                        }
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="number"
+                        value={item.quantity}
+                        onChange={(e) =>
+                          handleUpdateProduct(index, "quantity", e.target.value)
+                        }
+                      />
+                    </td>
+                    <td>
+                      Rs.
+                      {(
+                        item.price * item.quantity -
+                        item.discount * item.quantity
+                      ).toFixed(2)}
+                    </td>
+                    <td>
+                      {item.barcode && (
+                        <button
+                          className="delete-btn"
+                          onClick={() => handleDelete(index)}
+                        >
+                          Delete
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
-        <div className="totals">
-          <div>Total Price: Rs.{totalPrice.toFixed(2)}</div>
-          <div>Discount: Rs.{totalDiscount.toFixed(2)}</div>
-          <div>
-            <strong>Final Price: Rs.{finalPrice.toFixed(2)}</strong>
+          <div className="totals">
+            <div>Total Item Price: Rs.{totalPrice.toFixed(2)}</div>
+            <div>Discount: Rs.{totalDiscount.toFixed(2)}</div>
+            <div>
+              <strong>Final Item Price: Rs.{finalPrice.toFixed(2)}</strong>
+            </div>
           </div>
         </div>
 
+        <div className="service-table-container">
+          <div className="searchbar-section-service-table">
+            <input
+              type="text"
+              className="searchbar-service-table"
+              placeholder="Search Services.."
+            />
+            <button className="search-btn-service-table">Add Service </button>
+          </div>
+          <div className="pos-table-div">
+            <table className="pos-table">
+              <thead>
+                <tr>
+                  <th>Service Code</th>
+                  <th>Name</th>
+                  <th>Description</th>
+                  <th>Employee</th>
+                  <th>Price</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {products.map((item, index) => (
+                  <tr key={index}>
+                    <td></td>
+                    <td></td>
+                    <td>
+                      
+                      <input
+                        type="text"
+                        style={{width:"80%",}}
+                      />
+                    </td>
+                    <td>
+                      {" "}
+                      
+                      <input
+                        type="text"
+                       
+                      />
+                    </td>
+                    <td>
+                      Rs. 
+                      <input
+                        type="number"
+                        
+                        
+                      />
+                    </td>
+                    
+                    <td>
+                      {item.barcode && (
+                        <button
+                          className="delete-btn"
+                          onClick={() => handleDelete(index)}
+                        >
+                          Delete
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div className="totals" style={{ display: "flex", justifyContent: "right" }}>
+
+            
+            <div style={{float:"left"}}>
+              <strong>Final Service Price: Rs.{finalPrice.toFixed(2)}</strong>
+            </div>
+          </div>
+
+          <div className="totals" style={{ backgroundColor: "lightpink" }}>
+
+            <div>Total Bill Price: Rs.{totalPrice.toFixed(2)}</div>
+            <div>Discount: Rs.{totalDiscount.toFixed(2)}</div>
+            <div>
+              <strong>Final Bill Price: Rs.{finalPrice.toFixed(2)}</strong>
+            </div>
+          </div>
+
         <div className="footer">
-          <button className="submit-btn" onClick={handleSave}>Save</button>
+          <button className="submit-btn" onClick={handleSave}>
+            Save
+          </button>
           <button className="cancel-btn">Cancel</button>
           <button className="hold-btn">Hold</button>
           <button className="print-btn">Print & Save</button>

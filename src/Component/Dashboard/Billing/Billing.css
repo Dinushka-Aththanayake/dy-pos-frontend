@@ -2,15 +2,16 @@ body {
     font-family: Arial, sans-serif;
     background-color: #e3f2fd;
     margin: 0;
-    padding: 0;
+    
   }
   
   .pos-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    
     margin-top: 10px;
+    
   }
   
   .main-container {
@@ -19,6 +20,7 @@ body {
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+   
   }
   
   .search-bar {
@@ -58,7 +60,7 @@ body {
     
   }
   .pos-table-div{
-    min-height: 300px;
+    min-height: 200px;
   }
   
   .pos-table th, .pos-table td {
@@ -190,4 +192,34 @@ body {
     margin-left: 5px;
     width: 100%; /* Ensures equal input width */
     margin-right: 20px;
+}
+
+.searchbar-section-service-table{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.searchbar-service-table{
+  flex: 83%;
+  padding: 10px;
+  font-size: 14px;
+}
+
+.searchbar-service-table::placeholder{
+  font-size: 16px;
+  border: none;
+}
+
+.search-btn-service-table{
+  flex: 10%;
+  margin-left: 10px;
+  background-color: #4da6ff;
+  color: white;
+  border: none;
+  
+}
+
+.searchbar-section-service-table{
+  margin-bottom: 15px;
 }

@@ -11,17 +11,17 @@ function Account() {
       </div>
       <div className="form">
         <label className="label">Username:</label>
-        <input type="text" className="input" />
+        <input type="text" className="input1" />
         <label className="label">Name:</label>
-        <input type="text" className="input" />
+        <input type="text" className="input1" />
         <label className="label">Address:</label>
-        <input type="text" className="input" />
+        <input type="text" className="input1" />
         <label className="label">Mobile Number:</label>
-        <input type="text" className="input" />
+        <input type="text" className="input1" />
         <label className="label">Home Mobile:</label>
-        <input type="text" className="input" />
+        <input type="text" className="input1" />
         <label className="label">Password:</label>
-        <input type="password" className="input" />
+        <input type="password" className="input1" />
         <button className="edit-button">Edit</button>
       </div>
       

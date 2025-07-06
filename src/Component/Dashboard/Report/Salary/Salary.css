@@ -1,0 +1,77 @@
+.salary-main-container{
+    width: 100%;
+    padding: 15px;
+}
+
+.salary-records-container{
+    padding: 10px;
+    border: none;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+}
+
+.salary-search-section{
+    width: 100%;
+   
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.salary-search-sub-section{
+    flex: 1;
+    padding: 10px;
+}
+
+.salary-search-byname{
+    width: 100%;
+    padding: 8px;
+    border-radius: 5px;
+    border-style: solid;
+    border-color: rgb(28, 93, 185);
+}
+
+.search-bydatetime{
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+}
+    
+
+.from-date, .to-date{
+    flex: 1;
+    padding: 6px;
+    border-radius: 5px;
+    border-style: solid;
+    border-color: rgb(28, 93, 185);
+}
+
+.search-btn-section{
+    margin-right: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    
+}
+
+.salary-search-btn{
+    background-color: rgb(37, 117, 183);
+    color: white;
+    border: none;
+    padding: 8px;
+}
+
+.salary-create-btn{
+    padding-bottom: 8px;
+    padding-top: 8px;
+    background-color: rgb(37, 117, 183);
+    border: none;
+    color: white;
+}
+
+.salary-search-btn:hover{
+    opacity: 0.8;
+}
+
+.salary-create-btn:hover{
+    opacity: 0.8;
+}
