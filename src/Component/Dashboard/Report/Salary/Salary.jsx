@@ -4,14 +4,17 @@ import "./Salary.css";
 import { useNavigate } from "react-router-dom";
 
 function Salary() {
-
-  const Navigate=useNavigate();
+  const Navigate = useNavigate();
   return (
     <div className="salary-main-container">
       <div className="salary-records-container">
         <div className="salary-search-section">
           <div className="salary-search-sub-section">
-            <input type="text" className="salary-search-byname" placeholder="Search by en Employee.." />
+            <input
+              type="text"
+              className="salary-search-byname"
+              placeholder="Search by en Employee.."
+            />
             <div className="search-bydatetime">
               <input type="date" className="from-date" />
               <input type="date" className="to-date" />
@@ -19,7 +22,12 @@ function Salary() {
           </div>
           <div className="search-btn-section">
             <button className="salary-search-btn">Search</button>
-            <button className="salary-create-btn" onClick={() => Navigate("/salarycalculator")}>Create</button>
+            <button
+              className="salary-create-btn"
+              onClick={() => Navigate("calculator")}
+            >
+              Create
+            </button>
           </div>
         </div>
         <div
@@ -31,7 +39,7 @@ function Salary() {
             border: "1px solid #d0e1f9",
             backgroundColor: "#f4faff",
             boxShadow: "0px 4px 8px rgba(0, 123, 255, 0.1)",
-            padding:"0",
+            padding: "0",
           }}
         >
           <table

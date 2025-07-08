@@ -30,9 +30,25 @@ function Sales() {
         <button className="searchbutton">Search</button>
 
       </div>
-
-      <table className="sales-table">
-        <thead>
+      <div style={{
+            marginTop: "20px",
+            overflowX: "auto",
+            borderRadius: "10px",
+            border: "1px solid #d0e1f9",
+            backgroundColor: "#f4faff",
+            boxShadow: "0px 4px 8px rgba(0, 123, 255, 0.1)",
+            padding: "0",
+          }}>
+      <table className="sales-table" style={{
+              width: "100%",
+              borderCollapse: "collapse",
+              fontFamily: "Arial, sans-serif",
+              color: "#003366",
+            }}>
+        <thead style={{
+                backgroundColor: "#cce5ff",
+                textAlign: "left",
+              }}>
           <tr>
             <th>#</th>
             <th>Barcode</th>
@@ -59,6 +75,7 @@ function Sales() {
           ))}
         </tbody>
       </table>
+      </div>
       
       <div className="summary">
         <p>Total Price: {totalPrice}</p>

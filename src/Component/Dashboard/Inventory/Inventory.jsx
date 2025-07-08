@@ -1,7 +1,9 @@
 import "./Inventory.css";
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Inventory() {
+  const Navigate= useNavigate();
   const [branchFilter, setBranchFilter] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
   const [inventory, setInventory] = useState([]);
@@ -43,9 +45,6 @@ function Inventory() {
   return (
     <div className="inventory-container">
       {/* Inventory Header */}
-      <div className="inventory-header">
-        <h2>Inventory Management</h2>
-      </div>
 
       <div className="inventory-content">
         <div className="part1">
@@ -70,9 +69,33 @@ function Inventory() {
           </div>
 
           {/* Table Section */}
-          <div className="table-section">
-            <table className="inventory-table">
-              <thead>
+          <div
+            className="table-section"
+            style={{
+              marginTop: "20px",
+              overflowX: "auto",
+              borderRadius: "10px",
+              border: "1px solid #d0e1f9",
+              backgroundColor: "#f4faff",
+              boxShadow: "0px 4px 8px rgba(0, 123, 255, 0.1)",
+              padding: "0",
+            }}
+          >
+            <table
+              className="inventory-table"
+              style={{
+                width: "100%",
+                borderCollapse: "collapse",
+                fontFamily: "Arial, sans-serif",
+                color: "#003366",
+              }}
+            >
+              <thead
+                style={{
+                  backgroundColor: "#cce5ff",
+                  textAlign: "left",
+                }}
+              >
                 <tr>
                   <th>Barcode</th>
                   <th>Name</th>
@@ -83,7 +106,12 @@ function Inventory() {
               </thead>
               <tbody>
                 {filteredInventory.map((item) => (
-                  <tr key={item.id} onClick={() => setSelectedItem(item)} className="clickable-row">
+                  <tr
+                    key={item.id}
+                    onClick={() => setSelectedItem(item)}
+                    className="clickable-row"
+                    style={{ backgroundColor: "#e6f2ff" }}
+                  >
                     <td>{item.product.barCode}</td>
                     <td>{item.product.name}</td>
                     <td>{`Rs. ${item.sellPrice}`}</td>
@@ -102,53 +130,90 @@ function Inventory() {
           <form className="inventory-form">
             <div className="form-group11">
               <label>Barcode:</label>
-              <input type="text" value={selectedItem?.product.barCode || ""} readOnly />
+              <input
+                type="text"
+                value={selectedItem?.product.barCode || ""}
+                readOnly
+              />
             </div>
             <div className="form-group11">
               <label>Buy Price:</label>
-              <input type="text"  value={selectedItem ? `Rs. ${selectedItem.buyPrice}` : ""} readOnly />
+              <input
+                type="text"
+                value={selectedItem ? `Rs. ${selectedItem.buyPrice}` : ""}
+                readOnly
+              />
             </div>
             <div className="form-group11">
               <label>Sell Price:</label>
-              <input type="text" value={selectedItem ? `Rs. ${selectedItem.sellPrice}` : ""} readOnly />
+              <input
+                type="text"
+                value={selectedItem ? `Rs. ${selectedItem.sellPrice}` : ""}
+                readOnly
+              />
             </div>
             <div className="form-group11">
-  <label>Added Date:</label>
-  <input
-    type="text"
-    value={
-      selectedItem?.created
-        ? new Date(selectedItem.created).toLocaleString("en-US", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-            
-            hour12: true,
-          })
-        : ""
-    }
-    readOnly
-  />
-</div>
+              <label>Added Date:</label>
+              <input
+                type="text"
+                value={
+                  selectedItem?.created
+                    ? new Date(selectedItem.created).toLocaleString("en-US", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+
+                        hour12: true,
+                      })
+                    : ""
+                }
+                readOnly
+              />
+            </div>
             <div className="form-group11">
               <label>Rem Qty:</label>
-              <input type="text" value={selectedItem?.remainingQuantity || ""} readOnly />
+              <input
+                type="text"
+                value={selectedItem?.remainingQuantity || ""}
+                readOnly
+              />
             </div>
             <div className="form-group11">
               <label>Added Qty:</label>
-              <input type="text" value={selectedItem?.buyQuantity || ""} readOnly />
+              <input
+                type="text"
+                value={selectedItem?.buyQuantity || ""}
+                readOnly
+              />
             </div>
             <div className="form-group11">
               <label>Branch:</label>
-              <input type="text" value={selectedItem?.branch.name || ""} readOnly />
+              <input
+                type="text"
+                value={selectedItem?.branch.name || ""}
+                readOnly
+              />
             </div>
             <div className="form-group11">
               <label>Category:</label>
-              <input type="text" value={selectedItem?.product.category || ""} readOnly />
+              <input
+                type="text"
+                value={selectedItem?.product.category || ""}
+                readOnly
+              />
             </div>
           </form>
+          <button
+            className="createnewinventory-btn"
+            style={{ padding: "10px", width: "100%", marginTop:"15px", backgroundColor:"rgb(27, 122, 195)",
+              color:"white"
+             }}
+             onClick={() => Navigate("new")}
+          >
+            Create Inventory
+          </button>
         </div>
       </div>
     </div>

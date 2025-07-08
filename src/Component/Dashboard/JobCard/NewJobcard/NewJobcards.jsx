@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate,useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./NewJobcards.css";
 import { IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -8,24 +8,50 @@ function NewJobcards() {
   const navigate = useNavigate();
   const token = localStorage.getItem("access_token");
   const location = useLocation();
-  const appointment = location.state || {};
-  console.log("From appointment: " + appointment.customerName); 
+  const { appointments, jobcard } = location.state || {};
+  const [appointment, setAppointment] = useState(appointments);
+  const [editJobCard, setEditJobCard] = useState(jobcard);
   const [employee, setEmployee] = useState([]);
   const [branches, setBranches] = useState([]);
-  const [jobCard, setJobCard] = useState(
-    {
-    numPlate: appointment.numPlate || "",
-    completed: "",
-    customerName:appointment.customerName || "",
-    customerTelephone: appointment.customerTelephone ||"",
-    branchId: "",
-    jobs: [{ title: "", charge: 0, startTime: "", expectedEndTime: "", endTime: "", employeeId: null }],
+
+  const [jobCard, setJobCard] = useState(() => {
+    if (editJobCard) {
+      return {
+        ...editJobCard,
+        jobs: editJobCard.jobs.map((job) => ({
+          ...job,
+          charge: job.charge || 0,
+          startTime: job.startTime || "",
+          expectedEndTime: job.expectedEndTime || "",
+          endTime: job.endTime || "",
+          employeeId: job.employee.id || null,
+        })),
+      };
+    } else {
+      return {
+        numPlate: appointment?.numPlate || "",
+        completed: "",
+        customerName: appointment?.customerName || "",
+        customerTelephone: appointment?.customerTelephone || "",
+        branchId: 1,
+        jobs: [
+          {
+            title: "",
+            charge: 0,
+            startTime: "",
+            expectedEndTime: "",
+            endTime: "",
+            employeeId: null,
+          },
+        ],
+      };
+    }
   });
 
   const getFormattedDateTime = () => new Date().toISOString();
 
   const formatToISO = (time) => {
-    if (!time) return null;
+    if (!time) return undefined;
     const date = new Date();
     const [hours, minutes] = time.split(":").map(Number);
     date.setHours(hours, minutes, 0, 0);
@@ -43,19 +69,6 @@ function NewJobcards() {
       .then((response) => response.json())
       .then((data) => setEmployee(Array.isArray(data) ? data : []))
       .catch((error) => console.error("Error fetching employees!", error));
-  }, []);
-
-  useEffect(() => {
-    fetch("http://localhost:3000/branches/findAll", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => setBranches(Array.isArray(data) ? data : []))
-      .catch((error) => console.error("Error fetching branches!", error));
   }, []);
 
   const handleChange = (field, value) => {
@@ -81,7 +94,14 @@ function NewJobcards() {
       ...jobCard,
       jobs: [
         ...jobCard.jobs,
-        { title: "", charge: 0, startTime: "", expectedEndTime: "", endTime: "", employeeId: null },
+        {
+          title: "",
+          charge: 0,
+          startTime: "",
+          expectedEndTime: "",
+          endTime: "",
+          employeeId: null,
+        },
       ],
     });
   };
@@ -95,11 +115,11 @@ function NewJobcards() {
     const formattedJobCard = {
       ...jobCard,
       completed: getFormattedDateTime(),
-      branchId: parseInt(jobCard.branchId, 10),
+      branchId: 1,
     };
 
     try {
-      const response = await fetch("http://localhost:3000/jobCards/create", {
+      const jobCardRes = await fetch("http://localhost:3000/jobcards/upsert", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -108,15 +128,45 @@ function NewJobcards() {
         body: JSON.stringify(formattedJobCard),
       });
 
-      if (response.ok) {
-        alert("Job Card created successfully!");
-        navigate("/dashboard");
-      } else {
-        alert("Failed to create Job Card.");
+      const jobCardData = await jobCardRes.json();
+
+      if (!jobCardRes.ok || !jobCardData?.id) {
+        alert("Failed to create/update job card.");
+        return;
       }
+
+      const jobCardId = jobCardData.id;
+
+      for (const job of jobCard.jobs) {
+        const jobPayload = {
+          ...job,
+          jobCardId: jobCardId,
+          charge: parseInt(job.charge, 10) || 0,
+          employeeId: job.employeeId ? parseInt(job.employeeId, 10) : null,
+          startTime: job.startTime || undefined,
+          expectedEndTime: job.expectedEndTime || undefined,
+          endTime: job.endTime || undefined
+        };
+
+        const jobRes = await fetch("http://localhost:3000/jobs/upsert", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(jobPayload),
+        });
+
+        if (!jobRes.ok) {
+          throw new Error("Failed to upsert job.");
+        }
+      }
+
+      alert("Job card and jobs submitted successfully!");
+      navigate("/jobcard");
     } catch (error) {
-      console.error("Error creating Job Card:", error);
-      alert("Error creating Job card. Please try again.");
+      console.error("Error submitting job card:", error);
+      alert("Error submitting job card and jobs. Please try again.");
     }
   };
 
@@ -125,27 +175,29 @@ function NewJobcards() {
       <div className="secnew-jobcard">
         <div className="form-group">
           <label>Number Plate:</label>
-          <input type="text" value={jobCard.numPlate} onChange={(e) => handleChange("numPlate", e.target.value)} />
+          <input
+            type="text"
+            value={jobCard.numPlate}
+            onChange={(e) => handleChange("numPlate", e.target.value)}
+          />
         </div>
         <div className="form-group">
           <label>Customer Name:</label>
-          <input type="text" value={jobCard.customerName} onChange={(e) => handleChange("customerName", e.target.value)} />
+          <input
+            type="text"
+            value={jobCard.customerName}
+            onChange={(e) => handleChange("customerName", e.target.value)}
+          />
         </div>
         <div className="form-group">
           <label>Mobile Number:</label>
-          <input type="text" value={jobCard.customerTelephone}  onChange={(e) => handleChange("customerTelephone", e.target.value)} />
+          <input
+            type="text"
+            value={jobCard.customerTelephone}
+            onChange={(e) => handleChange("customerTelephone", e.target.value)}
+          />
         </div>
-        <div className="form-group">
-          <label>Branch:</label>
-          <select onChange={(e) => handleChange("branchId", e.target.value)} defaultValue="">
-            <option value="" disabled>Select a branch</option>
-            {branches.map((branch) => (
-              <option key={branch.id} value={branch.id}>
-                {branch.name}
-              </option>
-            ))}
-          </select>
-        </div>
+
         <table className="job-table">
           <thead>
             <tr>
@@ -164,23 +216,74 @@ function NewJobcards() {
               <tr key={index}>
                 <td>{index + 1}</td>
                 <td>
-                  <input type="text" onChange={(e) => handleJobChange(index, "title", e.target.value)} />
+                  <input
+                    type="text"
+                    value={job.title || ""}
+                    onChange={(e) =>
+                      handleJobChange(index, "title", e.target.value)
+                    }
+                  />
                 </td>
                 <td>
-                  <input type="number" onChange={(e) => handleJobChange(index, "charge", e.target.value)} />
+                  <input
+                    type="number"
+                    value={job.charge || 0}
+                    onChange={(e) =>
+                      handleJobChange(index, "charge", e.target.value)
+                    }
+                  />
                 </td>
                 <td>
-                  <input type="time" onChange={(e) => handleJobChange(index, "startTime", e.target.value)} />
+                  <input
+                    type="time"
+                    value={
+                      job.startTime
+                        ? new Date(job.startTime).toISOString().substring(11, 16)
+                        : ""
+                    }
+                    onChange={(e) =>
+                      handleJobChange(index, "startTime", e.target.value)
+                    }
+                  />
                 </td>
                 <td>
-                  <input type="time" onChange={(e) => handleJobChange(index, "expectedEndTime", e.target.value)} />
+                  <input
+                    type="time"
+                    value={
+                      job.expectedEndTime
+                        ? new Date(job.expectedEndTime)
+                            .toISOString()
+                            .substring(11, 16)
+                        : ""
+                    }
+                    onChange={(e) =>
+                      handleJobChange(index, "expectedEndTime", e.target.value)
+                    }
+                  />
                 </td>
                 <td>
-                  <input type="time" onChange={(e) => handleJobChange(index, "endTime", e.target.value)} />
+                  <input
+                    type="time"
+                    value={
+                      job.endTime
+                        ? new Date(job.endTime).toISOString().substring(11, 16)
+                        : ""
+                    }
+                    onChange={(e) =>
+                      handleJobChange(index, "endTime", e.target.value)
+                    }
+                  />
                 </td>
                 <td>
-                  <select onChange={(e) => handleJobChange(index, "employeeId", e.target.value)} defaultValue="">
-                    <option value="" disabled>Select employee</option>
+                  <select
+                    value={job.employeeId || ""}
+                    onChange={(e) =>
+                      handleJobChange(index, "employeeId", e.target.value)
+                    }
+                  >
+                    <option value="" disabled>
+                      Select employee
+                    </option>
                     {employee.map((emp) => (
                       <option key={emp.id} value={emp.id}>
                         {emp.firstName}
@@ -197,16 +300,22 @@ function NewJobcards() {
             ))}
           </tbody>
         </table>
+
         <div className="button-group11">
           <button className="add-job-btn" onClick={addNewJob}>
             Add New Job
           </button>
-          <button className="add-job-cancalbtn" onClick={() => navigate("/dashboard")}>
+          <button
+            className="add-job-cancalbtn"
+            onClick={() => navigate("/jobcard")}
+          >
             Cancel
           </button>
           <button className="proceed-btn" onClick={submitJobCard}>
             Submit Job Card
           </button>
+          <button className="hold-btn-job">Hold</button>
+          <button className="hold-bill-btn">Hold bills</button>
         </div>
       </div>
     </div>

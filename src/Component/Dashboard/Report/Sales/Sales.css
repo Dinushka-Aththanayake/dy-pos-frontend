@@ -31,14 +31,14 @@
     background: white;
   }
   
-  .sales-table th, .sales-table td {
-    border: 1px solid #87ceeb;
+  .sales-table td {
     padding: 10px;
-    text-align: left;
+    border-bottom: 1px solid #d0e1f9
   }
   
   .sales-table th {
-    background-color: #add8e6;
+     padding: 12px;
+    border-bottom: 1px solid #99ccff
   }
   
   .summary {

@@ -1,7 +1,5 @@
 body {
     font-family: Arial, sans-serif;
-    
-    padding: 20px;
 }
 
 .job-card1 {
@@ -77,6 +75,8 @@ body {
     margin-top: 20px;
 }
 
+.hold-bill-btn,
+.hold-btn-job,
 .add-job-btn,
 .proceed-btn,
 .add-job-holdbtn,
@@ -91,6 +91,19 @@ body {
     transition: 0.3s;
     margin-left: 10px;
     width: 170px;
+}
+
+.hold-btn-job, .hold-bill-btn{
+    background-color: rgb(60, 127, 198);
+    color: white;
+}
+
+.hold-btn-job:hover{
+    opacity: 0.8;
+}
+
+.hold-bill-btn:hover{
+    opacity: 0.8;
 }
 
 .add-job-btn {

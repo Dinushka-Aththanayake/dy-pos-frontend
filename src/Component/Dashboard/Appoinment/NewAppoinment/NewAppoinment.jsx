@@ -17,7 +17,8 @@ function NewAppointment() {
 
   const handleConfirm = async () => {
     const datetime = `${date} ${time}:00`;
-    const branchInt = branchId ? parseInt(branchId, 10) : 1; 
+    const branchInt = branchId ? parseInt(branchId, 10) : 1;
+
     const requestData = {
       numPlate,
       datetime,
@@ -41,10 +42,9 @@ function NewAppointment() {
 
       if (response.ok) {
         alert("Appointment created successfully!");
-        navigate("/dashboard");
+        navigate("/appoinment");
       } else {
         alert("Failed to create appointment.");
-        
       }
     } catch (error) {
       console.error("Error creating appointment:", error);
@@ -52,32 +52,52 @@ function NewAppointment() {
     }
   };
 
-  useEffect(() => {
-    fetch("http://localhost:3000/appointments/search", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (Array.isArray(data)) {
-          const today = new Date().toISOString().split("T")[0];
-          const todayAppointments = data.filter((app) =>
-            app.datetime.startsWith(today)
-          );
-          setAppointments(todayAppointments);
-          setFilteredAppointments(todayAppointments);
-        } else {
-          console.error("Unexpected response format:", data);
-          setAppointments([]);
-          setFilteredAppointments([]);
-        }
-      })
-      .catch((error) => console.error("Error fetching appointments!", error));
-  }, []);
+  // 🔍 Fetch appointments based on selected date
+  const fetchAppointmentsByDate = async (selectedDate) => {
+    if (!selectedDate) return;
 
+    try {
+      const response = await fetch(
+        `http://localhost:3000/appointments/search?date=${selectedDate}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (Array.isArray(data)) {
+        setAppointments(data);
+        setFilteredAppointments(data);
+      } else {
+        console.error("Unexpected response format:", data);
+        setAppointments([]);
+        setFilteredAppointments([]);
+      }
+    } catch (error) {
+      console.error("Error fetching appointments by date:", error);
+    }
+  };
+
+  // ⏱ Watch for changes in date and fetch accordingly
+  useEffect(() => {
+    if (date) {
+      fetchAppointmentsByDate(date);
+    } else {
+      setFilteredAppointments([]);
+    }
+  }, [date]);
+
+  const formatDate = (datetime) => {
+    const dateObj = new Date(datetime);
+    const date = dateObj.toLocaleDateString();
+    const time = dateObj.toLocaleTimeString();
+    return { date, time };
+  };
   return (
     <div className="new-appointment-container">
       <div className="appointment-form-box">
@@ -131,7 +151,7 @@ function NewAppointment() {
             >
               <option value="1">Ganemulla</option>
               <option value="2">Kadawatha</option>
-            </select> 
+            </select>
           </div>
         </form>
         <div className="button-group">
@@ -140,15 +160,16 @@ function NewAppointment() {
           </button>
           <button
             className="cancel-btn9"
-            onClick={() => navigate("/dashboard")}
+            onClick={() => navigate("/appoinment")}
           >
             Cancel
           </button>
         </div>
       </div>
+
       <div className="appointment-list-box">
         <div className="new-appointment-header">
-          <h2>Today Appointments</h2>
+          <h2>Appointments</h2>
         </div>
         <table className="appointment-table">
           <thead>
@@ -159,17 +180,21 @@ function NewAppointment() {
             </tr>
           </thead>
           <tbody>
-            {filteredAppointments.map((appointment, index) => (
-              <tr key={index}>
-                <td>{appointment.numPlate}</td>
-                <td>
-                  {appointment.datetime
-                    ? appointment.datetime.split(" ")[1]?.slice(0, 5)
-                    : "N/A"}
+            {filteredAppointments.length > 0 ? (
+              filteredAppointments.map((appointment, index) => (
+                <tr key={index}>
+                  <td>{appointment.numPlate}</td>
+                  <td>{formatDate(appointment.datetime).time}</td>
+                  <td>{appointment.branch?.name || "N/A"}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="3" style={{ textAlign: "center" }}>
+                  No appointments for selected date.
                 </td>
-                <td>{appointment.branch?.name || "N/A"}</td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>

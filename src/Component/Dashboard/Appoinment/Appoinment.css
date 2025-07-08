@@ -1,210 +1,198 @@
 /* General Reset */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  body, html {
-    height: 100%;
-    width: 100%;
-    font-family: Arial, sans-serif;
-    background-color: white; /* Light blue theme */
-    /* overflow: hidden; */
-  }
-
-  .appointment-content {
-    background: #ffffff;
-    width: 100%;
-    height: auto;
-    display: flex;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    gap: 20px;
-    padding-top: 40px;
-     }
-  .appointment-header {
-    margin-top: 30px;
-    
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 24px;
-    font-weight: bold;
-    color: #007acc;
-    text-align: center;
-    width: 100%;
-}
-  
-.appintment-table-container{
-  
-  border: 1px solid #ddd;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-  /* Left Table Section */
-  .appointment-table-section {
-    flex: 1;
-    padding: 20px;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    margin-right: 10px;
-  }
-  
-  .filter-section {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 15px;
-  }
+body,
+html {
+  height: 100%;
+  width: 100%;
+  font-family: Arial, sans-serif;
+  background-color: white; /* Light blue theme */
+  /* overflow: hidden; */
+}
 
-  .filter-section5{
-    margin-bottom: 15px;
-    display: flex;
+.appointment-content {
+  background: #ffffff;
+  width: 100%;
+  height: auto;
+  display: flex;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  gap: 20px;
+  padding-top: 40px;
+}
+.appointment-header {
+  margin-top: 30px;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 24px;
+  font-weight: bold;
+  color: #007acc;
+  text-align: center;
+  width: 100%;
+}
 
-    gap: 10px;
-  }
+/* Left Table Section */
+.appointment-table-section {
+  flex: 1.5;
+  padding: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin-right: 10px;
+}
 
-  .filter-section5 select{
-    width: 100%;
-  }
-  .filter-section input {
-    flex-grow: 1;
-    padding: 12px;
-    border: 1px solid #90caf9;
-    border-radius: 5px;
-  }
-  
-  .search-btn {
-    margin-left: 10px;
-    padding: 12px 20px;
-    border: none;
-    background: #42a5f5;
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .search-btn:hover {
-    background: #1e88e5;
-  }
-  
-  /* Table Styling */
-  .appointment-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 10px 0;
-    margin-right: 10px;
+.filter-section {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
 
-  }
-  
-  .appointment-table th, .appointment-table td {
-    padding: 12px;
-    border: 1px solid #bbdefb;
-    text-align: center;
-  }
-  
-  .appointment-table th {
-    background: #79abd4;
-    color: white;
-  }
-  
-  /* Right Form Section */
-  .appointment-form-container {
-    position: sticky;
-    z-index:10;
-    flex: 1;
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    padding-bottom: 30px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .form-field {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 15px;
-  }
-  
-  .form-field label {
-    font-weight: bold;
-    margin-bottom: 5px;
-  }
-  
-  .form-field input {
-    padding: 6px;
-    border: 1px solid #90caf9;
-    border-radius: 5px;
-  }
-  
-  /* Buttons */
-  .action-btn {
-    width: 100%;
-    padding: 12px;
-    border: none;
-    background: #42a5f5;
-    color: white;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    margin-top: 15px;
-  }
-  
-  .action-btn:hover {
-    background: #1e88e5;
-  }
+.filter-section5 {
+  margin-bottom: 15px;
+  display: flex;
 
-  .action-btn22, .cancel-btn22 {
-    width: 40%;
-    padding: 12px;
-    border: none;
-    background: #42a5f5;
-    color: white;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    margin-top: 5px;
-    margin-left: 10px;
-    float: left;
-  }
-  
-  .action-btn22:hover {
-    background: #1e88e5;
-  }
+  gap: 10px;
+}
 
-  .cancel-btn22 {
-    background-color: red;
-    margin-left: 30px;
-    opacity: 0.65;
-  }
+.filter-section5 select {
+  width: 100%;
+}
+.filter-section input {
+  flex-grow: 1;
+  padding: 12px;
+  border: 1px solid #90caf9;
+  border-radius: 5px;
+}
 
-  .cancel-btn22:hover{
-    opacity: 1;
-  }
+.search-btn {
+  margin-left: 10px;
+  padding: 12px 20px;
+  border: none;
+  background: #42a5f5;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
 
-  .buttongroupap{
-    align-items: center;
-  }
+.search-btn:hover {
+  background: #1e88e5;
+}
 
-  .status-btn {
-    padding: 8px 10px;
-    border: none;
-    border-radius: 5px;
-    color: white;
-    width: 110px;
-    font-size: 12px;
-    
-  }
+
+.appointment-table2 td {
+  padding: 10px;
+  border-bottom: 1px solid #d0e1f9;
+}
+
+.appointment-table2 th {
+  padding: 12px;
+  border-bottom: 2px solid #99ccff;
+}
+
+/* Right Form Section */
+.appointment-form-container {
+  position: sticky;
+  z-index: 10;
+  flex: 1;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  padding-bottom: 30px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.form-field label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.form-field input {
+  padding: 6px;
+  border: 1px solid #90caf9;
+  border-radius: 5px;
+}
+
+/* Buttons */
+.action-btn {
+  width: 60%;
+  padding: 10px;
+  border: none;
+  background: #42a5f5;
+  color: white;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
   
-  .status-btn.pending {
-    background-color: rgb(103, 196, 222);
-  }
+}
+
+.action-btn:hover {
+  background: #1e88e5;
+}
+
+.action-btn22,
+.cancel-btn22 {
+  width: 45%;
+  padding: 12px;
+  border: none;
+  background: #42a5f5;
+  color: white;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 5px;
+  margin-left: 10px;
   
-  .status-btn.completed {
-    background-color: rgb(56, 158, 56);
-  }
-  
-  .status-btn.cancelled {
-    background-color: red;
-  }
+}
+
+.action-btn22:hover {
+  background: #1e88e5;
+}
+
+.cancel-btn22 {
+  background-color: red;
+  margin-left: 30px;
+  opacity: 0.65;
+}
+
+.cancel-btn22:hover {
+  opacity: 1;
+}
+
+.buttongroupap {
+  align-items: center;
+  display: flex;
+  justify-items: space-between;
+}
+
+.status-btn {
+  padding: 8px 10px;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  width: 110px;
+  font-size: 12px;
+}
+
+.status-btn.pending {
+  background-color: rgb(103, 196, 222);
+}
+
+.status-btn.completed {
+  background-color: rgb(56, 158, 56);
+}
+
+.status-btn.cancelled {
+  background-color: red;
+}

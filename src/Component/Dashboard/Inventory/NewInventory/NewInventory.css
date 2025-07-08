@@ -1,0 +1,117 @@
+.new-inventory-container {
+  padding: 20px;
+  min-width: 300px;
+  min-height: 500px;
+  margin: auto;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.inventory-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+
+.inventory-table td {
+  padding: 10px;
+    border-bottom: 1px solid #d0e1f9
+}
+.inventory-table th{
+    padding: 12px;
+    border-bottom: 1px solid #99ccff
+}
+
+.inventory-table input {
+  width: 100%;
+  
+  box-sizing: border-box;
+}
+
+.newinventory-input{
+    padding: 10px;
+    border: 1px solid #80cfff;
+    border-radius: 5px;
+    outline: none;
+    font-size: 16px;
+    margin-right: 10px;
+    width: 80%;
+    padding-left: 35px;
+}
+
+.delete-icon {
+  color: #f44336;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.delete-icon:hover {
+  transform: scale(1.2);
+}
+
+.inventory-button-group {
+  display: flex;
+  justify-content: right;
+  gap: 15px;
+  width: 100%;
+  padding-right: 30px;
+  
+}
+
+.inventory-button-group button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  height: 40px;
+}
+
+.add-btn3 {
+  background-color: #4caf50;
+}
+
+.add-btn3:hover {
+  background-color: #45a049;
+}
+
+.save-btn3 {
+  background-color: #2196f3;
+}
+
+.save-btn3:hover {
+  background-color: #1e88e5;
+}
+
+.cancel-btn3 {
+  background-color: #f44336;
+}
+
+.cancel-btn3:hover {
+  background-color: #e53935;
+}
+
+.input-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.prefix {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  font-size: 14px;
+  color: #333;
+  pointer-events: none;
+}
+
+.newinventory-input {
+   /* enough space for "Rs." */
+  height: 30px;
+  font-size: 14px;
+}

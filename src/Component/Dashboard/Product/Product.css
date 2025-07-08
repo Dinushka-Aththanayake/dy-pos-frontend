@@ -7,3 +7,13 @@
     background-color: #f0f8ff;
     font-size: 16px;
 }
+
+.inventory-table1 td{
+    padding: 10px;
+    border-bottom: 1px solid #d0e1f9
+}
+
+.inventory-table1 th{
+    padding: 12px;
+    border-bottom: 1px solid #99ccff
+}

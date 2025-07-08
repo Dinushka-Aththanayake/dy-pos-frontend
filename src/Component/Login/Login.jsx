@@ -29,7 +29,7 @@ const Login = () => {
         localStorage.setItem("access_token", data.access_token);
         console.log("Access Token:", data.access_token);
         alert("Login successful!");
-        navigate("/dashboard"); // Navigate to DashboardLayout
+        navigate("/billing"); // Navigate to DashboardLayout
       } else {
         setError(data.message || "Invalid username or password");
       }

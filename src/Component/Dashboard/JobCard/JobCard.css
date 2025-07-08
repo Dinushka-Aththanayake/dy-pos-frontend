@@ -34,6 +34,11 @@
     border: 1px solid #90caf9;
     border-radius: 5px;
   }
+  .input-date-jobcard{
+    padding: 10px;
+    border: 1px solid #90caf9;
+    border-radius: 5px;
+  }
   
   .btn-primary {
     padding: 10px 15px;
@@ -49,28 +54,24 @@
   }
   
   /* Job Table */
-  .job-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: white;
-  }
   
-  .job-table th,
-  .job-table td {
-    padding: 12px;
-    border: 1px solid #bbdefb;
+  
+  
+  .job-table1 td {
+    padding: 10px;
+    border-bottom: 1px solid #d0e1f9;
     text-align: center;
   }
   
-  .job-table th {
-    background: #79abd4;
-    color: white;
+  .job-table1 th {
+    padding: 12px;
+    border-bottom: 2px solid #99ccff;
   }
   
-  .btn-secondary {
-    width: 100%;
+  .btn-secondary111 {
+    
     padding: 10px;
-    margin-top: 15px;
+    
     background-color: #64b5f6;
     border: none;
     color: white;
@@ -78,7 +79,7 @@
     cursor: pointer;
   }
   
-  .btn-secondary:hover {
+  .btn-secondary111:hover {
     background-color: #42a5f5;
   }
   
@@ -110,16 +111,16 @@
     background: white;
   }
   
-  .details-table th,
+  
   .details-table td {
-    padding: 12px;
-    border: 1px solid #bbdefb;
+    padding: 10px;
+    border-bottom: 1px solid #d0e1f9;
     text-align: center;
   }
   
   .details-table th {
-    background: #90caf9;
-    color: white;
+    padding: 12px;
+    border-bottom: 2px solid #99ccff;
   }
   
   .status-btn.incomplete {

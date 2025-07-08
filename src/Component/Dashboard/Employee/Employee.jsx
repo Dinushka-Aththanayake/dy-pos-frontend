@@ -61,27 +61,44 @@ const Employee = () => {
           />
           <button className="search-btn1">Search</button>
         </div>
-
-        <table className="employee-table">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Date</th>
-              <th>Time</th>
-              <th>In/Out</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredRecords.map((record, index) => (
-              <tr key={index}>
-                <td>{record.name}</td>
-                <td>{record.date}</td>
-                <td>{record.time}</td>
-                <td>{record.status}</td>
+        <div style={{
+            marginTop: "20px",
+            overflowX: "auto",
+            borderRadius: "10px",
+            border: "1px solid #d0e1f9",
+            backgroundColor: "#f4faff",
+            boxShadow: "0px 4px 8px rgba(0, 123, 255, 0.1)",
+            padding: "0",
+          }}>
+          <table className="employee-table" style={{
+              width: "100%",
+              borderCollapse: "collapse",
+              fontFamily: "Arial, sans-serif",
+              color: "#003366",
+            }}>
+            <thead style={{
+                backgroundColor: "#cce5ff",
+                textAlign: "left",
+              }}>
+              <tr style={{ padding: "12px", borderBottom: "2px solid #99ccff" }}>
+                <th>Name</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>In/Out</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {filteredRecords.map((record, index) => (
+                <tr key={index}>
+                  <td>{record.name}</td>
+                  <td>{record.date}</td>
+                  <td>{record.time}</td>
+                  <td>{record.status}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <div className="form-section">

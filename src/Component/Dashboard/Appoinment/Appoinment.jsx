@@ -59,45 +59,58 @@ function Appointment() {
   }, []);
 
   const handleSearch = () => {
-    let filtered = [...appointments];
+    const token = localStorage.getItem("access_token");
+    const url = new URL("http://localhost:3000/appointments/search");
 
     if (searchPlate.trim() !== "") {
-      filtered = filtered.filter(
-        (appointment) =>
-          appointment.numPlate && appointment.numPlate.includes(searchPlate)
-      );
+      url.searchParams.append("numPlate", searchPlate.trim().toUpperCase());
     }
 
     if (selectedDate) {
-      filtered = filtered.filter(
-        (appointment) => formatDate(appointment.datetime).date === selectedDate
-      );
+      url.searchParams.append("date", selectedDate);
     }
 
     if (selectedBranch !== "All") {
-      filtered = filtered.filter(
-        (appointment) =>
-          appointment.branch && appointment.branch.name === selectedBranch
-      );
+      const branchObj = branches.find((b) => b.name === selectedBranch);
+      if (branchObj) {
+        url.searchParams.append("branchId", branchObj.id);
+      }
     }
 
-    setFilteredAppointments(filtered);
+    fetch(url.toString(), {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setFilteredAppointments(data);
+        } else {
+          console.error("Unexpected search response format:", data);
+          setFilteredAppointments([]);
+        }
+      })
+      .catch((error) => {
+        console.error("Error searching appointments!", error);
+        setFilteredAppointments([]);
+      });
   };
 
   const handleDateChange = (e) => {
     setSelectedDate(e.target.value);
-    handleSearch();
   };
 
   const handleBranchChange = (e) => {
     setSelectedBranch(e.target.value);
-    handleSearch();
   };
 
   const handleCancel = async (id) => {
     if (!id) return;
 
-    const appointmentId = Number(id); // Ensure it's an integer
+    const appointmentId = Number(id);
 
     if (window.confirm("Are you sure you want to cancel this appointment?")) {
       const token = localStorage.getItem("access_token");
@@ -111,7 +124,7 @@ function Appointment() {
               "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
             },
-            body: JSON.stringify({ id: appointmentId }), // Pass correct parameter name
+            body: JSON.stringify({ id: appointmentId }),
           }
         );
 
@@ -155,15 +168,15 @@ function Appointment() {
             placeholder="Enter Number Plate..."
             className="search-input1"
             value={searchPlate}
-            onChange={(e) => setSearchPlate(e.target.value)}
+            onChange={(e) => setSearchPlate(e.target.value.toUpperCase())}
           />
           <button
             className="search-btn"
             onClick={handleSearch}
-            disabled={searchPlate.trim() === ""}
           >
             Search
           </button>
+          
         </div>
         <div className="filter-section5">
           <input
@@ -184,11 +197,30 @@ function Appointment() {
               </option>
             ))}
           </select>
+          <button className="action-btn" onClick={() => Navigate("new")}>
+          Create Appointment
+        </button>
         </div>
-        <div className="appintment-table-container">
-          <table className="appointment-table">
-            <thead>
-              <tr>
+        <div className="appintment-table-container2" style={{
+            marginTop: "20px",
+            overflowX: "auto",
+            borderRadius: "10px",
+            border: "1px solid #d0e1f9",
+            backgroundColor: "#f4faff",
+            boxShadow: "0px 4px 8px rgba(0, 123, 255, 0.1)",
+            padding: "0",
+          }}>
+          <table className="appointment-table2" style={{
+              width: "100%",
+              borderCollapse: "collapse",
+              fontFamily: "Arial, sans-serif",
+              color: "#003366",
+            }} >
+            <thead style={{
+                backgroundColor: "#cce5ff",
+                textAlign: "left",
+              }}>
+              <tr style={{ backgroundColor: "#e6f2ff" }}>
                 <th>Number Plate</th>
                 <th>Date</th>
                 <th>Branch</th>
@@ -228,12 +260,7 @@ function Appointment() {
           </table>
         </div>
 
-        <button
-          className="action-btn"
-          onClick={() => Navigate("/newappoinment")}
-        >
-          Create New Appointment
-        </button>
+        
       </div>
       <div className="appointment-form-container">
         <form>
@@ -302,16 +329,20 @@ function Appointment() {
           <button
             className="cancel-btn22"
             onClick={() => handleCancel(selectedAppointment?.id)}
-            disabled={!selectedAppointment}
+            disabled={
+              !selectedAppointment || selectedAppointment.status === "CANCELLED"
+            }
           >
             Cancel Appointment
           </button>
           <button
             className="action-btn22"
             onClick={() =>
-              Navigate("/newjobcard", { state: selectedAppointment })
+              Navigate("/jobcard/new", { state: {appointments:selectedAppointment} })
             }
-            disabled={!selectedAppointment}
+            disabled={
+              !selectedAppointment || selectedAppointment.status === "CANCELLED"
+            }
           >
             Create Jobcard
           </button>

@@ -118,7 +118,7 @@ body {
     
   }
   
-  .submit-btn, .cancel-btn, .hold-btn, .print-btn {
+  .submit-btn, .cancel-btn, .hold-btn, .print-btn, .hold-bills-btn {
     padding: 10px 15px;
     border: none;
     color: white;
@@ -136,7 +136,7 @@ body {
     background: #f57c00;
   }
   
-  .hold-btn {
+  .hold-btn, .hold-bills-btn {
     background: #42a5f5;
   }
   
@@ -158,6 +158,10 @@ body {
   
   .print-btn:hover {
     background: #2e7d32;
+  }
+
+  .hold-bills-btn:hover{
+    opacity: 0.8;
   }
   
   .info-bar {

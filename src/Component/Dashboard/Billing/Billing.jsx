@@ -1,46 +1,104 @@
 import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./Billing.css";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
-import { color } from "framer-motion";
 
 function Billing() {
-  const [inventory, setInventory] = useState([]);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { jobCard, holdbill } = location.state || {};
+  const [bill, setBill] = useState(holdbill);
+  const [jobcard, setJobcard] = useState(jobCard);
   const token = localStorage.getItem("access_token");
+  const [inventory, setInventory] = useState([]);
   const [filteredInventory, setFilteredInventory] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [customerTelephone, setCustomerTelephone] = useState("");
-  const [customerName, setCustomerName] = useState("");
+
+  const [customerTelephone, setCustomerTelephone] = useState(
+    jobcard?.customerTelephone || bill?.customerTelephone || ""
+  );
+  const [customerNumPlate, setNumberPlate] = useState(
+    jobcard?.numPlate || bill?.customerNumPlate || ""
+  );
+  const [customerName, setCustomerName] = useState(
+    jobcard?.customerName || bill?.customerName || ""
+  );
+
   const [products, setProducts] = useState(
-    Array(1).fill({
-      barcode: "",
-      name: "",
-      unitPrice: 0,
-      discount: 0,
-      quantity: 0,
-    })
+    bill?.items?.map((item) => ({
+      itemId: item.id,
+      inventoryId: item.inventory.id,
+      barcode: item.inventory.product.barCode,
+      name: item.inventory.product.name,
+      price: Number(item.unitPrice),
+      discount: Number(item.inventory.sellPrice) - Number(item.unitPrice),
+      quantity: item.quantity,
+    })) || [
+      {
+        barcode: "",
+        name: "",
+        price: 0,
+        discount: 0,
+        quantity: 0,
+      },
+    ]
+  );
+
+  const [services, setServices] = useState(
+    jobCard?.jobs?.map((job) => ({
+      id: job.id,
+      serviceCode: job.id,
+      name: job.title || "",
+      employee: job?.employee?.firstName || "",
+      price: Number(job.charge || 0),
+    })) ||
+      bill?.jobCard?.jobs.map((service) => ({
+        id: service.id,
+        serviceCode: service.id || "",
+        name: service.title || "",
+        employee: service.employee.firstName || "",
+        price: Number(service.charge || 0),
+      })) ||
+      []
   );
 
   useEffect(() => {
-    fetch("http://localhost:3000/inventories/search", {
+    fetch("http://localhost:3000/inventories/search?available=true", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
     })
-      .then((response) => response.json())
+      .then((res) => res.json())
       .then((data) => {
-        if (Array.isArray(data)) {
-          setInventory(data);
-        } else {
-          console.error("Unexpected response format: " + JSON.stringify(data));
-          setInventory([]);
-        }
+        if (Array.isArray(data)) setInventory(data);
+        else setInventory([]);
       })
-      .catch((error) => console.error("Error fetching inventories!", error));
+      .catch((err) => console.error("Inventory fetch error:", err));
   }, []);
+
+  const resetForm = () => {
+    setCustomerName("");
+    setCustomerTelephone("");
+    setNumberPlate("");
+    setProducts([
+      {
+        barcode: "",
+        name: "",
+        price: 0,
+        discount: 0,
+        quantity: 0,
+      },
+    ]);
+    setServices([]);
+    setSearchTerm("");
+    setSelectedProduct(null);
+    setJobcard(null);
+    setBill(null);
+  };
 
   useEffect(() => {
     if (searchTerm.trim() === "") {
@@ -63,95 +121,138 @@ function Billing() {
       (item) => item.barcode === selectedProduct.product.barCode
     );
 
+    const newProduct = {
+      inventoryId: selectedProduct.id,
+      barcode: selectedProduct.product.barCode,
+      name: selectedProduct.product.name,
+      price: Number(selectedProduct.sellPrice),
+      discount: 0,
+      quantity: 1,
+    };
+
+    const updatedProducts = [...products];
     if (existingIndex !== -1) {
-      // Increase quantity if product already exists
-      const updatedProducts = [...products];
       updatedProducts[existingIndex].quantity += 1;
-      setProducts(updatedProducts);
     } else {
-      // Find first empty row
       const emptyIndex = products.findIndex((item) => item.barcode === "");
-
-      const newProduct = {
-        inventoryId: selectedProduct.id,
-        barcode: selectedProduct.product.barCode,
-        name: selectedProduct.product.name,
-        price: Number(selectedProduct.sellPrice),
-        discount: 0,
-        quantity: 1,
-      };
-
-      const updatedProducts = [...products];
-
       if (emptyIndex !== -1) {
-        // Replace first empty row
         updatedProducts[emptyIndex] = newProduct;
       } else {
-        // Append if no empty row
         updatedProducts.push(newProduct);
       }
-
-      setProducts(updatedProducts);
     }
 
+    setProducts(updatedProducts);
     setSelectedProduct(null);
     setSearchTerm("");
   };
 
   const handleUpdateProduct = (index, field, value) => {
-    const updatedProducts = [...products];
-    updatedProducts[index][field] = Number(value);
-    setProducts(updatedProducts);
+    const updated = [...products];
+    updated[index][field] = Number(value) || 0;
+    setProducts(updated);
   };
 
-  const handleDelete = (index) => {
-  const updatedProducts = [...products];
-  updatedProducts.splice(index, 1); // remove the row completely
-  setProducts(updatedProducts);
-};
+  const handleDelete = async (index) => {
+    const item = products[index];
 
-  const totalPrice = products.reduce(
-    (sum, item) => sum + item.price * item.quantity,
+    // If item has an ID, it exists in DB and should be deleted
+    if (item.itemId) {
+      try {
+        await fetch("http://localhost:3000/items/delete", {
+          method: "POST", // or "DELETE" based on your API
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ id: item.itemId }),
+        });
+      } catch (error) {
+        console.error("Error deleting item from DB:", error);
+        alert("Failed to delete item from database.");
+        return; // exit early if delete fails
+      }
+    }
+
+    // Remove from UI list
+    const updated = [...products];
+    updated.splice(index, 1);
+    setProducts(updated);
+  };
+
+  const handleServiceChange = (index, field, value) => {
+    const updated = [...services];
+    updated[index][field] =
+      field === "price" || field === "discount" ? Number(value) || 0 : value;
+    setServices(updated);
+  };
+
+  const handleDeleteService = (index) => {
+    const updated = [...services];
+    updated.splice(index, 1);
+    setServices(updated);
+  };
+
+  const totalItemPrice = products.reduce(
+    (sum, i) => sum + (i.price || 0) * (i.quantity || 0),
     0
   );
-  const totalDiscount = products.reduce(
-    (sum, item) => sum + item.discount * item.quantity,
+  const itemDiscount = products.reduce(
+    (sum, i) => sum + (i.discount || 0) * (i.quantity || 0),
     0
   );
-  const finalPrice = totalPrice - totalDiscount;
+  const finalItemPrice = totalItemPrice - itemDiscount;
+
+  const totalServicePrice = services.reduce(
+    (sum, s) => sum + (s.price || 0),
+    0
+  );
+  const totalServiceDiscount = services.reduce(
+    (sum, s) => sum + (s.discount || 0),
+    0
+  );
+  const finalServicePrice = totalServicePrice - totalServiceDiscount;
+
+  const totalBill = finalItemPrice + finalServicePrice;
 
   const handleSave = async () => {
-    if (!customerName || !customerTelephone) {
+    if (!customerName && (!customerNumPlate || !customerTelephone)) {
       alert("Please enter customer details");
       return;
     }
+
     try {
-      const billResponse = await fetch("http://localhost:3000/bills/create", {
+      // 1. Create/Update bill
+      const billRes = await fetch("http://localhost:3000/bills/upsert", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
+          id: bill?.id || undefined,
           customerName,
           customerTelephone,
+          customerNumPlate,
+          jobCardId: jobcard?.id || null,
           branchId: 1,
         }),
       });
 
-      const billData = await billResponse.json();
-      if (!billResponse.ok) throw new Error("Failed to create bill");
+      const billData = await billRes.json();
+      if (!billRes.ok) throw new Error("Failed to create/update bill");
+      const billId = parseInt(billData.id);
 
-      const billId = billData.id;
-
+      // 2. Upsert items
       for (const product of products) {
-        await fetch("http://localhost:3000/items/create", {
+        await fetch("http://localhost:3000/items/upsert", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
+            id: product.itemId || undefined,
             billId,
             inventoryId: product.inventoryId,
             quantity: product.quantity,
@@ -159,18 +260,161 @@ function Billing() {
           }),
         });
       }
+      const jobCardId = jobcard?.id || bill?.jobCard?.id;
+      // 3. Upsert each service/job
+      for (const service of services) {
+        const job =
+          jobcard?.jobs?.find((j) => j.id === service.id) ||
+          bill?.jobCard?.jobs?.find((j) => j.id === service.id);
+        if (!job) continue;
+
+        await fetch("http://localhost:3000/jobs/upsert", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            jobCardId: jobCardId,
+            id: job.id,
+            title: job.title,
+            employeeId: job.employee.id,
+            startTime: job.startTime,
+            expectedEndTime: job.expectedEndTime,
+            endTime: job.endTime,
+            charge: service.price, // updated price
+          }),
+        });
+      }
+
+      // 4. Finalize the bill
+      const finalizeRes = await fetch("http://localhost:3000/bills/finalize", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ id: billId }),
+      });
+
+      if (!finalizeRes.ok) throw new Error("Failed to finalize bill");
+
+      // 5. Complete jobcard
+
+      if (jobCardId) {
+        await fetch("http://localhost:3000/jobcards/complete", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ id: jobCardId }),
+        });
+      }
+
       alert("Bill saved successfully");
-      setProducts([]);
-      setCustomerName("");
-      setCustomerTelephone("");
+      resetForm();
     } catch (error) {
-      console.error("Error saving bill: ", error);
+      console.error("Save error:", error);
+      alert(error.message || "An error occurred");
     }
+  };
+
+  const handleHold = async () => {
+    if (!customerName && (!customerNumPlate || !customerTelephone)) {
+      alert("Please enter customer details");
+      return;
+    }
+
+    try {
+      // 1. Create/Update bill
+      const billRes = await fetch("http://localhost:3000/bills/upsert", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          id: bill?.id || undefined,
+          customerName,
+          customerTelephone,
+          customerNumPlate,
+          jobCardId: jobcard?.id || bill?.jobCard?.id || null,
+          branchId: 1,
+        }),
+      });
+
+      const billData = await billRes.json();
+      if (!billRes.ok) throw new Error("Failed to create/update bill");
+      const billId = parseInt(billData.id);
+
+      // 2. Upsert items
+      for (const product of products) {
+        await fetch("http://localhost:3000/items/upsert", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            id: product.itemId || undefined,
+            billId,
+            inventoryId: product.inventoryId,
+            quantity: product.quantity,
+            unitPrice: product.price - product.discount,
+          }),
+        });
+      }
+
+      // 3. Upsert each job (without finalizing)
+      for (const service of services) {
+        const job =
+          jobcard?.jobs?.find((j) => j.id === service.id) ||
+          bill?.jobCard?.jobs?.find((j) => j.id === service.id);
+        if (!job) continue;
+
+        await fetch("http://localhost:3000/jobs/upsert", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            id: job.id,
+            title: job.title,
+            employeeId: job.employeeId,
+            startTime: job.startTime,
+            expectedEndTime: job.expectedEndTime,
+            endTime: job.endTime,
+            charge: service.price, // Updated charge
+          }),
+        });
+      }
+
+      alert("Bill held successfully");
+      resetForm();
+    } catch (error) {
+      console.error("Hold error:", error);
+      alert(error.message || "An error occurred while holding the bill");
+    }
+  };
+
+  const handleCancel = () => {
+    if (window.confirm("Are you sure you want to cancel this bill?")) {
+      resetForm();
+    }
+  };
+
+  const handlePrintAndSave = async () => {
+    await handleSave();
+    // Add print logic if needed
+    window.print(); // Optional: for browser print dialog
   };
 
   return (
     <div className="pos-container">
       <div className="main-container">
+        {/* Customer Info */}
         <div className="info-bar">
           <div className="info-bar1">
             <label className="info-labal">Customer Name:</label>
@@ -184,7 +428,18 @@ function Billing() {
               onChange={(e) => setCustomerName(e.target.value)}
             />
           </div>
-
+          <div className="info-bar1">
+            <label className="info-labal">Number Plate:</label>
+          </div>
+          <div className="info-bar1">
+            <input
+              type="text"
+              className="info-input"
+              placeholder="Enter Number Plate"
+              value={customerNumPlate}
+              onChange={(e) => setNumberPlate(e.target.value)}
+            />
+          </div>
           <div className="info-bar1">
             <label className="info-labal">Mobile Number:</label>
           </div>
@@ -198,19 +453,19 @@ function Billing() {
             />
           </div>
         </div>
+
+        {/* Product Section */}
         <div className="item-table-container">
           <div className="search-bar" style={{ width: "100%" }}>
             <Autocomplete
               options={inventory}
               getOptionLabel={(item) =>
-                `${item.product.barCode} - ${item.product.name} - Rs.${item.sellPrice} - ${item.remainingQuantity} - ${item.branch.name} `
+                `${item.product.barCode} - ${item.product.name} - Rs.${item.sellPrice} - ${item.product.brand}`
               }
               value={selectedProduct}
-              onChange={(event, newValue) => setSelectedProduct(newValue)}
+              onChange={(e, newValue) => setSelectedProduct(newValue)}
               inputValue={searchTerm}
-              onInputChange={(event, newInputValue) =>
-                setSearchTerm(newInputValue)
-              }
+              onInputChange={(e, newInputValue) => setSearchTerm(newInputValue)}
               renderInput={(params) => (
                 <TextField
                   {...params}
@@ -226,181 +481,153 @@ function Billing() {
               Add Item
             </button>
           </div>
-          <div className="pos-table-div">
-            <table className="pos-table">
-              <thead>
-                <tr>
-                  <th>Barcode</th>
-                  <th>Name</th>
-                  <th>Unit Price</th>
-                  <th>Discount</th>
-                  <th>Quantity</th>
-                  <th>Total Price</th>
-                  <th>Action</th>
+
+          <table className="pos-table">
+            <thead>
+              <tr>
+                <th>Barcode</th>
+                <th>Name</th>
+                <th>Unit Price</th>
+                <th>Discount</th>
+                <th>Quantity</th>
+                <th>Total</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {products.map((item, i) => (
+                <tr key={i}>
+                  <td>{item.barcode}</td>
+                  <td>{item.name}</td>
+                  <td>
+                    Rs.
+                    <input
+                      type="number"
+                      value={item.price}
+                      onChange={(e) =>
+                        handleUpdateProduct(i, "price", e.target.value)
+                      }
+                    />
+                  </td>
+                  <td>
+                    Rs.
+                    <input
+                      type="number"
+                      value={item.discount}
+                      onChange={(e) =>
+                        handleUpdateProduct(i, "discount", e.target.value)
+                      }
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      value={item.quantity}
+                      onChange={(e) =>
+                        handleUpdateProduct(i, "quantity", e.target.value)
+                      }
+                    />
+                  </td>
+                  <td>
+                    Rs.
+                    {(
+                      (item.price || 0) * (item.quantity || 0) -
+                      (item.discount || 0) * (item.quantity || 0)
+                    ).toFixed(2)}
+                  </td>
+                  <td>
+                    <button
+                      className="delete-btn"
+                      onClick={() => handleDelete(i)}
+                    >
+                      Delete
+                    </button>
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {products.map((item, index) => (
-                  <tr key={index}>
-                    <td>{item.barcode || "-"}</td>
-                    <td>{item.name || "-"}</td>
-                    <td>
-                      Rs.
-                      <input
-                        type="number"
-                        value={item.price}
-                        onChange={(e) =>
-                          handleUpdateProduct(
-                            index,
-                            "UnitPrice",
-                            e.target.value
-                          )
-                        }
-                      />
-                    </td>
-                    <td>
-                      {" "}
-                      Rs.
-                      <input
-                        type="number"
-                        value={item.discount}
-                        onChange={(e) =>
-                          handleUpdateProduct(index, "discount", e.target.value)
-                        }
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="number"
-                        value={item.quantity}
-                        onChange={(e) =>
-                          handleUpdateProduct(index, "quantity", e.target.value)
-                        }
-                      />
-                    </td>
-                    <td>
-                      Rs.
-                      {(
-                        item.price * item.quantity -
-                        item.discount * item.quantity
-                      ).toFixed(2)}
-                    </td>
-                    <td>
-                      {item.barcode && (
-                        <button
-                          className="delete-btn"
-                          onClick={() => handleDelete(index)}
-                        >
-                          Delete
-                        </button>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+              ))}
+            </tbody>
+          </table>
 
           <div className="totals">
-            <div>Total Item Price: Rs.{totalPrice.toFixed(2)}</div>
-            <div>Discount: Rs.{totalDiscount.toFixed(2)}</div>
+            <div>Total Item Price: Rs.{totalItemPrice.toFixed(2)}</div>
+            <div>Discount: Rs.{itemDiscount.toFixed(2)}</div>
             <div>
-              <strong>Final Item Price: Rs.{finalPrice.toFixed(2)}</strong>
+              <strong>Final Item Price: Rs.{finalItemPrice.toFixed(2)}</strong>
             </div>
           </div>
         </div>
 
-        <div className="service-table-container">
-          <div className="searchbar-section-service-table">
-            <input
-              type="text"
-              className="searchbar-service-table"
-              placeholder="Search Services.."
-            />
-            <button className="search-btn-service-table">Add Service </button>
-          </div>
-          <div className="pos-table-div">
+        {/* Service Section */}
+        {services.length > 0 && (
+          <div className="service-table-container">
             <table className="pos-table">
               <thead>
                 <tr>
                   <th>Service Code</th>
                   <th>Name</th>
-                  <th>Description</th>
                   <th>Employee</th>
                   <th>Price</th>
-                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
-                {products.map((item, index) => (
-                  <tr key={index}>
-                    <td></td>
-                    <td></td>
+                {services.map((service, i) => (
+                  <tr key={i}>
+                    <td>{service.serviceCode}</td>
+                    <td>{service.name}</td>
+                    <td>{service.employee}</td>
                     <td>
-                      
-                      <input
-                        type="text"
-                        style={{width:"80%",}}
-                      />
-                    </td>
-                    <td>
-                      {" "}
-                      
-                      <input
-                        type="text"
-                       
-                      />
-                    </td>
-                    <td>
-                      Rs. 
+                      Rs.
                       <input
                         type="number"
-                        
-                        
+                        value={service.price}
+                        onChange={(e) =>
+                          handleServiceChange(i, "price", e.target.value)
+                        }
                       />
-                    </td>
-                    
-                    <td>
-                      {item.barcode && (
-                        <button
-                          className="delete-btn"
-                          onClick={() => handleDelete(index)}
-                        >
-                          Delete
-                        </button>
-                      )}
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
+
+            <div className="totals">
+              <div>Total Service Price: Rs.{totalServicePrice.toFixed(2)}</div>
+              <div>Discount: Rs.{totalServiceDiscount.toFixed(2)}</div>
+              <div>
+                <strong>
+                  Final Service Price: Rs.{finalServicePrice.toFixed(2)}
+                </strong>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Final Total */}
+        <div className="totals" style={{ backgroundColor: "lightpink" }}>
+          <div>Item Total: Rs.{finalItemPrice.toFixed(2)}</div>
+          <div>Service Total: Rs.{finalServicePrice.toFixed(2)}</div>
+          <div>
+            <strong>Total Bill: Rs.{totalBill.toFixed(2)}</strong>
           </div>
         </div>
 
-        <div className="totals" style={{ display: "flex", justifyContent: "right" }}>
-
-            
-            <div style={{float:"left"}}>
-              <strong>Final Service Price: Rs.{finalPrice.toFixed(2)}</strong>
-            </div>
-          </div>
-
-          <div className="totals" style={{ backgroundColor: "lightpink" }}>
-
-            <div>Total Bill Price: Rs.{totalPrice.toFixed(2)}</div>
-            <div>Discount: Rs.{totalDiscount.toFixed(2)}</div>
-            <div>
-              <strong>Final Bill Price: Rs.{finalPrice.toFixed(2)}</strong>
-            </div>
-          </div>
-
+        {/* Footer */}
         <div className="footer">
           <button className="submit-btn" onClick={handleSave}>
             Save
           </button>
-          <button className="cancel-btn">Cancel</button>
-          <button className="hold-btn">Hold</button>
-          <button className="print-btn">Print & Save</button>
+          <button className="cancel-btn" onClick={handleCancel}>
+            Cancel{" "}
+          </button>
+          <button className="hold-btn" onClick={handleHold}>
+            Hold
+          </button>
+          <button className="print-btn" onClick={handlePrintAndSave}>
+            Print & Save
+          </button>
+          <button className="hold-bills-btn" onClick={() => navigate("hold")}>
+            Hold Bills
+          </button>
         </div>
       </div>
     </div>

@@ -103,9 +103,25 @@ function Product() {
             </button>
           </div>
 
-          <div className="table-section">
-            <table className="inventory-table">
-              <thead>
+          <div className="table-section" style={{
+            marginTop: "20px",
+            overflowX: "auto",
+            borderRadius: "10px",
+            border: "1px solid #d0e1f9",
+            backgroundColor: "#f4faff",
+            boxShadow: "0px 4px 8px rgba(0, 123, 255, 0.1)",
+            padding: "0",
+          }} >
+            <table className="inventory-table1" style={{
+              width: "100%",
+              borderCollapse: "collapse",
+              fontFamily: "Arial, sans-serif",
+              color: "#003366",
+            }} >
+              <thead style={{
+                backgroundColor: "#cce5ff",
+                textAlign: "left",
+              }}>
                 <tr>
                   <th>Barcode</th>
                   <th>Name</th>
@@ -115,7 +131,7 @@ function Product() {
               </thead>
               <tbody>
                 {filterProduct.map((item) => (
-                  <tr key={item.barCode}>
+                  <tr key={item.barCode} style={{ backgroundColor: "#e6f2ff" }}>
                     <td>{item.barCode}</td>
                     <td>{item.name}</td>
                     <td>{item.category}</td>

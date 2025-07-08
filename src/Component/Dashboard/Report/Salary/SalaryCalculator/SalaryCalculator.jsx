@@ -61,7 +61,7 @@ function SalaryCalculator() {
   };
 
   return (
-    <div className="salarycal-main-container" style={{ padding: "25px" }}>
+    <div className="salarycal-main-container" style={{ padding: "25px",display:"flex", alignItems:"center" }}>
       <div
         style={{
           padding: "20px",
@@ -201,10 +201,10 @@ function SalaryCalculator() {
               fontSize:"12px"
             }}
           >
-            Calculate Salary
+            Calculate 
           </button>
           <button
-            onClick={() => Navigate("/dashboard")}
+            onClick={() => Navigate("/reports/salary")}
             style={{
               padding: "10px 20px",
               backgroundColor: "rgb(189, 75, 75)",

@@ -1,0 +1,9 @@
+.employee-table1 th{
+    padding: 12px;
+    border-bottom: 1px solid #99ccff
+}
+
+.employee-table1 td{
+    padding: 10px;
+    border-bottom: 1px solid #d0e1f9
+}
