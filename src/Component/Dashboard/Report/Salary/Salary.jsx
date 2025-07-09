@@ -1,27 +1,98 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./Salary.css";
-
 import { useNavigate } from "react-router-dom";
 
 function Salary() {
   const Navigate = useNavigate();
+  const token = localStorage.getItem("access_token");
+
+  const [employee, setEmployee] = useState([]);
+  const [salaryRecords, setSalaryRecords] = useState([]);
+  const [selectedEmployee, setSelectedEmployee] = useState("");
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+
+  // Fetch employee list
+  useEffect(() => {
+    fetch("http://localhost:3000/employees/findAll", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => setEmployee(Array.isArray(data) ? data : []))
+      .catch((err) => console.error("Error fetching employees!", err));
+  }, []);
+
+  // Fetch all salary records on load
+  useEffect(() => {
+    fetchSalaries();
+  }, []);
+
+  const fetchSalaries = (
+    employeeId = "",
+    createdAfter = "",
+    createdBefore = ""
+  ) => {
+    const url = new URL("http://localhost:3000/salaries/search");
+    if (employeeId) url.searchParams.append("employeeId", employeeId);
+    if (createdAfter) url.searchParams.append("createdAfter", createdAfter);
+    if (createdBefore) url.searchParams.append("createdBefore", createdBefore);
+
+    fetch(url.toString(), {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => setSalaryRecords(Array.isArray(data) ? data : []))
+      .catch((err) => console.error("Error fetching salaries!", err));
+  };
+
+  const handleSearch = () => {
+    fetchSalaries(selectedEmployee, fromDate, toDate);
+  };
+
   return (
     <div className="salary-main-container">
       <div className="salary-records-container">
         <div className="salary-search-section">
           <div className="salary-search-sub-section">
-            <input
-              type="text"
+            <select
               className="salary-search-byname"
-              placeholder="Search by en Employee.."
-            />
+              value={selectedEmployee}
+              onChange={(e) => setSelectedEmployee(e.target.value)}
+            >
+              <option value="">All</option>
+              {employee.map((emp) => (
+                <option key={emp.id} value={emp.id}>
+                  {emp.firstName}
+                </option>
+              ))}
+            </select>
             <div className="search-bydatetime">
-              <input type="date" className="from-date" />
-              <input type="date" className="to-date" />
+              <input
+                type="date"
+                className="from-date"
+                value={fromDate}
+                onChange={(e) => setFromDate(e.target.value)}
+              />
+              <input
+                type="date"
+                className="to-date"
+                value={toDate}
+                onChange={(e) => setToDate(e.target.value)}
+              />
             </div>
           </div>
           <div className="search-btn-section">
-            <button className="salary-search-btn">Search</button>
+            <button className="salary-search-btn" onClick={handleSearch}>
+              Search
+            </button>
             <button
               className="salary-create-btn"
               onClick={() => Navigate("calculator")}
@@ -30,6 +101,7 @@ function Salary() {
             </button>
           </div>
         </div>
+
         <div
           className="salary-table"
           style={{
@@ -90,6 +162,12 @@ function Salary() {
                 <th
                   style={{ padding: "12px", borderBottom: "2px solid #99ccff" }}
                 >
+                  Additions
+                </th>
+
+                <th
+                  style={{ padding: "12px", borderBottom: "2px solid #99ccff" }}
+                >
                   Deductions
                 </th>
                 <th
@@ -105,58 +183,120 @@ function Salary() {
               </tr>
             </thead>
             <tbody>
-              {/* Example static row; replace with .map() from fetched data */}
-              <tr style={{ backgroundColor: "#e6f2ff" }}>
-                <td
-                  style={{ padding: "10px", borderBottom: "1px solid #d0e1f9" }}
-                >
-                  2025-07-06
-                </td>
-                <td
-                  style={{ padding: "10px", borderBottom: "1px solid #d0e1f9" }}
-                >
-                  Dinushka Himesh
-                </td>
-                <td
-                  style={{ padding: "10px", borderBottom: "1px solid #d0e1f9" }}
-                >
-                  5
-                </td>
-                <td
-                  style={{ padding: "10px", borderBottom: "1px solid #d0e1f9" }}
-                >
-                  200
-                </td>
-                <td
-                  style={{ padding: "10px", borderBottom: "1px solid #d0e1f9" }}
-                >
-                  1000
-                </td>
-                <td
-                  style={{ padding: "10px", borderBottom: "1px solid #d0e1f9" }}
-                >
-                  1500
-                </td>
-                <td
-                  style={{ padding: "10px", borderBottom: "1px solid #d0e1f9" }}
-                >
-                  500
-                </td>
-                <td
-                  style={{ padding: "10px", borderBottom: "1px solid #d0e1f9" }}
-                >
-                  30000
-                </td>
-                <td
-                  style={{
-                    padding: "10px",
-                    borderBottom: "1px solid #d0e1f9",
-                    fontWeight: "bold",
-                  }}
-                >
-                  33700
-                </td>
-              </tr>
+              {salaryRecords.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan="9"
+                    style={{ textAlign: "center", padding: "12px" }}
+                  >
+                    No records found.
+                  </td>
+                </tr>
+              ) : (
+                salaryRecords.map((record) => (
+                  <tr key={record.id} style={{ backgroundColor: "#e6f2ff" }}>
+                    <td
+                      style={{
+                        padding: "10px",
+                        borderBottom: "1px solid #d0e1f9",
+                      }}
+                    >
+                      {record.created?.split("T")[0]}
+                    </td>
+                    <td
+                      style={{
+                        padding: "10px",
+                        borderBottom: "1px solid #d0e1f9",
+                      }}
+                    >
+                      {record.employee?.firstName || "N/A"}
+                    </td>
+                    <td
+                      style={{
+                        padding: "10px",
+                        borderBottom: "1px solid #d0e1f9",
+                      }}
+                    >
+                      {record.otHours}
+                    </td>
+                    <td
+                      style={{
+                        padding: "10px",
+                        borderBottom: "1px solid #d0e1f9",
+                      }}
+                    >
+                      {record.otPayPerHour}
+                    </td>
+                    <td
+                      style={{
+                        padding: "10px",
+                        borderBottom: "1px solid #d0e1f9",
+                      }}
+                    >
+                      {record.bonus}
+                    </td>
+                    <td
+                      style={{
+                        padding: "10px",
+                        borderBottom: "1px solid #d0e1f9",
+                      }}
+                    >
+                      {record.allowance}
+                    </td>
+                    <td
+                      style={{
+                        padding: "10px",
+                        borderBottom: "1px solid #d0e1f9",
+                      }}
+                    >
+                      {record.additional}
+                    </td>
+                    <td
+                      style={{
+                        padding: "10px",
+                        borderBottom: "1px solid #d0e1f9",
+                      }}
+                    >
+                      {record.deduction}
+                    </td>
+                    <td
+                      style={{
+                        padding: "10px",
+                        borderBottom: "1px solid #d0e1f9",
+                      }}
+                    >
+                      {record.basic}
+                    </td>
+                    <td
+                      style={{
+                        padding: "10px",
+                        borderBottom: "1px solid #d0e1f9",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {(() => {
+                        const otHours = parseFloat(record.otHours) || 0;
+                        const otRate = parseFloat(record.otPayPerHour) || 0;
+                        const bonus = parseFloat(record.bonus) || 0;
+                        const allowance = parseFloat(record.allowance) || 0;
+                        const additional = parseFloat(record.additional) || 0;
+                        const deduction = parseFloat(record.deduction) || 0;
+                        const basic = parseFloat(record.basic) || 0;
+
+                        const final =
+                          basic +
+                          otHours * otRate +
+                          bonus +
+                          allowance +
+                          additional -
+                          deduction;
+
+                        return parseFloat(final).toFixed(2);
+                      })()}
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
