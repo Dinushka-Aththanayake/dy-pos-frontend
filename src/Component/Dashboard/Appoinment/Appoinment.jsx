@@ -170,13 +170,9 @@ function Appointment() {
             value={searchPlate}
             onChange={(e) => setSearchPlate(e.target.value.toUpperCase())}
           />
-          <button
-            className="search-btn"
-            onClick={handleSearch}
-          >
+          <button className="search-btn" onClick={handleSearch}>
             Search
           </button>
-          
         </div>
         <div className="filter-section5">
           <input
@@ -198,10 +194,12 @@ function Appointment() {
             ))}
           </select>
           <button className="action-btn" onClick={() => Navigate("new")}>
-          Create Appointment
-        </button>
+            Create Appointment
+          </button>
         </div>
-        <div className="appintment-table-container2" style={{
+        <div
+          className="appintment-table-container2"
+          style={{
             marginTop: "20px",
             overflowX: "auto",
             borderRadius: "10px",
@@ -209,17 +207,23 @@ function Appointment() {
             backgroundColor: "#f4faff",
             boxShadow: "0px 4px 8px rgba(0, 123, 255, 0.1)",
             padding: "0",
-          }}>
-          <table className="appointment-table2" style={{
+          }}
+        >
+          <table
+            className="appointment-table2"
+            style={{
               width: "100%",
               borderCollapse: "collapse",
               fontFamily: "Arial, sans-serif",
               color: "#003366",
-            }} >
-            <thead style={{
+            }}
+          >
+            <thead
+              style={{
                 backgroundColor: "#cce5ff",
                 textAlign: "left",
-              }}>
+              }}
+            >
               <tr style={{ backgroundColor: "#e6f2ff" }}>
                 <th>Number Plate</th>
                 <th>Date</th>
@@ -259,8 +263,6 @@ function Appointment() {
             </tbody>
           </table>
         </div>
-
-        
       </div>
       <div className="appointment-form-container">
         <form>
@@ -328,23 +330,87 @@ function Appointment() {
         <div className="buttongroupap">
           <button
             className="cancel-btn22"
-            onClick={() => handleCancel(selectedAppointment?.id)}
-            disabled={
-              !selectedAppointment || selectedAppointment.status === "CANCELLED"
-            }
+            onClick={() => {
+              if (
+                !selectedAppointment ||
+                selectedAppointment.status === "CANCELLED" ||
+                selectedAppointment.status === "COMPLETED"
+              ) {
+                alert(
+                  "Action not allowed for CANCELLED or COMPLETED appointments."
+                );
+                return;
+              }
+              handleCancel(selectedAppointment.id);
+            }}
           >
             Cancel Appointment
           </button>
+
           <button
             className="action-btn22"
-            onClick={() =>
-              Navigate("/jobcard/new", { state: {appointments:selectedAppointment} })
-            }
-            disabled={
-              !selectedAppointment || selectedAppointment.status === "CANCELLED"
-            }
+            onClick={async () => {
+              if (
+                !selectedAppointment ||
+                selectedAppointment.status === "CANCELLED" ||
+                selectedAppointment.status === "COMPLETED"
+              ) {
+                alert(
+                  "You cannot create a jobcard for a CANCELLED or COMPLETED appointment."
+                );
+                return;
+              }
+
+              const token = localStorage.getItem("access_token");
+
+              try {
+                const response = await fetch(
+                  `http://localhost:3000/appointments/complete`,
+                  {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                      Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify({ id: selectedAppointment.id }),
+                  }
+                );
+
+                if (response.ok) {
+                  
+                  Navigate("/jobcard/new", {
+                    state: { appointments: selectedAppointment },
+                  });
+                } else {
+                  const errorData = await response.json();
+                  alert(
+                    `${response.message}`
+                  );
+                }
+              } catch (error) {
+                console.error("Error completing appointment:", error);
+                alert(`${response.message}`);
+              }
+            }}
           >
             Create Jobcard
+          </button>
+
+          <button
+            className="action-btn22"
+            onClick={() => {
+              if (
+                !selectedAppointment ||
+                selectedAppointment.status === "CANCELLED" ||
+                selectedAppointment.status === "COMPLETED"
+              ) {
+                alert("You cannot edit a CANCELLED or COMPLETED appointment.");
+                return;
+              }
+              Navigate("new", { state: { appointmentsss: selectedAppointment } });
+            }}
+          >
+            Edit
           </button>
         </div>
       </div>

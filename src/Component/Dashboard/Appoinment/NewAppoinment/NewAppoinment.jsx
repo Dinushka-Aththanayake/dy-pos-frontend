@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import "./NewAppoinment.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { formatDateToISO } from "../../../../utils";
 
 function NewAppointment() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const editAppointment = location.state?.appointmentsss || null;
   const [numPlate, setNumPlate] = useState("");
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
@@ -12,9 +14,31 @@ function NewAppointment() {
   const [filteredAppointments, setFilteredAppointments] = useState([]);
   const [customerName, setCustomerName] = useState("");
   const [customerTelephone, setcustomerTelephone] = useState("");
-  const [branchId, setBranchId] = useState("");
+  const branchId = 1;
 
   const token = localStorage.getItem("access_token");
+
+  // Pre-fill form fields if editing
+  useEffect(() => {
+    if (editAppointment) {
+      setNumPlate(editAppointment.numPlate || "");
+      setCustomerName(editAppointment.customerName || "");
+      setcustomerTelephone(editAppointment.customerTelephone || "");
+      
+
+      if (editAppointment.datetime) {
+        const datetime = new Date(editAppointment.datetime);
+        const dateStr = datetime.toISOString().split("T")[0];
+        const timeStr = datetime
+          .toTimeString()
+          .split(":")
+          .slice(0, 2)
+          .join(":");
+        setDate(dateStr);
+        setTime(timeStr);
+      }
+    }
+  }, [editAppointment]);
 
   const handleConfirm = async () => {
     const datetime = formatDateToISO(date, time);
@@ -27,6 +51,11 @@ function NewAppointment() {
       customerTelephone,
       branchId: branchInt,
     };
+    
+    // Include ID for update
+    if (editAppointment?.id) {
+      requestData.id = editAppointment.id;
+    }
 
     try {
       const response = await fetch(
@@ -42,18 +71,21 @@ function NewAppointment() {
       );
 
       if (response.ok) {
-        alert("Appointment created successfully!");
+        alert(
+          editAppointment
+            ? "Appointment updated successfully!"
+            : "Appointment created successfully!"
+        );
         navigate("/appoinment");
       } else {
-        alert("Failed to create appointment.");
+        alert("Failed to save appointment.");
       }
     } catch (error) {
-      console.error("Error creating appointment:", error);
-      alert("Error creating appointment. Please try again.");
+      console.error("Error saving appointment:", error);
+      alert("Error saving appointment. Please try again.");
     }
   };
 
-  // 🔍 Fetch appointments based on selected date
   const fetchAppointmentsByDate = async (selectedDate) => {
     if (!selectedDate) return;
 
@@ -75,16 +107,15 @@ function NewAppointment() {
         setAppointments(data);
         setFilteredAppointments(data);
       } else {
-        console.error("Unexpected response format:", data);
         setAppointments([]);
         setFilteredAppointments([]);
+        console.error("Unexpected response format:", data);
       }
     } catch (error) {
       console.error("Error fetching appointments by date:", error);
     }
   };
 
-  // ⏱ Watch for changes in date and fetch accordingly
   useEffect(() => {
     if (date) {
       fetchAppointmentsByDate(date);
@@ -96,9 +127,13 @@ function NewAppointment() {
   const formatDate = (datetime) => {
     const dateObj = new Date(datetime);
     const date = dateObj.toLocaleDateString();
-    const time = dateObj.toLocaleTimeString();
+    const time = dateObj.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
     return { date, time };
   };
+
   return (
     <div className="new-appointment-container">
       <div className="appointment-form-box">
@@ -108,7 +143,7 @@ function NewAppointment() {
             <input
               type="text"
               value={numPlate}
-              onChange={(e) => setNumPlate(e.target.value)}
+              onChange={(e) => setNumPlate(e.target.value.toUpperCase())}
             />
           </div>
           <div className="form-group">
@@ -143,21 +178,10 @@ function NewAppointment() {
               onChange={(e) => setcustomerTelephone(e.target.value)}
             />
           </div>
-          <div className="form-group">
-            <label>Branch:</label>
-            <select
-              className="branch-dropdown11"
-              value={branchId}
-              onChange={(e) => setBranchId(e.target.value)}
-            >
-              <option value="1">Ganemulla</option>
-              <option value="2">Kadawatha</option>
-            </select>
-          </div>
         </form>
         <div className="button-group">
           <button className="confirm-btn9" onClick={handleConfirm}>
-            Confirm
+            {editAppointment ? "Update" : "Confirm"}
           </button>
           <button
             className="cancel-btn9"

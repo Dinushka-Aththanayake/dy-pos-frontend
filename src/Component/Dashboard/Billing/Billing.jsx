@@ -406,6 +406,10 @@ function Billing() {
   };
 
   const handlePrintAndSave = async () => {
+     if (!customerName && (!customerNumPlate || !customerTelephone)) {
+      alert("Please enter customer details");
+      return;
+    }
     await handleSave();
     // Add print logic if needed
     window.print(); // Optional: for browser print dialog
