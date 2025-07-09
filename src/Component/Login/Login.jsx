@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Visibility, VisibilityOff } from "@mui/icons-material"; // Import icons
 import "./Login.css";
+import loginImage from "../../assets/login.png";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -40,7 +41,7 @@ const Login = () => {
 
   return (
     <div className="login-container1">
-        <img src="src\assets\login.png" alt="" className="login-img" />
+        <img src={loginImage} alt="" className="login-img" />
       <div className="login-box">
         <h2>Login</h2>
         {error && <p className="error-message">{error}</p>}

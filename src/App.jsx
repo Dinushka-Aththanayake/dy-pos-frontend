@@ -28,8 +28,8 @@ import Payout from "./Component/Dashboard/Payout/Payout";
 import Salary from "./Component/Dashboard/Report/Salary/Salary";
 import Sales from "./Component/Dashboard/Report/Sales/Sales";
 import Product from "./Component/Dashboard/Product/Product";
-import { Outlet } from "react-router";
-import { createBrowserRouter, RouterProvider } from "react-router";
+import { createHashRouter, Outlet } from "react-router";
+import { RouterProvider } from "react-router";
 import Footer from "./Component/Dashboard/Footer/Footer";
 import Login from "./Component/Login/Login";
 import NewJobcards from "./Component/Dashboard/JobCard/NewJobcard/NewJobcards";
@@ -173,7 +173,7 @@ function AppRoot(props) {
   );
 }
 
-export const router = createBrowserRouter([
+export const router = createHashRouter([
   {
     path: "/",
     element: <Login />,
@@ -302,6 +302,7 @@ export const router = createBrowserRouter([
 ]);
 
 function App() {
+  console.log("App component rendered");
   return <RouterProvider router={router} />;
 }
 
