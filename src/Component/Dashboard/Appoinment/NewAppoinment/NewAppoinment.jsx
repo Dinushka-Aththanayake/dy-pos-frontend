@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./NewAppoinment.css";
 import { useNavigate } from "react-router-dom";
+import { formatDateToISO } from "../../../../utils";
 
 function NewAppointment() {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ function NewAppointment() {
   const token = localStorage.getItem("access_token");
 
   const handleConfirm = async () => {
-    const datetime = `${date} ${time}:00`;
+    const datetime = formatDateToISO(date, time);
     const branchInt = branchId ? parseInt(branchId, 10) : 1;
 
     const requestData = {
