@@ -204,6 +204,22 @@ function Inventory() {
                 readOnly
               />
             </div>
+            <div className="form-group11">
+              <label>Supplier Name:</label>
+              <input
+                type="text"
+                value={selectedItem?.supplierName || ""}
+                readOnly
+              />
+            </div>
+            <div className="form-group11">
+              <label>Supplier Mobile Number:</label>
+              <input
+                type="text"
+                value={selectedItem?.supplierTelephone || ""}
+                readOnly
+              />
+            </div>
           </form>
           <button
             className="createnewinventory-btn"
