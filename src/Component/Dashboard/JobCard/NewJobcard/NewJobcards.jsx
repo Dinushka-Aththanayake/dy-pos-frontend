@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import "./NewJobcards.css";
 import { IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { formatDateToISO, getTodayDate } from "../../../../utils";
 
 function NewJobcards() {
   const navigate = useNavigate();
@@ -48,16 +49,6 @@ function NewJobcards() {
     }
   });
 
-  const getFormattedDateTime = () => new Date().toISOString();
-
-  const formatToISO = (time) => {
-    if (!time) return undefined;
-    const date = new Date();
-    const [hours, minutes] = time.split(":").map(Number);
-    date.setHours(hours, minutes, 0, 0);
-    return date.toISOString();
-  };
-
   useEffect(() => {
     fetch("http://localhost:3000/employees/findAll", {
       method: "GET",
@@ -81,8 +72,6 @@ function NewJobcards() {
       updatedJobs[index][field] = parseInt(value, 10) || 0;
     } else if (field === "employeeId") {
       updatedJobs[index][field] = value ? parseInt(value, 10) : null;
-    } else if (["startTime", "expectedEndTime", "endTime"].includes(field)) {
-      updatedJobs[index][field] = formatToISO(value);
     } else {
       updatedJobs[index][field] = value;
     }
@@ -112,11 +101,7 @@ function NewJobcards() {
   };
 
   const submitJobCard = async () => {
-    const formattedJobCard = {
-      ...jobCard,
-      completed: getFormattedDateTime(),
-      branchId: 1,
-    };
+    const {jobs, ...formattedJobCard} = {...jobCard, branchId: 1};
 
     try {
       const jobCardRes = await fetch("http://localhost:3000/jobcards/upsert", {
@@ -137,15 +122,15 @@ function NewJobcards() {
 
       const jobCardId = jobCardData.id;
 
-      for (const job of jobCard.jobs) {
+      for (const job of jobs) {
         const jobPayload = {
           ...job,
           jobCardId: jobCardId,
           charge: parseInt(job.charge, 10) || 0,
           employeeId: job.employeeId ? parseInt(job.employeeId, 10) : null,
-          startTime: job.startTime || undefined,
-          expectedEndTime: job.expectedEndTime || undefined,
-          endTime: job.endTime || undefined
+          startTime: job.startTime ? formatDateToISO(getTodayDate(), job.startTime) : undefined,
+          expectedEndTime: job.expectedEndTime ? formatDateToISO(getTodayDate(), job.expectedEndTime) : undefined,
+          endTime: job.endTime ? formatDateToISO(getTodayDate(), job.endTime) : undefined,
         };
 
         const jobRes = await fetch("http://localhost:3000/jobs/upsert", {
@@ -237,9 +222,7 @@ function NewJobcards() {
                   <input
                     type="time"
                     value={
-                      job.startTime
-                        ? new Date(job.startTime).toISOString().substring(11, 16)
-                        : ""
+                      job.startTime ?? ""
                     }
                     onChange={(e) =>
                       handleJobChange(index, "startTime", e.target.value)
@@ -250,11 +233,7 @@ function NewJobcards() {
                   <input
                     type="time"
                     value={
-                      job.expectedEndTime
-                        ? new Date(job.expectedEndTime)
-                            .toISOString()
-                            .substring(11, 16)
-                        : ""
+                      job.expectedEndTime ?? ""
                     }
                     onChange={(e) =>
                       handleJobChange(index, "expectedEndTime", e.target.value)
@@ -265,9 +244,7 @@ function NewJobcards() {
                   <input
                     type="time"
                     value={
-                      job.endTime
-                        ? new Date(job.endTime).toISOString().substring(11, 16)
-                        : ""
+                      job.endTime ?? ""
                     }
                     onChange={(e) =>
                       handleJobChange(index, "endTime", e.target.value)
