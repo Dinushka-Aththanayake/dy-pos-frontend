@@ -29,7 +29,7 @@ function NewAppointment() {
 
     try {
       const response = await fetch(
-        "http://localhost:3000/appointments/create",
+        "http://localhost:3000/appointments/upsert",
         {
           method: "POST",
           headers: {
