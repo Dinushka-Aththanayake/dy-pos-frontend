@@ -146,7 +146,7 @@ function Services() {
                       <td>{job.id || "-"}</td>
                       <td>{job.title || "-"}</td>
                       <td>{job.charge || 0}</td>
-                      <td>{emp ? emp.firstName : "-"}</td>
+                      <td>{job.employee.firstName || "-"}</td>
                       <td>{new Date(job.jobCard.completed).toLocaleDateString()}</td>
                     </tr>
                   );
