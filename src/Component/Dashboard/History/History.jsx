@@ -123,7 +123,7 @@ function History() {
           name="customerNumPlate"
           placeholder="Number Plate"
           className="searchbar"
-          value={searchParams.customerNumPlate}
+          value={searchParams.customerNumPlate.toUpperCase()}
           onChange={handleInputChange}
         />
         <input

@@ -142,7 +142,7 @@ function NewAppointment() {
             <input
               type="text"
               value={numPlate}
-              onChange={(e) => setNumPlate(e.target.value)}
+              onChange={(e) => setNumPlate(e.target.value.toUpperCase())}
             />
           </div>
           <div className="form-group">

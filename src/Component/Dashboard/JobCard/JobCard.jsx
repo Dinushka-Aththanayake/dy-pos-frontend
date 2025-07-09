@@ -69,7 +69,7 @@ function JobCard() {
               type="text"
               placeholder="Search by Number Plate..."
               value={searchNumPlate}
-              onChange={(e) => setSearchNumPlate(e.target.value)}
+              onChange={(e) => setSearchNumPlate(e.target.value.toUpperCase())}
             />{" "}
             <button className="btn-primary" onClick={handleSearch}>
               Search

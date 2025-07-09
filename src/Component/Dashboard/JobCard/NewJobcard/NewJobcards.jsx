@@ -178,7 +178,7 @@ function NewJobcards() {
           <input
             type="text"
             value={jobCard.numPlate}
-            onChange={(e) => handleChange("numPlate", e.target.value)}
+            onChange={(e) => handleChange("numPlate", e.target.value.toUpperCase())}
           />
         </div>
         <div className="form-group">
@@ -314,8 +314,7 @@ function NewJobcards() {
           <button className="proceed-btn" onClick={submitJobCard}>
             Submit Job Card
           </button>
-          <button className="hold-btn-job">Hold</button>
-          <button className="hold-bill-btn">Hold bills</button>
+          
         </div>
       </div>
     </div>
