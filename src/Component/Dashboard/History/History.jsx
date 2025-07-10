@@ -219,7 +219,7 @@ function History() {
                           borderRadius: "5px",
                           cursor: "pointer",
                         }}
-                        onClick={() => navigate("show", { state: bill })}
+                        onClick={() => navigate("show", { state: {bill, autoPrint: false} })}
                       >
                         See more
                       </button>
