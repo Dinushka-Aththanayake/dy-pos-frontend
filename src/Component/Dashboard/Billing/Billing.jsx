@@ -15,6 +15,7 @@ function Billing() {
   const [filteredInventory, setFilteredInventory] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [discount, setDiscount] = useState(0);
 
   const [customerTelephone, setCustomerTelephone] = useState(
     jobcard?.customerTelephone || bill?.customerTelephone || ""
@@ -214,6 +215,7 @@ function Billing() {
   const finalServicePrice = totalServicePrice - totalServiceDiscount;
 
   const totalBill = finalItemPrice + finalServicePrice;
+  const finalBill = totalBill - parseFloat(discount || 0);
 
   const handleSave = async () => {
     if (!customerName && (!customerNumPlate || !customerTelephone)) {
@@ -236,6 +238,7 @@ function Billing() {
           customerNumPlate,
           jobCardId: jobcard?.id || null,
           branchId: 1,
+          discount: parseFloat(discount) || 0,
         }),
       });
 
@@ -341,6 +344,7 @@ function Billing() {
           customerNumPlate,
           jobCardId: jobcard?.id || bill?.jobCard?.id || null,
           branchId: 1,
+          discount: discount || "0.00",
         }),
       });
 
@@ -406,7 +410,7 @@ function Billing() {
   };
 
   const handlePrintAndSave = async () => {
-     if (!customerName && (!customerNumPlate || !customerTelephone)) {
+    if (!customerName && (!customerNumPlate || !customerTelephone)) {
       alert("Please enter customer details");
       return;
     }
@@ -441,7 +445,7 @@ function Billing() {
               className="info-input"
               placeholder="Enter Number Plate"
               value={customerNumPlate}
-              onChange={(e) => setNumberPlate(e.target.value)}
+              onChange={(e) => setNumberPlate(e.target.value.toUpperCase())}
             />
           </div>
           <div className="info-bar1">
@@ -608,10 +612,18 @@ function Billing() {
 
         {/* Final Total */}
         <div className="totals" style={{ backgroundColor: "lightpink" }}>
-          <div>Item Total: Rs.{finalItemPrice.toFixed(2)}</div>
-          <div>Service Total: Rs.{finalServicePrice.toFixed(2)}</div>
+          <div>Total Bill: Rs.{totalBill.toFixed(2)}</div>
           <div>
-            <strong>Total Bill: Rs.{totalBill.toFixed(2)}</strong>
+            Discount: Rs.
+            <input
+              type="number"
+              className="discount-input"
+              value={discount}
+              onChange={(e) => setDiscount(e.target.value)}
+            />
+          </div>
+          <div>
+            <strong>Final Bill: Rs.{finalBill.toFixed(2)}</strong>
           </div>
         </div>
 
