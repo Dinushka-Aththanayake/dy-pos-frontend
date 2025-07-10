@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Sales.css";
+import { formatDateToLocalString } from "../../../../utils";
 
 function Sales() {
   const [branch, setBranch] = useState("All");
@@ -18,8 +19,10 @@ function Sales() {
       const queryParams = new URLSearchParams();
 
       if (filters.barCode) queryParams.append("barCode", filters.barCode);
-      if (filters.finalizedAfter) queryParams.append("finalizedAfter", filters.finalizedAfter);
-      if (filters.finalizedBefore) queryParams.append("finalizedBefore", filters.finalizedBefore);
+      if (filters.finalizedAfter)
+        queryParams.append("finalizedAfter", filters.finalizedAfter);
+      if (filters.finalizedBefore)
+        queryParams.append("finalizedBefore", filters.finalizedBefore);
 
       const url = `http://localhost:3000/items/search?${queryParams.toString()}`;
 
@@ -57,8 +60,14 @@ function Sales() {
   };
 
   const totalPrice = data.reduce((sum, item) => sum + (item.price || 0), 0);
-  const totalSalePrice = data.reduce((sum, item) => sum + (item.salesPrice || 0), 0);
-  const totalProfit = data.reduce((sum, item) => sum + ((item.salesPrice || 0) - (item.price || 0)), 0);
+  const totalSalePrice = data.reduce(
+    (sum, item) => sum + (item.salesPrice || 0),
+    0
+  );
+  const totalProfit = data.reduce(
+    (sum, item) => sum + ((item.salesPrice || 0) - (item.price || 0)),
+    0
+  );
 
   return (
     <div className="sales-report-container">
@@ -84,7 +93,11 @@ function Sales() {
         />
         <button
           className="searchbutton"
-          style={{ padding: "10px", backgroundColor: "rgb(60, 157, 205)", color: "white" }}
+          style={{
+            padding: "10px",
+            backgroundColor: "rgb(60, 157, 205)",
+            color: "white",
+          }}
           onClick={handleSearch}
         >
           Search
@@ -137,10 +150,16 @@ function Sales() {
                   <td>{item.id}</td>
                   <td>{item.inventory?.product?.barCode || "N/A"}</td>
                   <td>{item.inventory?.product?.name || "N/A"}</td>
-                  <td>{item.price}</td>
+                  <td>{item.inventory.buyPrice}</td>
                   <td>{item.unitPrice}</td>
-                  <td>{item.profit}</td>
-                  <td>{item.date || "N/A"}</td>
+                  <td>
+                    {(item.unitPrice - item.inventory.buyPrice).toFixed(2)}
+                  </td>
+                  <td>
+                    {item.bill.finalized
+                      ? formatDateToLocalString(new Date(item.bill.finalized))
+                      : "N/A"}
+                  </td>
                 </tr>
               ))}
             </tbody>
