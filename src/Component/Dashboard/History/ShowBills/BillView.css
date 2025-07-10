@@ -141,6 +141,35 @@
   margin-top: 2px;
 }
 
+.signature-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 40px;
+  margin-bottom: 10px;
+  gap: 40px;
+}
+
+.signature-field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.signature-label {
+  font-size: 15px;
+  color: #222;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.signature-line {
+  width: 180px;
+  border-bottom: 2px dotted #888;
+  height: 18px;
+  margin-bottom: 2px;
+}
+
 @media print {
   body * {
     visibility: hidden;
@@ -162,5 +191,10 @@
   .print-btn {
     display: none;
     /* Hide print button in print view */
+  }
+
+  .signature-row {
+    margin-top: 40px;
+    margin-bottom: 0;
   }
 }

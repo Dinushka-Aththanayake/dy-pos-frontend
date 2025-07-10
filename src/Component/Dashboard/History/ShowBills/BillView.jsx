@@ -118,6 +118,16 @@ function BillView({ bill, autoPrint = false }) {
                 <div><strong>Discount:</strong> Rs. {discount.toFixed(2)}</div>
                 <div className="print-final"><strong>Final Total:</strong> Rs. {finalTotal.toFixed(2)}</div>
             </div>
+            <div className="signature-row">
+                <div className="signature-field">
+                    <span className="signature-label">Authorized</span>
+                    <div className="signature-line" />
+                </div>
+                <div className="signature-field">
+                    <span className="signature-label">Received</span>
+                    <div className="signature-line" />
+                </div>
+            </div>
             <div className="print-footer">Thank you for your business!</div>
         </div>
     );
