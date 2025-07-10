@@ -39,6 +39,7 @@ import NewInventory from "./Component/Dashboard/Inventory/NewInventory/NewInvent
 import Services from "./Component/Dashboard/Report/Services/Services";
 import ShowBills from "./Component/Dashboard/History/ShowBills/ShowBills";
 import HoldBills from "./Component/Dashboard/Billing/HoldBills/HoldBills";
+import RegisterUser from "./Component/Dashboard/Account/RegisterUser/RegisterUser";
 
 const NAVIGATION = [
   {
@@ -185,14 +186,15 @@ export const router = createHashRouter([
       {
         path: "billing",
         children: [
-          { 
-            path: "", 
-            element: <Billing /> 
+          {
+            path: "",
+            element: <Billing />,
           },
           {
-            path:"hold",
-            element: <HoldBills/>
-          }],
+            path: "hold",
+            element: <HoldBills />,
+          },
+        ],
       },
       {
         path: "appoinment",
@@ -247,10 +249,6 @@ export const router = createHashRouter([
         ],
       },
       {
-        path: "account",
-        element: <Account />,
-      },
-      {
         path: "payout",
         element: <Payout />,
       },
@@ -262,12 +260,21 @@ export const router = createHashRouter([
         path: "employee",
         children: [
           {
-            path: "attendance",
-            element: <Employee />,
+            path: "account",
+            children: [
+              {
+                path: "",
+                element: <Account />,
+              },
+              {
+                path: "new",
+                element: <RegisterUser />,
+              },
+            ],
           },
           {
-            path: "account",
-            element: <Account />,
+            path: "attendance",
+            element: <Employee />,
           },
         ],
       },
