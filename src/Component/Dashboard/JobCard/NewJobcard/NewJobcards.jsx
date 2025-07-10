@@ -95,7 +95,32 @@ function NewJobcards() {
     });
   };
 
-  const deleteJob = (index) => {
+  const deleteJob = async (index) => {
+    const jobToDelete = jobCard.jobs[index];
+
+    // If job has an ID, call the delete API
+    if (jobToDelete.id) {
+      try {
+        const response = await fetch("http://localhost:3000/jobs/delete", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ id: jobToDelete.id }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to delete job from backend.");
+        }
+      } catch (error) {
+        console.error("Error deleting job:", error);
+        alert("Failed to delete job. Please try again.");
+        return;
+      }
+    }
+
+    // Remove job from frontend state
     const updatedJobs = jobCard.jobs.filter((_, i) => i !== index);
     setJobCard({ ...jobCard, jobs: updatedJobs });
   };
@@ -163,7 +188,9 @@ function NewJobcards() {
           <input
             type="text"
             value={jobCard.numPlate}
-            onChange={(e) => handleChange("numPlate", e.target.value.toUpperCase())}
+            onChange={(e) =>
+              handleChange("numPlate", e.target.value.toUpperCase())
+            }
           />
         </div>
         <div className="form-group">
