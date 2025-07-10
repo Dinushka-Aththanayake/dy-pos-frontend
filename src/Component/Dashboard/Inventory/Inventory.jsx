@@ -1,6 +1,7 @@
 import "./Inventory.css";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { formatDateToLocalString } from "../../../utils";
 
 function Inventory() {
   const Navigate= useNavigate();
@@ -158,15 +159,7 @@ function Inventory() {
                 type="text"
                 value={
                   selectedItem?.created
-                    ? new Date(selectedItem.created).toLocaleString("en-US", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-
-                        hour12: true,
-                      })
+                    ? formatDateToLocalString(new Date(selectedItem.created))
                     : ""
                 }
                 readOnly
