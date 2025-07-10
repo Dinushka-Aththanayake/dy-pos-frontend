@@ -47,7 +47,7 @@ function BillView({ bill, autoPrint = false }) {
                 </div>
             </div>
             <div className="print-header">
-                <h2>BILL</h2>
+                <h2>INVOICE</h2>
                 <div className="print-meta">
                     <div><strong>Bill Ref:</strong> {bill.id}</div>
                     {bill.jobCard?.id && <div><strong>Job Card Ref:</strong> {bill.jobCard.id}</div>}
@@ -59,6 +59,7 @@ function BillView({ bill, autoPrint = false }) {
                 <div><strong>Number Plate:</strong> {bill.customerNumPlate}</div>
                 <div><strong>Mobile Number:</strong> {bill.customerTelephone}</div>
             </div>
+            <h4 style={{ marginTop: 10 }}>Items</h4>
             <table className="print-table">
                 <thead>
                     <tr>
@@ -87,7 +88,7 @@ function BillView({ bill, autoPrint = false }) {
             </table>
             {bill.jobCard?.jobs && bill.jobCard.jobs.length > 0 && (
                 <>
-                    <h4 style={{ marginTop: 30 }}>Service Jobs</h4>
+                    <h4 style={{ marginTop: 10 }}>Jobs</h4>
                     <table className="print-table">
                         <thead>
                             <tr>

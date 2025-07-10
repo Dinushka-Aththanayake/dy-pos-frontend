@@ -41,14 +41,14 @@
 .print-table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 18px;
+  margin: 2px;
   font-size: 15px;
 }
 
 .print-table th,
 .print-table td {
   border: 1px solid #b3c6e0;
-  padding: 8px 6px;
+  padding: 3px 4px;
   text-align: left;
 }
 
@@ -81,6 +81,7 @@
   display: block;
   width: 100%;
   padding: 10px;
+  margin-bottom: 20px;
   background-color: #64b5f6;
   color: white;
   border: none;
