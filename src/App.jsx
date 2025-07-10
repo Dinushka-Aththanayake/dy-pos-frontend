@@ -41,50 +41,60 @@ import ShowBills from "./Component/Dashboard/History/ShowBills/ShowBills";
 import HoldBills from "./Component/Dashboard/Billing/HoldBills/HoldBills";
 import RegisterUser from "./Component/Dashboard/Account/RegisterUser/RegisterUser";
 
+// 🔐 New ProtectedRoute Component
+const ProtectedRoute = ({ allowedRoles, children }) => {
+  const employeeData = localStorage.getItem("employee");
+  const employee = JSON.parse(employeeData);
+  const role = employee?.role;
+  console.log("logged in user role", role);
+  if (!role) return <Login />;
+  if (!allowedRoles.includes(role)) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+          backgroundColor: "rgba(255, 255, 255, 0.01)",
+        }}
+      >
+        <div
+          style={{
+            padding: "2rem",
+            backgroundColor: "rgba(0, 0, 0, 0.1)",
+            borderRadius: "8px",
+            color: "white",
+            textAlign: "center",
+            boxShadow: "0 0 10px rgba(0, 0, 0, 0.5)",
+          }}
+        >
+          <h2 style={{ color: "red", marginBottom: "1rem" }}>
+            Unauthorized Access
+          </h2>
+          <p style={{color:"black"}}>
+            You are logged in as <strong>{employee.role}</strong>
+          </p>
+        </div>
+      </div>
+    );
+  }
+  return children;
+};
+
 const NAVIGATION = [
   {
     kind: "header",
     title: "Main items",
   },
-  {
-    segment: "billing",
-    title: "Billing",
-    icon: <ShoppingCartIcon />,
-  },
-  {
-    segment: "history",
-    title: "Billing History",
-    icon: <HistoryIcon />,
-  },
-  {
-    segment: "payout",
-    title: "Payout",
-    icon: <PaidIcon />,
-  },
-  {
-    segment: "appoinment",
-    title: "Appoinment",
-    icon: <DashboardIcon />,
-  },
-  {
-    segment: "jobcard",
-    title: "Jobcards",
-    icon: <TaskIcon />,
-  },
-  {
-    segment: "inventory",
-    title: "Inventory",
-    icon: <InventoryIcon />,
-  },
-  {
-    segment: "product",
-    title: "Products",
-    icon: <CategoryIcon />,
-  },
-
-  {
-    kind: "divider",
-  },
+  { segment: "billing", title: "Billing", icon: <ShoppingCartIcon /> },
+  { segment: "history", title: "Billing History", icon: <HistoryIcon /> },
+  { segment: "payout", title: "Payout", icon: <PaidIcon /> },
+  { segment: "appoinment", title: "Appoinment", icon: <DashboardIcon /> },
+  { segment: "jobcard", title: "Jobcards", icon: <TaskIcon /> },
+  { segment: "inventory", title: "Inventory", icon: <InventoryIcon /> },
+  { segment: "product", title: "Products", icon: <CategoryIcon /> },
+  { kind: "divider" },
   {
     kind: "header",
     title: "Analytics",
@@ -94,22 +104,9 @@ const NAVIGATION = [
     title: "Reports",
     icon: <BarChartIcon />,
     children: [
-      {
-        segment: "sales",
-        title: "Sales",
-        icon: <TimelineIcon />,
-      },
-      {
-        segment: "services",
-        title: "Services",
-        icon: <TimelineIcon />,
-      },
-
-      {
-        segment: "salary",
-        title: "Salary",
-        icon: <AttachMoneyIcon />,
-      },
+      { segment: "sales", title: "Sales", icon: <TimelineIcon /> },
+      { segment: "services", title: "Services", icon: <TimelineIcon /> },
+      { segment: "salary", title: "Salary", icon: <AttachMoneyIcon /> },
     ],
   },
   {
@@ -117,16 +114,8 @@ const NAVIGATION = [
     title: "Employee",
     icon: <SupervisorAccountIcon />,
     children: [
-      {
-        segment: "attendance",
-        title: "Attendance",
-        icon: <DescriptionIcon />,
-      },
-      {
-        segment: "account",
-        title: "Account",
-        icon: <AccountCircleIcon />,
-      },
+      { segment: "attendance", title: "Attendance", icon: <DescriptionIcon /> },
+      { segment: "account", title: "Account", icon: <AccountCircleIcon /> },
     ],
   },
 ];
@@ -135,20 +124,12 @@ const demoTheme = extendTheme({
   colorSchemes: { light: true, dark: false },
   colorSchemeSelector: "class",
   breakpoints: {
-    values: {
-      xs: 0,
-      sm: 600,
-      md: 600,
-      lg: 1200,
-      xl: 1536,
-    },
+    values: { xs: 0, sm: 600, md: 600, lg: 1200, xl: 1536 },
   },
 });
 
 function AppRoot(props) {
   const { window } = props;
-
-  // Remove this const when copying and pasting into your project.
   const demoWindow = window ? window() : undefined;
 
   return (
@@ -174,6 +155,7 @@ function AppRoot(props) {
   );
 }
 
+// 🌐 Router Setup
 export const router = createHashRouter([
   {
     path: "/",
@@ -188,11 +170,19 @@ export const router = createHashRouter([
         children: [
           {
             path: "",
-            element: <Billing />,
+            element: (
+              <ProtectedRoute allowedRoles={["admin", "worker"]}>
+                <Billing />
+              </ProtectedRoute>
+            ),
           },
           {
             path: "hold",
-            element: <HoldBills />,
+            element: (
+              <ProtectedRoute allowedRoles={["admin", "worker"]}>
+                <HoldBills />
+              </ProtectedRoute>
+            ),
           },
         ],
       },
@@ -201,11 +191,19 @@ export const router = createHashRouter([
         children: [
           {
             path: "",
-            element: <Appoinment />,
+            element: (
+              <ProtectedRoute allowedRoles={["admin", "worker"]}>
+                <Appoinment />
+              </ProtectedRoute>
+            ),
           },
           {
             path: "new",
-            element: <NewAppointment />,
+            element: (
+              <ProtectedRoute allowedRoles={["admin", "worker"]}>
+                <NewAppointment />
+              </ProtectedRoute>
+            ),
           },
         ],
       },
@@ -214,11 +212,19 @@ export const router = createHashRouter([
         children: [
           {
             path: "",
-            element: <JobCard />,
+            element: (
+              <ProtectedRoute allowedRoles={["admin", "worker"]}>
+                <JobCard />
+              </ProtectedRoute>
+            ),
           },
           {
             path: "new",
-            element: <NewJobcards />,
+            element: (
+              <ProtectedRoute allowedRoles={["admin", "worker"]}>
+                <NewJobcards />
+              </ProtectedRoute>
+            ),
           },
         ],
       },
@@ -227,11 +233,19 @@ export const router = createHashRouter([
         children: [
           {
             path: "",
-            element: <History />,
+            element: (
+              <ProtectedRoute allowedRoles={["admin", "worker"]}>
+                <History />
+              </ProtectedRoute>
+            ),
           },
           {
             path: "show",
-            element: <ShowBills />,
+            element: (
+              <ProtectedRoute allowedRoles={["admin", "worker"]}>
+                <ShowBills />
+              </ProtectedRoute>
+            ),
           },
         ],
       },
@@ -240,21 +254,37 @@ export const router = createHashRouter([
         children: [
           {
             path: "",
-            element: <Inventory />,
+            element: (
+              <ProtectedRoute allowedRoles={["admin"]}>
+                <Inventory />
+              </ProtectedRoute>
+            ),
           },
           {
             path: "new",
-            element: <NewInventory />,
+            element: (
+              <ProtectedRoute allowedRoles={["admin", "worker"]}>
+                <NewInventory />
+              </ProtectedRoute>
+            ),
           },
         ],
       },
       {
         path: "payout",
-        element: <Payout />,
+        element: (
+          <ProtectedRoute allowedRoles={["admin", "worker"]}>
+            <Payout />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "product",
-        element: <Product />,
+        element: (
+          <ProtectedRoute allowedRoles={["admin", "worker"]}>
+            <Product />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "employee",
@@ -264,17 +294,29 @@ export const router = createHashRouter([
             children: [
               {
                 path: "",
-                element: <Account />,
+                element: (
+                  <ProtectedRoute allowedRoles={["admin"]}>
+                    <Account />
+                  </ProtectedRoute>
+                ),
               },
               {
                 path: "new",
-                element: <RegisterUser />,
+                element: (
+                  <ProtectedRoute allowedRoles={["admin"]}>
+                    <RegisterUser />
+                  </ProtectedRoute>
+                ),
               },
             ],
           },
           {
             path: "attendance",
-            element: <Employee />,
+            element: (
+              <ProtectedRoute allowedRoles={["admin", "worker"]}>
+                <Employee />
+              </ProtectedRoute>
+            ),
           },
         ],
       },
@@ -283,22 +325,38 @@ export const router = createHashRouter([
         children: [
           {
             path: "sales",
-            element: <Sales />,
+            element: (
+              <ProtectedRoute allowedRoles={["admin"]}>
+                <Sales />
+              </ProtectedRoute>
+            ),
           },
           {
             path: "services",
-            element: <Services />,
+            element: (
+              <ProtectedRoute allowedRoles={["admin"]}>
+                <Services />
+              </ProtectedRoute>
+            ),
           },
           {
             path: "salary",
             children: [
               {
                 path: "",
-                element: <Salary />,
+                element: (
+                  <ProtectedRoute allowedRoles={["admin"]}>
+                    <Salary />
+                  </ProtectedRoute>
+                ),
               },
               {
                 path: "calculator",
-                element: <SalaryCalculator />,
+                element: (
+                  <ProtectedRoute allowedRoles={["admin"]}>
+                    <SalaryCalculator />
+                  </ProtectedRoute>
+                ),
               },
             ],
           },

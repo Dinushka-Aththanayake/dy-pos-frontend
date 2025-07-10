@@ -28,7 +28,9 @@ const Login = () => {
 
       if (response.ok) {
         localStorage.setItem("access_token", data.access_token);
+        localStorage.setItem("employee", JSON.stringify(data.employee));
         console.log("Access Token:", data.access_token);
+        console.log("employee", JSON.stringify(data.employee));
         alert("Login successful!");
         navigate("/billing"); // Navigate to DashboardLayout
       } else {
@@ -41,7 +43,7 @@ const Login = () => {
 
   return (
     <div className="login-container1">
-        <img src={loginImage} alt="" className="login-img" />
+      <img src={loginImage} alt="" className="login-img" />
       <div className="login-box">
         <h2>Login</h2>
         {error && <p className="error-message">{error}</p>}
@@ -53,7 +55,7 @@ const Login = () => {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
-          
+
           {/* Password field with eye icon */}
           <div className="password-container">
             <input
@@ -63,15 +65,19 @@ const Login = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <span className="eye-icon" onClick={() => setShowPassword(!showPassword)}>
+            <span
+              className="eye-icon"
+              onClick={() => setShowPassword(!showPassword)}
+            >
               {showPassword ? <VisibilityOff /> : <Visibility />}
             </span>
           </div>
 
-          <button type="submit" className="login-button">Login</button>
+          <button type="submit" className="login-button">
+            Login
+          </button>
         </form>
       </div>
-     
     </div>
   );
 };
