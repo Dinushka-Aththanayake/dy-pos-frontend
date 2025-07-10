@@ -104,7 +104,7 @@ function History() {
         (sum, job) => sum + parseFloat(job.charge),
         0
       ) || 0;
-    return (itemTotal + jobCardTotal).toFixed(2);
+    return (itemTotal + jobCardTotal-bill.discount).toFixed(2);
   };
 
   return (

@@ -187,13 +187,53 @@ function ShowBills() {
         style={{
           textAlign: "right",
           fontWeight: "bold",
-          fontSize: "20px",
+          fontSize: "18px",
           color: "#000",
           paddingRight: "15px",
           marginTop: "20px",
+          backgroundColor:"#f4faff",
+          borderRadius: "10px",
+          border: "1px solid #d0e1f9",
+          boxShadow: "0px 4px 8px rgba(0, 123, 255, 0.1)",
+          padding:"10px",
+          
         }}
       >
         Total Bill Price: Rs. {totalBill.toFixed(2)}
+      </div>
+      <div
+        style={{
+          textAlign: "right",
+          fontWeight: "bold",
+          fontSize: "18px",
+          color: "#000",
+          paddingRight: "15px",
+          marginTop: "20px",
+          backgroundColor:"#f4faff",  
+          borderRadius: "10px",
+          border: "1px solid #d0e1f9",
+          boxShadow: "0px 4px 8px rgba(0, 123, 255, 0.1)",
+          padding:"10px",
+        }}
+      >
+        Discount: Rs. {bill.discount}
+      </div>
+      <div
+        style={{
+          textAlign: "right",
+          fontWeight: "bold",
+          fontSize: "18px",
+          color: "#000",
+          paddingRight: "15px",
+          marginTop: "20px",
+          padding:"10px",
+          backgroundColor:"rgb(216, 162, 207)",  
+          borderRadius: "10px",
+          border: "1px solid #d0e1f9",
+          boxShadow: "0px 4px 8px rgba(0, 123, 255, 0.1)",
+        }}
+      >
+        Total Bill Price: Rs. {(totalBill.toFixed(2)-bill.discount).toFixed(2)}
       </div>
     </div>
   );
