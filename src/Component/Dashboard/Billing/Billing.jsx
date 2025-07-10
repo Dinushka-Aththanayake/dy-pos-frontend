@@ -55,14 +55,14 @@ function Billing() {
       employee: job?.employee?.firstName || "",
       price: Number(job.charge || 0),
     })) ||
-      bill?.jobCard?.jobs.map((service) => ({
-        id: service.id,
-        serviceCode: service.id || "",
-        name: service.title || "",
-        employee: service.employee.firstName || "",
-        price: Number(service.charge || 0),
-      })) ||
-      []
+    bill?.jobCard?.jobs.map((service) => ({
+      id: service.id,
+      serviceCode: service.id || "",
+      name: service.title || "",
+      employee: service.employee.firstName || "",
+      price: Number(service.charge || 0),
+    })) ||
+    []
   );
 
   useEffect(() => {
@@ -415,8 +415,12 @@ function Billing() {
       return;
     }
     await handleSave();
-    // Add print logic if needed
-    window.print(); // Optional: for browser print dialog
+    navigate("/history/show", {
+      state: {
+        bill,
+        autoPrint: true, // Set to true to trigger auto-print
+      }
+    });
   };
 
   return (

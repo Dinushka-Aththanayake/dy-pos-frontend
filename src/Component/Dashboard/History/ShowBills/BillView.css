@@ -1,0 +1,166 @@
+/* PrintBill.css - print-friendly styles */
+.print-bill-container {
+  max-width: 900px;
+  margin: 0 auto;
+  background: #fff;
+  padding: 32px 32px 16px 32px;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  color: #222;
+  border-radius: 10px;
+  box-shadow: 0 0 8px #b3c6e0;
+}
+
+.print-header {
+  text-align: center;
+  border-bottom: 2px solid #1964a2;
+  margin-bottom: 18px;
+  padding-bottom: 8px;
+}
+
+.print-header h2 {
+  margin: 0 0 8px 0;
+  color: #1964a2;
+  letter-spacing: 2px;
+}
+
+.print-meta {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  font-size: 15px;
+}
+
+.print-customer {
+  margin-bottom: 18px;
+  font-size: 15px;
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.print-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 18px;
+  font-size: 15px;
+}
+
+.print-table th,
+.print-table td {
+  border: 1px solid #b3c6e0;
+  padding: 8px 6px;
+  text-align: left;
+}
+
+.print-table th {
+  background: #e3f0fa;
+  color: #1964a2;
+}
+
+.print-summary {
+  margin-top: 18px;
+  font-size: 16px;
+  text-align: right;
+}
+
+.print-final {
+  font-size: 20px;
+  font-weight: bold;
+  color: #1964a2;
+  margin-top: 8px;
+}
+
+.print-footer {
+  margin-top: 32px;
+  text-align: center;
+  font-size: 15px;
+  color: #acacac;
+}
+
+.print-btn {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background-color: #64b5f6;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+  font-size: 16px;
+}
+
+.print-btn:hover {
+  background-color: #42a5f5;
+}
+
+.print-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(100, 181, 246, 0.5);
+}
+
+.print-btn:active {
+  background-color: #1e88e5;
+}
+
+.bill-header-custom {
+  margin-bottom: 18px;
+}
+
+.bill-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+}
+
+.bill-header-logo img {
+  height: 60px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px #b3c6e0;
+  background: #fff;
+}
+
+.bill-header-title {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.bill-header-divider {
+  width: 100%;
+  border-bottom: 2px solid #1964a2;
+  margin: 10px 0 8px 0;
+}
+
+.bill-header-contact {
+  text-align: center;
+  font-size: 15px;
+  color: #222;
+  margin-top: 2px;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  .print-bill-container,
+  .print-bill-container * {
+    visibility: visible;
+  }
+
+  .print-bill-container {
+    box-shadow: none;
+    margin: 0;
+    padding: 0;
+    border-radius: 0;
+    width: 100%;
+  }
+
+  .print-btn {
+    display: none;
+    /* Hide print button in print view */
+  }
+}
