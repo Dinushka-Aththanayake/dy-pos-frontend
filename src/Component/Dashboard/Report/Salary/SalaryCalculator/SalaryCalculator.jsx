@@ -2,6 +2,8 @@ import { div } from "framer-motion/client";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 function SalaryCalculator() {
   const Navigate = useNavigate();
   const token = localStorage.getItem("access_token");
@@ -22,7 +24,7 @@ function SalaryCalculator() {
 
   // Fetch employee list
   useEffect(() => {
-    fetch("http://localhost:3000/employees/findAll", {
+    fetch(`${API_BASE_URL}/employees/findAll`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -37,7 +39,7 @@ function SalaryCalculator() {
   // Fetch basic salary of selected employee
   useEffect(() => {
     if (selectedEmployee) {
-      fetch(`http://localhost:3000/employees/search?id=${selectedEmployee}`, {
+      fetch(`${API_BASE_URL}/employees/search?id=${selectedEmployee}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -59,7 +61,7 @@ function SalaryCalculator() {
 
     try {
       const res = await fetch(
-        `http://localhost:3000/attendances/search?employeeId=${selectedEmployee}&recordedAfter=${fromDate}&recordedBefore=${toDate}`,
+        `${API_BASE_URL}/attendances/search?employeeId=${selectedEmployee}&recordedAfter=${fromDate}&recordedBefore=${toDate}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -148,7 +150,7 @@ function SalaryCalculator() {
       deduction: parseFloat(deductions || 0),
     };
 
-    const res = await fetch("http://localhost:3000/salaries/create", {
+    const res = await fetch(`${API_BASE_URL}/salaries/create`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

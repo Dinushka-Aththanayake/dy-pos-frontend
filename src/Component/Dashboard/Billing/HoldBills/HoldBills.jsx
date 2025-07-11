@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 function HoldBills() {
   const [bills, setBills] = useState([]);
   const navigate = useNavigate();
@@ -9,7 +11,7 @@ function HoldBills() {
   useEffect(() => {
     const fetchHeldBills = async () => {
       try {
-        const response = await fetch("http://localhost:3000/bills/search?isFinalized=", {
+        const response = await fetch(`${API_BASE_URL}/bills/search?isFinalized=`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

@@ -2,6 +2,8 @@ import "./JobCard.css";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 function JobCard() {
   const Navigate = useNavigate();
   const [jobCards, setJobCards] = useState([]);
@@ -26,7 +28,9 @@ function JobCard() {
   const fetchJobCards = (params = {}) => {
     const token = localStorage.getItem("access_token");
     const queryParams = new URLSearchParams(params).toString();
-    const url = `http://localhost:3000/jobCards/search${queryParams ? `?${queryParams}` : ""}`;
+    const url = `${API_BASE_URL}/jobCards/search${
+      queryParams ? `?${queryParams}` : ""
+    }`;
 
     fetch(url, {
       method: "GET",

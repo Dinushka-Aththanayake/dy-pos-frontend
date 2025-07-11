@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import "./Employee.css";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 const Employee = () => {
   const [records, setRecords] = useState([]);
   const [filterName, setFilterName] = useState("");
@@ -16,7 +18,7 @@ const Employee = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("access_token");
-    fetch("http://localhost:3000/employees/findAll", {
+    fetch(`${API_BASE_URL}/employees/findAll`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -31,7 +33,7 @@ const Employee = () => {
   const fetchRecords = async () => {
     try {
       const token = localStorage.getItem("access_token");
-      const response = await fetch("http://localhost:3000/attendances/search", {
+      const response = await fetch(`${API_BASE_URL}/attendances/search`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -60,7 +62,7 @@ const Employee = () => {
       let type = "IN"; // Default to IN
 
       const statusResponse = await fetch(
-        `http://localhost:3000/attendances/status?employeeId=${empId}`,
+        `${API_BASE_URL}/attendances/status?employeeId=${empId}`,
         {
           method: "GET",
           headers: {
@@ -80,7 +82,7 @@ const Employee = () => {
       }
 
       const recordResponse = await fetch(
-        `http://localhost:3000/attendances/record`,
+        `${API_BASE_URL}/attendances/record`,
         {
           method: "POST",
           headers: {
@@ -108,7 +110,7 @@ const Employee = () => {
 
   const handleInOutAuth = async () => {
     try {
-      const response = await fetch("http://localhost:3000/auth/login", {
+      const response = await fetch(`${API_BASE_URL}/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -147,7 +149,7 @@ const Employee = () => {
       if (startDate) queryParams.append("recordedAfter", startDate);
       if (endDate) queryParams.append("recordedBefore", endDate);
 
-      const url = `http://localhost:3000/attendances/search?${queryParams.toString()}`;
+      const url = `${API_BASE_URL}/attendances/search?${queryParams.toString()}`;
 
       const response = await fetch(url, {
         method: "GET",

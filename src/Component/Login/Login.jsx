@@ -4,6 +4,8 @@ import { Visibility, VisibilityOff } from "@mui/icons-material"; // Import icons
 import "./Login.css";
 import loginImage from "../../assets/login.png";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -16,7 +18,7 @@ const Login = () => {
     setError(""); // Reset error message
 
     try {
-      const response = await fetch("http://localhost:3000/auth/login", {
+      const response = await fetch(`${API_BASE_URL}/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

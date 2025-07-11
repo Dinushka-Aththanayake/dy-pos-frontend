@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import "./Appoinment.css";
 import { useNavigate } from "react-router-dom";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 function Appointment() {
   const Navigate = useNavigate();
   const [branches, setBranches] = useState([]);
@@ -15,7 +17,7 @@ function Appointment() {
   useEffect(() => {
     const token = localStorage.getItem("access_token");
 
-    fetch("http://localhost:3000/branches/findAll", {
+    fetch(`${API_BASE_URL}/branches/findAll`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -37,7 +39,7 @@ function Appointment() {
   useEffect(() => {
     const token = localStorage.getItem("access_token");
 
-    fetch("http://localhost:3000/appointments/search", {
+    fetch(`${API_BASE_URL}/appointments/search`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -60,7 +62,7 @@ function Appointment() {
 
   const handleSearch = () => {
     const token = localStorage.getItem("access_token");
-    const url = new URL("http://localhost:3000/appointments/search");
+    const url = new URL(`${API_BASE_URL}/appointments/search`);
 
     if (searchPlate.trim() !== "") {
       url.searchParams.append("numPlate", searchPlate.trim().toUpperCase());
@@ -117,7 +119,7 @@ function Appointment() {
 
       try {
         const response = await fetch(
-          `http://localhost:3000/appointments/cancel`,
+          `${API_BASE_URL}/appointments/cancel`,
           {
             method: "POST",
             headers: {
@@ -365,7 +367,7 @@ function Appointment() {
 
               try {
                 const response = await fetch(
-                  `http://localhost:3000/appointments/complete`,
+                  `${API_BASE_URL}/appointments/complete`,
                   {
                     method: "POST",
                     headers: {

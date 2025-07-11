@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import "./Sales.css";
 import { formatDateToLocalString } from "../../../../utils";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 function Sales() {
   const [branch, setBranch] = useState("All");
   const [startDate, setStartDate] = useState("");
@@ -24,7 +26,7 @@ function Sales() {
       if (filters.finalizedBefore)
         queryParams.append("finalizedBefore", filters.finalizedBefore);
 
-      const url = `http://localhost:3000/items/search?${queryParams.toString()}`;
+      const url = `${API_BASE_URL}/items/search?${queryParams.toString()}`;
 
       const response = await fetch(url, {
         method: "GET",

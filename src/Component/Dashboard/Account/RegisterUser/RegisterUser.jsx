@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 function RegisterUser() {
   const token = localStorage.getItem("access_token");
   const [formData, setFormData] = useState({
@@ -58,7 +60,7 @@ function RegisterUser() {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/employees/create",
+        `${API_BASE_URL}/employees/create`,
         payload,
         {
           headers: {

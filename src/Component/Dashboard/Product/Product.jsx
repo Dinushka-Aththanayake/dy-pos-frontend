@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Product.css";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 function Product() {
   const [products, setProducts] = useState([]);
 
@@ -22,7 +24,7 @@ function Product() {
   });
 
   useEffect(() => {
-    fetch("http://localhost:3000/products/search", {
+    fetch(`${API_BASE_URL}/products/search`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -46,7 +48,7 @@ function Product() {
     e.preventDefault();
     const requestData = { barCode, name, category, brand };
     try {
-      const response = await fetch("http://localhost:3000/products/create", {
+      const response = await fetch(`${API_BASE_URL}/products/create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -63,7 +65,7 @@ function Product() {
         setBrand("");
 
         const updatedProducts = await fetch(
-          "http://localhost:3000/products/search",
+          `${API_BASE_URL}/products/search`,
           {
             method: "GET",
             headers: {
