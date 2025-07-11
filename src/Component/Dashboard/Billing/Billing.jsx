@@ -519,6 +519,7 @@ function Billing() {
                       onChange={(e) =>
                         handleUpdateProduct(i, "price", e.target.value)
                       }
+                      min="0"
                     />
                   </td>
                   <td>
@@ -529,6 +530,7 @@ function Billing() {
                       onChange={(e) =>
                         handleUpdateProduct(i, "discount", e.target.value)
                       }
+                      min="0"
                     />
                   </td>
                   <td>
@@ -624,6 +626,7 @@ function Billing() {
               className="discount-input"
               value={discount}
               onChange={(e) => setDiscount(e.target.value)}
+              min="0"
             />
           </div>
           <div>
