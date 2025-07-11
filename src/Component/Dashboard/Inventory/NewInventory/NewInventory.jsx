@@ -3,6 +3,8 @@ import "./NewInventory.css";
 import axios from "axios";
 import DeleteIcon from "@mui/icons-material/Delete";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 const NewInventory = () => {
   const [inventories, setInventories] = useState([
     {
@@ -69,7 +71,7 @@ const NewInventory = () => {
           branchId: 1,
         };
 
-        await axios.post("http://localhost:3000/inventories/create", payload, {
+        await axios.post(`${API_BASE_URL}/inventories/create`, payload, {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",

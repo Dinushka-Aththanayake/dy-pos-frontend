@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import "./Salary.css";
 import { useNavigate } from "react-router-dom";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 function Salary() {
   const Navigate = useNavigate();
   const token = localStorage.getItem("access_token");
@@ -14,7 +16,7 @@ function Salary() {
 
   // Fetch employee list
   useEffect(() => {
-    fetch("http://localhost:3000/employees/findAll", {
+    fetch(`${API_BASE_URL}/employees/findAll`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -36,7 +38,7 @@ function Salary() {
     createdAfter = "",
     createdBefore = ""
   ) => {
-    const url = new URL("http://localhost:3000/salaries/search");
+    const url = new URL(`${API_BASE_URL}/salaries/search`);
     if (employeeId) url.searchParams.append("employeeId", employeeId);
     if (createdAfter) url.searchParams.append("createdAfter", createdAfter);
     if (createdBefore) url.searchParams.append("createdBefore", createdBefore);

@@ -3,6 +3,8 @@ import "./NewAppoinment.css";
 import { useNavigate, useLocation } from "react-router-dom";
 import { formatDateToISO } from "../../../../utils";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 function NewAppointment() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -58,7 +60,7 @@ function NewAppointment() {
 
     try {
       const response = await fetch(
-        "http://localhost:3000/appointments/upsert",
+        `${API_BASE_URL}/appointments/upsert`,
         {
           method: "POST",
           headers: {
@@ -90,7 +92,7 @@ function NewAppointment() {
 
     try {
       const response = await fetch(
-        `http://localhost:3000/appointments/search?date=${selectedDate}`,
+        `${API_BASE_URL}/appointments/search?date=${selectedDate}`,
         {
           method: "GET",
           headers: {

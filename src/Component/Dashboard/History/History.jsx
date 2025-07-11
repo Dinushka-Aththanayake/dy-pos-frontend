@@ -3,6 +3,8 @@ import "./History.css";
 import { useNavigate } from "react-router-dom";
 import { div } from "framer-motion/client";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 function History() {
   const navigate = useNavigate();
   const [bills, setBills] = useState([]);
@@ -19,7 +21,7 @@ function History() {
 
   // Fetch all bills on initial load
   useEffect(() => {
-    fetch("http://localhost:3000/bills/search", {
+    fetch(`${API_BASE_URL}/bills/search`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -69,7 +71,7 @@ function History() {
 
   // Handle Search with query parameters
   const handleSearch = () => {
-    const url = new URL("http://localhost:3000/bills/search");
+    const url = new URL(`${API_BASE_URL}/bills/search`);
 
     if (searchParams.id.trim() !== "") {
       url.searchParams.append("id", searchParams.id.trim());

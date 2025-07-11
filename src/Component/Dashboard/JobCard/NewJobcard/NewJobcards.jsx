@@ -10,6 +10,8 @@ import {
   getTodayDate,
 } from "../../../../utils";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 function NewJobcards() {
   const navigate = useNavigate();
   const token = localStorage.getItem("access_token");
@@ -57,7 +59,7 @@ function NewJobcards() {
   });
 
   useEffect(() => {
-    fetch("http://localhost:3000/employees/findAll", {
+    fetch(`${API_BASE_URL}/employees/findAll`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -112,7 +114,7 @@ function NewJobcards() {
     // If job has an ID, call the delete API
     if (jobToDelete.id) {
       try {
-        const response = await fetch("http://localhost:3000/jobs/delete", {
+        const response = await fetch(`${API_BASE_URL}/jobs/delete`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -140,7 +142,7 @@ function NewJobcards() {
     const { jobs, ...formattedJobCard } = { ...jobCard, branchId: 1 };
 
     try {
-      const jobCardRes = await fetch("http://localhost:3000/jobcards/upsert", {
+      const jobCardRes = await fetch(`${API_BASE_URL}/jobcards/upsert`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -171,7 +173,7 @@ function NewJobcards() {
           endTime: job.endTime ? job.endTime.toISOString() : undefined,
         };
 
-        const jobRes = await fetch("http://localhost:3000/jobs/upsert", {
+        const jobRes = await fetch(`${API_BASE_URL}/jobs/upsert`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

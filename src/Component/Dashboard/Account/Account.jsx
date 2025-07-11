@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import "./Account.css";
 import { useNavigate } from "react-router-dom";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 function Account() {
   const navigation = useNavigate();
   const [employees, setEmployees] = useState([]);
@@ -11,7 +13,7 @@ function Account() {
   const token = localStorage.getItem("access_token");
 
   useEffect(() => {
-    fetch("http://localhost:3000/employees/findAll", {
+    fetch(`${API_BASE_URL}/employees/findAll`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -26,7 +28,7 @@ function Account() {
   useEffect(() => {
     if (!selectedEmployeeId) return;
 
-    fetch(`http://localhost:3000/employees/search?id=${selectedEmployeeId}`, {
+    fetch(`${API_BASE_URL}/employees/search?id=${selectedEmployeeId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -49,7 +51,7 @@ function Account() {
 
     const { password, ...employeeData } = selectedEmployee;
 
-    fetch("http://localhost:3000/employees/update", {
+    fetch(`${API_BASE_URL}/employees/update`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -79,7 +81,7 @@ function Account() {
       return;
     }
 
-    fetch("http://localhost:3000/employees/changePassword", {
+    fetch(`${API_BASE_URL}/employees/changePassword`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

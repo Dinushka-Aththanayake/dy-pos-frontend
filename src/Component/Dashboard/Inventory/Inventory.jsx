@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { formatDateToLocalString } from "../../../utils";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 function Inventory() {
   const Navigate= useNavigate();
   const [branchFilter, setBranchFilter] = useState("All");
@@ -12,7 +14,7 @@ function Inventory() {
   const token = localStorage.getItem("access_token");
 
   useEffect(() => {
-    fetch("http://localhost:3000/inventories/search", {
+    fetch(`${API_BASE_URL}/inventories/search`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

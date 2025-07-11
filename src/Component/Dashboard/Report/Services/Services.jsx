@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./Services.css";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 function Services() {
   const [employee, setEmployee] = useState([]);
   const [jobs, setJobs] = useState([]);
@@ -12,7 +14,7 @@ function Services() {
 
   // Fetch employees
   useEffect(() => {
-    fetch("http://localhost:3000/employees/findAll", {
+    fetch(`${API_BASE_URL}/employees/findAll`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -29,7 +31,7 @@ function Services() {
 
   const fetchJobs = (filters = {}) => {
     const params = new URLSearchParams(filters).toString();
-    const url = `http://localhost:3000/jobs/search${params ? `?${params}` : ""}`;
+    const url = `${API_BASE_URL}/jobs/search${params ? `?${params}` : ""}`;
 
     fetch(url, {
       method: "GET",

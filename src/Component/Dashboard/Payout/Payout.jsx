@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./Payout.css";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 function Payout() {
   const token = localStorage.getItem("access_token");
 
@@ -14,7 +16,7 @@ function Payout() {
   const [afterDate, setAfterDate] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:3000/employees/findAll", {
+    fetch(`${API_BASE_URL}/employees/findAll`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -27,7 +29,7 @@ function Payout() {
   }, []);
 
   const fetchPayouts = () => {
-    fetch("http://localhost:3000/payouts/search", {
+    fetch(`${API_BASE_URL}/payouts/search`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -49,7 +51,7 @@ function Payout() {
       return;
     }
 
-    fetch("http://localhost:3000/payouts/create", {
+    fetch(`${API_BASE_URL}/payouts/create`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -94,7 +96,7 @@ function Payout() {
             <button
               className="search-btn1"
               onClick={() => {
-                const url = new URL("http://localhost:3000/payouts/search");
+                const url = new URL(`${API_BASE_URL}/payouts/search`);
                 if (beforeDate)
                   url.searchParams.append("beforeDate", beforeDate);
                 if (afterDate) url.searchParams.append("afterDate", afterDate);

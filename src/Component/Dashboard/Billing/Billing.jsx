@@ -4,6 +4,8 @@ import "./Billing.css";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 function Billing() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -66,7 +68,7 @@ function Billing() {
   );
 
   useEffect(() => {
-    fetch("http://localhost:3000/inventories/search?available=true", {
+    fetch(`${API_BASE_URL}/inventories/search?available=true`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -160,7 +162,7 @@ function Billing() {
     // If item has an ID, it exists in DB and should be deleted
     if (item.itemId) {
       try {
-        await fetch("http://localhost:3000/items/delete", {
+        await fetch(`${API_BASE_URL}/items/delete`, {
           method: "POST", // or "DELETE" based on your API
           headers: {
             "Content-Type": "application/json",
@@ -225,7 +227,7 @@ function Billing() {
 
     try {
       // 1. Create/Update bill
-      const billRes = await fetch("http://localhost:3000/bills/upsert", {
+      const billRes = await fetch(`${API_BASE_URL}/bills/upsert`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -248,7 +250,7 @@ function Billing() {
 
       // 2. Upsert items
       for (const product of products) {
-        await fetch("http://localhost:3000/items/upsert", {
+        await fetch(`${API_BASE_URL}/items/upsert`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -271,7 +273,7 @@ function Billing() {
           bill?.jobCard?.jobs?.find((j) => j.id === service.id);
         if (!job) continue;
 
-        await fetch("http://localhost:3000/jobs/upsert", {
+        await fetch(`${API_BASE_URL}/jobs/upsert`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -291,7 +293,7 @@ function Billing() {
       }
 
       // 4. Finalize the bill
-      const finalizeRes = await fetch("http://localhost:3000/bills/finalize", {
+      const finalizeRes = await fetch(`${API_BASE_URL}/bills/finalize`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -305,7 +307,7 @@ function Billing() {
       // 5. Complete jobcard
 
       if (jobCardId) {
-        await fetch("http://localhost:3000/jobcards/complete", {
+        await fetch(`${API_BASE_URL}/jobcards/complete`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -331,7 +333,7 @@ function Billing() {
 
     try {
       // 1. Create/Update bill
-      const billRes = await fetch("http://localhost:3000/bills/upsert", {
+      const billRes = await fetch(`${API_BASE_URL}/bills/upsert`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -354,7 +356,7 @@ function Billing() {
 
       // 2. Upsert items
       for (const product of products) {
-        await fetch("http://localhost:3000/items/upsert", {
+        await fetch(`${API_BASE_URL}/items/upsert`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -377,7 +379,7 @@ function Billing() {
           bill?.jobCard?.jobs?.find((j) => j.id === service.id);
         if (!job) continue;
 
-        await fetch("http://localhost:3000/jobs/upsert", {
+        await fetch(`${API_BASE_URL}/jobs/upsert`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
