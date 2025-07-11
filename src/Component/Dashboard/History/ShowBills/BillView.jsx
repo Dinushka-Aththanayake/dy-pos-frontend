@@ -34,14 +34,15 @@ function BillView({ bill, autoPrint = false }) {
                     <div className="bill-header-logo">
                         <img src={headerLogo} alt="Logo" style={{ height: 80 }} />
                     </div>
-                    <div className="bill-header-title" style={{ textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: "5px" }}>
-                        <div style={{ fontSize: 24, fontWeight: 700, letterSpacing: 1 }}>Ranawaka Car Audio</div>
-                        <div style={{ fontSize: 24, fontWeight: 700, letterSpacing: 1 }}>& All Accessories</div>
-                        <div style={{ fontSize: 14, color: "#555" }}>All accessories and accident painting</div>
+                    <div className="bill-header-title" style={{ textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: "0" }}>
+                        <div className="company-name-header" style={{ fontSize: 20, fontWeight: 700, letterSpacing: 1}}>Ranawaka Car Audio</div>
+                        <div  className="company-name-header" style={{ fontSize: 20, fontWeight: 700, letterSpacing: 1 }}>& </div>
+                        <div className="company-name-header" style={{ fontSize: 20, fontWeight: 700, letterSpacing: 1 }}>All Accessories</div>
+                        <div  style={{ fontSize: 14, color: "#555" }}>All accessories and accident painting</div>
                     </div>
                 </div>
-                <div className="bill-header-divider" style={{ borderBottom: "2px solid #1964a2", margin: "10px 0 8px 0" }} />
-                <div className="bill-header-contact" style={{ textAlign: "center", fontSize: 12, fontStyle: "italic", color: "#555" }}>
+                <div className="bill-header-divider" style={{ borderBottom: "2px solid #1964a2", margin: "5px 0 3px 0" }} />
+                <div className="bill-header-contact" style={{ textAlign: "center", fontSize: 9, fontStyle: "italic", color: "#555" }}>
                     644/E/3, Bandarawatta, Kadawatha<br />
                     Tel: 071-0919845 / 0769715454
                 </div>
@@ -59,7 +60,7 @@ function BillView({ bill, autoPrint = false }) {
                 <div><strong>Number Plate:</strong> {bill.customerNumPlate}</div>
                 <div><strong>Mobile Number:</strong> {bill.customerTelephone}</div>
             </div>
-            <h4 style={{ marginTop: 10 }}>Items</h4>
+            <h4 style={{ marginTop: 1, fontSize:"13px" }}>Items</h4>
             <table className="print-table">
                 <thead>
                     <tr>
@@ -114,10 +115,10 @@ function BillView({ bill, autoPrint = false }) {
                 </>
             )}
             <div className="print-summary">
-                <div><strong>Total Item Price:</strong> Rs. {itemTotal.toFixed(2)}</div>
-                <div><strong>Total Service Price:</strong> Rs. {serviceTotal.toFixed(2)}</div>
-                <div><strong>Discount:</strong> Rs. {discount.toFixed(2)}</div>
-                <div className="print-final"><strong>Final Total:</strong> Rs. {finalTotal.toFixed(2)}</div>
+                <div style={{fontSize:13}}><strong>Total Item Price:</strong> Rs. {itemTotal.toFixed(2)}</div>
+                <div style={{fontSize:13}}><strong>Total Service Price:</strong> Rs. {serviceTotal.toFixed(2)}</div>
+                <div style={{fontSize:13}}><strong>Discount:</strong> Rs. {discount.toFixed(2)}</div>
+                <div className="print-final" style={{fontSize:12}}><strong>Final Total:</strong> Rs. {finalTotal.toFixed(2)}</div>
             </div>
             <div className="signature-row">
                 <div className="signature-field">
