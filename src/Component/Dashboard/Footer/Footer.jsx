@@ -10,14 +10,8 @@ function Footer() {
   const [showNotifications, setShowNotifications] = useState(false);
 
   const dummyNotifications = [
-    "New booking received",
-    "User John updated profile",
-    "Flight AI-203 delayed",
-    "Payment received from Jane",
-    "Maintenance scheduled tomorrow",
-    "Flight schedule updated",
-    "Admin approved request",
-    "New user registered",
+    "No Notifications..",
+    
   ];
 
   return (
@@ -55,13 +49,9 @@ function Footer() {
       {showNotifications && (
         <Paper elevation={3} className="notification-box">
           <Typography variant="subtitle1" sx={{ padding: "8px" }}>
-            <strong>Notifications</strong> 
+            <strong>No Notifications..</strong> 
           </Typography>
-          <ol className="notification-list">
-            {dummyNotifications.map((note, index) => (
-              <li key={index}>{note}</li>
-            ))}
-          </ol>
+          
         </Paper>
       )}
     </Box>
