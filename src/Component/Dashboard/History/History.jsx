@@ -234,7 +234,7 @@ function History() {
       </div>
 
       {searchTriggered && (
-        <div className="sales-report-container">
+        <div className="sales-report-container" style={{maxHeight:"300px"}}>
           <p><strong>Total Bills Price:</strong></p>
           <p>Rs. {totalSearchedBillsPrice.toFixed(2)}</p>
         </div>
