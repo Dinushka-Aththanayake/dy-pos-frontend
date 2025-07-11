@@ -637,13 +637,14 @@ function Billing() {
             Save
           </button>
           <button className="cancel-btn" onClick={handleCancel}>
-            Cancel{" "}
+            Cancel
+          </button>
+          
+          <button className="print-btn-bill" onClick={handlePrintAndSave}>
+            Print & Save
           </button>
           <button className="hold-btn" onClick={handleHold}>
             Hold
-          </button>
-          <button className="print-btn" onClick={handlePrintAndSave}>
-            Print & Save
           </button>
           <button className="hold-bills-btn" onClick={() => navigate("hold")}>
             Hold Bills

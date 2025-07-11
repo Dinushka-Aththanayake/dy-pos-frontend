@@ -115,17 +115,18 @@ body {
   
   .footer {
     display: flex;
-    
+    justify-content: space-between;
+    gap: 15px;
   }
   
-  .submit-btn, .cancel-btn, .hold-btn, .print-btn, .hold-bills-btn {
+  .submit-btn, .cancel-btn, .hold-btn, .print-btn-bill, .hold-bills-btn {
     padding: 10px 15px;
     border: none;
     color: white;
     border-radius: 5px;
     cursor: pointer;
-    margin: 10px;
-    width: 120px;
+    flex:1;
+    
   }
   
   .submit-btn {
@@ -140,7 +141,7 @@ body {
     background: #42a5f5;
   }
   
-  .print-btn {
+  .print-btn-bill {
     background: #388e3c;
   }
   
@@ -156,7 +157,7 @@ body {
     background: #1e88e5;
   }
   
-  .print-btn:hover {
+  .print-btn-bill:hover {
     background: #2e7d32;
   }
 
