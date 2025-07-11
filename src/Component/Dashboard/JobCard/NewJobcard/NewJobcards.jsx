@@ -3,7 +3,12 @@ import { useNavigate, useLocation } from "react-router-dom";
 import "./NewJobcards.css";
 import { IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { formatDateToISO, getTodayDate } from "../../../../utils";
+import {
+  formatDateToISO,
+  formatDateToISODate,
+  formatDateToTime,
+  getTodayDate,
+} from "../../../../utils";
 
 function NewJobcards() {
   const navigate = useNavigate();
@@ -22,9 +27,11 @@ function NewJobcards() {
         jobs: editJobCard.jobs.map((job) => ({
           ...job,
           charge: job.charge || 0,
-          startTime: job.startTime || "",
-          expectedEndTime: job.expectedEndTime || "",
-          endTime: job.endTime || "",
+          startTime: job.startTime ? new Date(job.startTime) : undefined,
+          expectedEndTime: job.expectedEndTime
+            ? new Date(job.expectedEndTime)
+            : undefined,
+          endTime: job.endTime ? new Date(job.endTime) : undefined,
           employeeId: job.employee.id || null,
         })),
       };
@@ -39,9 +46,9 @@ function NewJobcards() {
           {
             title: "",
             charge: 0,
-            startTime: "",
-            expectedEndTime: "",
-            endTime: "",
+            startTime: undefined,
+            expectedEndTime: undefined,
+            endTime: undefined,
             employeeId: null,
           },
         ],
@@ -72,6 +79,10 @@ function NewJobcards() {
       updatedJobs[index][field] = parseInt(value, 10) || 0;
     } else if (field === "employeeId") {
       updatedJobs[index][field] = value ? parseInt(value, 10) : null;
+    } else if (field.endsWith("Time")) {
+      updatedJobs[index][field] = new Date(
+        formatDateToISODate(getTodayDate(), value)
+      );
     } else {
       updatedJobs[index][field] = value;
     }
@@ -86,9 +97,9 @@ function NewJobcards() {
         {
           title: "",
           charge: 0,
-          startTime: "",
-          expectedEndTime: "",
-          endTime: "",
+          startTime: undefined,
+          expectedEndTime: undefined,
+          endTime: undefined,
           employeeId: null,
         },
       ],
@@ -126,7 +137,7 @@ function NewJobcards() {
   };
 
   const submitJobCard = async () => {
-    const {jobs, ...formattedJobCard} = {...jobCard, branchId: 1};
+    const { jobs, ...formattedJobCard } = { ...jobCard, branchId: 1 };
 
     try {
       const jobCardRes = await fetch("http://localhost:3000/jobcards/upsert", {
@@ -153,9 +164,11 @@ function NewJobcards() {
           jobCardId: jobCardId,
           charge: parseInt(job.charge, 10) || 0,
           employeeId: job.employeeId ? parseInt(job.employeeId, 10) : null,
-          startTime: job.startTime ? formatDateToISO(getTodayDate(), job.startTime) : undefined,
-          expectedEndTime: job.expectedEndTime ? formatDateToISO(getTodayDate(), job.expectedEndTime) : undefined,
-          endTime: job.endTime ? formatDateToISO(getTodayDate(), job.endTime) : undefined,
+          startTime: job.startTime ? job.startTime.toISOString() : undefined,
+          expectedEndTime: job.expectedEndTime
+            ? job.expectedEndTime.toISOString()
+            : undefined,
+          endTime: job.endTime ? job.endTime.toISOString() : undefined,
         };
 
         const jobRes = await fetch("http://localhost:3000/jobs/upsert", {
@@ -239,7 +252,7 @@ function NewJobcards() {
                 <td>
                   <input
                     type="number"
-                    value={job.charge || 0}
+                    value={job.charge || ""}
                     onChange={(e) =>
                       handleJobChange(index, "charge", e.target.value)
                     }
@@ -248,9 +261,7 @@ function NewJobcards() {
                 <td>
                   <input
                     type="time"
-                    value={
-                      job.startTime ?? ""
-                    }
+                    value={job.startTime ? formatDateToTime(job.startTime) : ""}
                     onChange={(e) =>
                       handleJobChange(index, "startTime", e.target.value)
                     }
@@ -260,7 +271,9 @@ function NewJobcards() {
                   <input
                     type="time"
                     value={
-                      job.expectedEndTime ?? ""
+                      job.expectedEndTime
+                        ? formatDateToTime(job.expectedEndTime)
+                        : ""
                     }
                     onChange={(e) =>
                       handleJobChange(index, "expectedEndTime", e.target.value)
@@ -270,9 +283,7 @@ function NewJobcards() {
                 <td>
                   <input
                     type="time"
-                    value={
-                      job.endTime ?? ""
-                    }
+                    value={job.endTime ? formatDateToTime(job.endTime) : ""}
                     onChange={(e) =>
                       handleJobChange(index, "endTime", e.target.value)
                     }
