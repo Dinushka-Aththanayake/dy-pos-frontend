@@ -46,12 +46,34 @@ function Inventory() {
   });
 
   return (
+    <div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          marginBottom: "10px",
+        }}
+      >
+        <h2 style={{ color: "rgb(0, 51, 102)", marginBottom: "10px" }}>
+          Inventory
+        </h2>
+        <button
+            className="createnewinventory-btn"
+            style={{ padding: "10px",  backgroundColor:"rgb(27, 122, 195)",
+              color:"white"
+             }}
+             onClick={() => Navigate("new")}
+          >
+            Create Inventory
+          </button>
+      </div>
+    
     <div className="inventory-container">
       {/* Inventory Header */}
 
       <div className="inventory-content">
         <div className="part1">
-          <div className="filter-section">
+          <div className="filter-section11" style={{display:"flex"}}>
             <input
               type="text"
               placeholder="Search by Code or Name..."
@@ -60,15 +82,7 @@ function Inventory() {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
             <button className="search-button">Search</button>
-            <select
-              className="branch-filter"
-              value={branchFilter}
-              onChange={(e) => setBranchFilter(e.target.value)}
-            >
-              <option value="All">All</option>
-              <option value="Kadawatha">Kadawatha</option>
-              <option value="Ganemulla">Ganemulla</option>
-            </select>
+            
           </div>
 
           {/* Table Section */}
@@ -128,6 +142,7 @@ function Inventory() {
         </div>
 
         {/* Form Section */}
+        {selectedItem && (
         <div className="form-section-inventory">
           <div className="image-placeholder">Image</div>
           <form className="inventory-form">
@@ -216,17 +231,11 @@ function Inventory() {
               />
             </div>
           </form>
-          <button
-            className="createnewinventory-btn"
-            style={{ padding: "10px", width: "100%", marginTop:"15px", backgroundColor:"rgb(27, 122, 195)",
-              color:"white"
-             }}
-             onClick={() => Navigate("new")}
-          >
-            Create Inventory
-          </button>
+          
         </div>
+        )}
       </div>
+    </div>
     </div>
   );
 }

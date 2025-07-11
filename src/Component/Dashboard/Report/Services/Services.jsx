@@ -57,122 +57,137 @@ function Services() {
     fetchJobs(filters); // fetch jobs with query filters
   };
 
-  const totalPrice = filteredJobs.reduce((sum, job) => sum + (job.charge || 0), 0);
+  const totalPrice = filteredJobs.reduce(
+    (sum, job) => sum + (job.charge || 0),
+    0
+  );
 
   return (
-    <div className="sales-report-container">
-      <div className="sales-filter-section">
-        <select
-          style={{ width: "100%" }}
-          className="employee-selector"
-          value={selectedEmployee}
-          onChange={(e) => setSelectedEmployee(e.target.value)}
-        >
-          <option value="">All</option>
-          {employee.map((emp) => (
-            <option key={emp.id} value={emp.id}>
-              {emp.firstName}
-            </option>
-          ))}
-        </select>
-        <input
-          type="date"
-          className="date-picker"
-          value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
-        />
-        <input
-          type="date"
-          className="date-picker"
-          value={endDate}
-          onChange={(e) => setEndDate(e.target.value)}
-        />
-        <button
-          className="searchbutton"
-          onClick={handleSearch}
-          style={{
-            padding: "10px",
-            backgroundColor: "rgb(60, 157, 205)",
-            color: "white",
-          }}
-        >
-          Search
-        </button>
-      </div>
+    <div>
+      <h2 style={{ color: "rgb(0, 51, 102)", marginBottom: "10px" }}>
+        Services History
+      </h2>
 
-      <div style={{ display: "flex", gap: "15px" }}>
-        <div
-          style={{
-            marginTop: "20px",
-            overflowX: "auto",
-            borderRadius: "10px",
-            border: "1px solid #d0e1f9",
-            backgroundColor: "#f4faff",
-            boxShadow: "0px 4px 8px rgba(0, 123, 255, 0.1)",
-            padding: "0",
-            flex: 4.5,
-          }}
-        >
-          <table
-            className="sales-table"
+      <div className="sales-report-container">
+        <div className="sales-filter-section">
+          <select
+            style={{ width: "100%" }}
+            className="employee-selector"
+            value={selectedEmployee}
+            onChange={(e) => setSelectedEmployee(e.target.value)}
+          >
+            <option value="">All</option>
+            {employee.map((emp) => (
+              <option key={emp.id} value={emp.id}>
+                {emp.firstName}
+              </option>
+            ))}
+          </select>
+          <input
+            type="date"
+            className="date-picker"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+          />
+          <input
+            type="date"
+            className="date-picker"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+          />
+          <button
+            className="searchbutton"
+            onClick={handleSearch}
             style={{
-              width: "100%",
-              borderCollapse: "collapse",
-              fontFamily: "Arial, sans-serif",
-              color: "#003366",
+              padding: "10px",
+              backgroundColor: "rgb(60, 157, 205)",
+              color: "white",
             }}
           >
-            <thead style={{ backgroundColor: "#cce5ff", textAlign: "left" }}>
-              <tr>
-                <th>#</th>
-                <th>Reference</th>
-                <th>Title</th>
-                <th>Price</th>
-                <th>Employee</th>
-                <th>Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredJobs.length === 0 ? (
-                <tr>
-                  <td colSpan="6" style={{ textAlign: "center" }}>
-                    No jobs found.
-                  </td>
-                </tr>
-              ) : (
-                filteredJobs.map((job, index) => {
-                  const emp = employee.find((e) => e.id === job.employeeId);
-                  return (
-                    <tr key={job.id}>
-                      <td>{index + 1}</td>
-                      <td>{job.id || "-"}</td>
-                      <td>{job.title || "-"}</td>
-                      <td>{job.charge || 0}</td>
-                      <td>{job.employee.firstName || "-"}</td>
-                      <td>{new Date(job.jobCard.completed).toLocaleDateString()}</td>
-                    </tr>
-                  );
-                })
-              )}
-            </tbody>
-          </table>
+            Search
+          </button>
         </div>
 
-        <div
-          className="summary"
-          style={{
-            flex: 1,
-            borderRadius: "10px",
-            border: "1px solid #d0e1f9",
-            backgroundColor: "#f4faff",
-            boxShadow: "0px 4px 8px rgba(0, 123, 255, 0.1)",
-            padding: "15px",
-          }}
-        >
-          <p style={{ marginTop: "15px", fontWeight: "bold" }}>
-            Total Sale Price:
-          </p>
-          <p style={{ fontSize: "18px", color: "#0077cc" }}> Rs. {totalPrice}.00</p>
+        <div style={{ display: "flex", gap: "15px" }}>
+          <div
+            style={{
+              marginTop: "20px",
+              overflowX: "auto",
+              borderRadius: "10px",
+              border: "1px solid #d0e1f9",
+              backgroundColor: "#f4faff",
+              boxShadow: "0px 4px 8px rgba(0, 123, 255, 0.1)",
+              padding: "0",
+              flex: 4.5,
+            }}
+          >
+            <table
+              className="sales-table"
+              style={{
+                width: "100%",
+                borderCollapse: "collapse",
+                fontFamily: "Arial, sans-serif",
+                color: "#003366",
+              }}
+            >
+              <thead style={{ backgroundColor: "#cce5ff", textAlign: "left" }}>
+                <tr>
+                  <th>#</th>
+                  <th>Reference</th>
+                  <th>Title</th>
+                  <th>Price</th>
+                  <th>Employee</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredJobs.length === 0 ? (
+                  <tr>
+                    <td colSpan="6" style={{ textAlign: "center" }}>
+                      No jobs found.
+                    </td>
+                  </tr>
+                ) : (
+                  filteredJobs.map((job, index) => {
+                    const emp = employee.find((e) => e.id === job.employeeId);
+                    return (
+                      <tr key={job.id}>
+                        <td>{index + 1}</td>
+                        <td>{job.id || "-"}</td>
+                        <td>{job.title || "-"}</td>
+                        <td>{job.charge || 0}</td>
+                        <td>{job.employee.firstName || "-"}</td>
+                        <td>
+                          {new Date(job.jobCard.completed).toLocaleDateString()}
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          <div
+            className="summary"
+            style={{
+              flex: 1,
+              borderRadius: "10px",
+              border: "1px solid #d0e1f9",
+              backgroundColor: "#f4faff",
+              boxShadow: "0px 4px 8px rgba(0, 123, 255, 0.1)",
+              padding: "15px",
+              maxHeight:"200px"
+            }}
+          >
+            <p style={{ marginTop: "15px", fontWeight: "bold" }}>
+              Total Sale Price:
+            </p>
+            <p style={{ fontSize: "18px", color: "#0077cc" }}>
+              {" "}
+              Rs. {totalPrice}.00
+            </p>
+          </div>
         </div>
       </div>
     </div>

@@ -7,10 +7,10 @@ body {
 }
 
 .inventory-container {
-    width: 90%;
+    width: 100%;
     margin: auto;
     background-color: #ffffff;
-    padding: 20px;
+    
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
@@ -40,18 +40,18 @@ body {
 }
 
 /* ===== Filter Section ===== */
-.filter-section {
+.filter-section11 {
     display: flex;
     align-items: center;
     gap: 10px;
     margin-bottom: 15px;
 }
 
-.search-input1,
-.branch-filter {
+.search-input1 {
     padding: 8px;
     border: 1px solid #007acc;
     border-radius: 4px;
+    flex:5;
 }
 
 .search-button {
@@ -62,7 +62,8 @@ body {
     cursor: pointer;
     border-radius: 4px;
     transition: background-color 0.3s;
-    height: 41.6px;
+    
+    flex:1;
 }
 
 .search-button:hover {

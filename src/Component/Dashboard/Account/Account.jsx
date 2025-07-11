@@ -196,7 +196,7 @@ function Account() {
           <input
             type="text"
             className="input1"
-            value={selectedEmployee?.role || "ss"}
+            value={selectedEmployee?.role || ""}
             readOnly
           />
 

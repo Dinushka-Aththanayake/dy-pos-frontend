@@ -12,18 +12,15 @@
 
 .salary-search-section{
     width: 100%;
-   
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-.salary-search-sub-section{
-    flex: 1;
-    padding: 10px;
+    gap:10px
 }
 
+
 .salary-search-byname{
-    width: 100%;
+    
     padding: 8px;
     border-radius: 5px;
     border-style: solid;

@@ -35,7 +35,6 @@ function Product() {
       .then((data) => {
         if (Array.isArray(data)) {
           setProducts(data);
-          
         } else {
           console.error("Unexpected response format: " + JSON.stringify(data));
           setProducts([]);
@@ -76,7 +75,6 @@ function Product() {
         ).then((res) => res.json());
 
         setProducts(updatedProducts);
-        
       } else {
         alert("Failed to create product.");
       }
@@ -86,104 +84,119 @@ function Product() {
     }
   };
 
-  
-
   return (
-    <div className="inventory-container">
-      <div className="inventory-content">
-        <div className="part1">
-          <div className="filter-section">
-            <input
-              type="text"
-              placeholder="Search by Code or Name..."
-              className="search-input1"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <button className="search-button" >
-              Search
-            </button>
-          </div>
+    <div>
+      <h2 style={{ color: "rgb(0, 51, 102)", marginBottom: "10px" }}>
+        Products
+      </h2>
 
-          <div className="table-section" style={{
-            marginTop: "20px",
-            overflowX: "auto",
-            borderRadius: "10px",
-            border: "1px solid #d0e1f9",
-            backgroundColor: "#f4faff",
-            boxShadow: "0px 4px 8px rgba(0, 123, 255, 0.1)",
-            padding: "0",
-          }} >
-            <table className="inventory-table1" style={{
-              width: "100%",
-              borderCollapse: "collapse",
-              fontFamily: "Arial, sans-serif",
-              color: "#003366",
-            }} >
-              <thead style={{
-                backgroundColor: "#cce5ff",
-                textAlign: "left",
-              }}>
-                <tr>
-                  <th>Barcode</th>
-                  <th>Name</th>
-                  <th>Category</th>
-                  <th>Brand</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filterProduct.map((item) => (
-                  <tr key={item.barCode} style={{ backgroundColor: "#e6f2ff" }}>
-                    <td>{item.barCode}</td>
-                    <td>{item.name}</td>
-                    <td>{item.category}</td>
-                    <td>{item.brand}</td>
+      <div className="inventory-container">
+        <div className="inventory-content">
+          <div className="part1">
+            <div className="filter-section" style={{display:"flex",gap:"15px"}}>
+              <input
+                type="text"
+                placeholder="Search by Code or Name..."
+                className="search-input1"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                style={{flex:5}}
+              />
+              <button className="search-button" style={{flex:1}} >Search</button>
+            </div>
+
+            <div
+              className="table-section"
+              style={{
+                marginTop: "20px",
+                overflowX: "auto",
+                borderRadius: "10px",
+                border: "1px solid #d0e1f9",
+                backgroundColor: "#f4faff",
+                boxShadow: "0px 4px 8px rgba(0, 123, 255, 0.1)",
+                padding: "0",
+              }}
+            >
+              <table
+                className="inventory-table1"
+                style={{
+                  width: "100%",
+                  borderCollapse: "collapse",
+                  fontFamily: "Arial, sans-serif",
+                  color: "#003366",
+                }}
+              >
+                <thead
+                  style={{
+                    backgroundColor: "#cce5ff",
+                    textAlign: "left",
+                  }}
+                >
+                  <tr>
+                    <th>Barcode</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Brand</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {filterProduct.map((item) => (
+                    <tr
+                      key={item.barCode}
+                      style={{ backgroundColor: "#e6f2ff" }}
+                    >
+                      <td>{item.barCode}</td>
+                      <td>{item.name}</td>
+                      <td>{item.category}</td>
+                      <td>{item.brand}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
 
-        <div className="form-section-inventory">
-          <div className="image-placeholder">Image</div>
-          <form className="inventory-form" onSubmit={handleConfirm}>
-            <div className="form-group2">
-              <label>Barcode:</label>
-              <input
-                type="text"
-                value={barCode}
-                onChange={(e) => setBarCode(e.target.value)}
-              />
-            </div>
-            <div className="form-group2">
-              <label>Name:</label>
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-            </div>
-            <div className="form-group2">
-              <label>Category:</label>
-              <input
-                type="text"
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-              />
-            </div>
-            <div className="form-group2">
-              <label>Brand:</label>
-              <input
-                type="text"
-                value={brand}
-                onChange={(e) => setBrand(e.target.value)}
-              />
-            </div>
-            <button className="submit-btn" type="submit">
-              Create
-            </button>
-          </form>
+          <div className="form-section-inventory">
+            <div className="image-placeholder">Image</div>
+            <form className="inventory-form" >
+              <div className="form-group2">
+                <label>Barcode:</label>
+                <input
+                  type="text"
+                  value={barCode}
+                  onChange={(e) => setBarCode(e.target.value)}
+                />
+              </div>
+              <div className="form-group2">
+                <label>Name:</label>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </div>
+              <div className="form-group2">
+                <label>Category:</label>
+                <input
+                  type="text"
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                />
+              </div>
+              <div className="form-group2">
+                <label>Brand:</label>
+                <input
+                  type="text"
+                  value={brand}
+                  onChange={(e) => setBrand(e.target.value)}
+                />
+              </div>
+              <button className="submit-btn" type="submit" onClick={handleConfirm}
+              style={{marginTop:"15px", float:"right"}}>
+                Create
+              </button>
+            </form>
+          </div>
         </div>
       </div>
     </div>

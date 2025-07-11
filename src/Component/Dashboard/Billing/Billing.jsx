@@ -521,6 +521,7 @@ function Billing() {
                       onChange={(e) =>
                         handleUpdateProduct(i, "price", e.target.value)
                       }
+                      min="0"
                     />
                   </td>
                   <td>
@@ -531,6 +532,7 @@ function Billing() {
                       onChange={(e) =>
                         handleUpdateProduct(i, "discount", e.target.value)
                       }
+                      min="0"
                     />
                   </td>
                   <td>
@@ -626,6 +628,7 @@ function Billing() {
               className="discount-input"
               value={discount}
               onChange={(e) => setDiscount(e.target.value)}
+              min="0"
             />
           </div>
           <div>
@@ -639,13 +642,14 @@ function Billing() {
             Save
           </button>
           <button className="cancel-btn" onClick={handleCancel}>
-            Cancel{" "}
+            Cancel
+          </button>
+          
+          <button className="print-btn-bill" onClick={handlePrintAndSave}>
+            Print & Save
           </button>
           <button className="hold-btn" onClick={handleHold}>
             Hold
-          </button>
-          <button className="print-btn" onClick={handlePrintAndSave}>
-            Print & Save
           </button>
           <button className="hold-bills-btn" onClick={() => navigate("hold")}>
             Hold Bills
