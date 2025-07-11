@@ -123,12 +123,13 @@ function History() {
       <div className="sales-report-container">
         <div className="sales-filter-section">
           <input
-            type="text"
+            type="number"
             name="id"
             placeholder="Reference Number.."
             className="searchbar"
             value={searchParams.id}
             onChange={handleInputChange}
+            min="0"
           />
           <input
             type="text"
