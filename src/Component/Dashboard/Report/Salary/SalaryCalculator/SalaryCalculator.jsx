@@ -122,7 +122,7 @@ function SalaryCalculator() {
     const total =
       parseFloat(basicSalary) +
       otPay +
-      additionAmount+
+      additionAmount +
       bonusAmount +
       allowanceAmount -
       deductionAmount;
@@ -131,316 +131,324 @@ function SalaryCalculator() {
   };
 
   const handleSave = async () => {
-  if (!selectedEmployee) {
-    alert("Please select an employee.");
-    return;
-  }
-
-  try {
-    const payload = {
-      employeeId: parseInt(selectedEmployee),
-      basic: parseFloat(basicSalary || 0),
-      otHours: parseFloat(otHours || 0),
-      otPayPerHour: parseFloat(otRate || 0),
-      bonus: parseFloat(bonus || 0),
-      allowance: parseFloat(allowances || 0),
-      additional: parseFloat(addition || 0),
-      deduction: parseFloat(deductions || 0),
-    };
-
-    const res = await fetch("http://localhost:3000/salaries/create", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(payload),
-    });
-
-    if (res.ok) {
-      alert("Salary saved successfully.");
-      Navigate("/reports/salary");
-    } else {
-      const errorData = await res.json();
-      alert("Failed to save salary: " + (errorData.message || "Unknown error."));
+    if (!selectedEmployee) {
+      alert("Please select an employee.");
+      return;
     }
-  } catch (err) {
-    console.error("Error saving salary:", err);
-    alert("Error occurred while saving salary.");
-  }
-};
 
+    try {
+      const payload = {
+        employeeId: parseInt(selectedEmployee),
+        basic: parseFloat(basicSalary || 0),
+        otHours: parseFloat(otHours || 0),
+        otPayPerHour: parseFloat(otRate || 0),
+        bonus: parseFloat(bonus || 0),
+        allowance: parseFloat(allowances || 0),
+        additional: parseFloat(addition || 0),
+        deduction: parseFloat(deductions || 0),
+      };
+
+      const res = await fetch("http://localhost:3000/salaries/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (res.ok) {
+        alert("Salary saved successfully.");
+        Navigate("/reports/salary");
+      } else {
+        const errorData = await res.json();
+        alert(
+          "Failed to save salary: " + (errorData.message || "Unknown error.")
+        );
+      }
+    } catch (err) {
+      console.error("Error saving salary:", err);
+      alert("Error occurred while saving salary.");
+    }
+  };
 
   return (
-    <div style={{ display: "flex", gap: "10px" }}>
-      <div
-        className="salarycal-main-container"
-        style={{
-          padding: "25px",
-          display: "flex",
-          alignItems: "center",
-          flex: 1,
-        }}
-      >
+    <div>
+      <h2 style={{ color: "rgb(0, 51, 102)", marginBottom: "10px" }}>
+        Salary Calculator
+      </h2>
+      <div style={{ display: "flex", gap: "10px" }}>
         <div
+          className="salarycal-main-container"
           style={{
-            padding: "20px",
-
-            backgroundColor: "rgb(218, 234, 244)",
-            borderRadius: "12px",
-            boxShadow: "0 0 10px rgba(0,0,0,0.2)",
+            padding: "25px",
+            display: "flex",
+            alignItems: "center",
+            flex: 1,
           }}
         >
-          <label>Employee:</label>
-          <select
-            className="filter-input"
-            value={selectedEmployee}
-            onChange={(e) => setSelectedEmployee(e.target.value)}
-            style={{
-              width: "100%",
-              padding: "8px",
-              marginBottom: "10px",
-              borderRadius: "5px",
-              borderStyle: "solid",
-              borderColor: "rgb(28, 103, 150)",
-            }}
-          >
-            <option value="" disabled>Select Employee</option>
-            {employee.map((emp) => (
-              <option key={emp.id} value={emp.id}>
-                {emp.firstName}
-              </option>
-            ))}
-          </select>
-
-          <label>Basic Salary:</label>
-          <input
-            type="number"
-            value={basicSalary}
-            readOnly
-            style={{
-              width: "100%",
-              padding: "8px",
-              marginBottom: "10px",
-              backgroundColor: "#eaeaea",
-              borderRadius: "5px",
-              borderStyle: "solid",
-              borderColor: "rgb(28, 103, 150)",
-            }}
-          />
-
-          <label>OT Hours:</label>
-          <input
-            type="number"
-            value={otHours}
-            onChange={(e) => setOtHours(e.target.value)}
-            placeholder="Enter OT Hours"
-            style={{
-              width: "100%",
-              padding: "8px",
-              marginBottom: "10px",
-              borderRadius: "5px",
-              borderStyle: "solid",
-              borderColor: "rgb(28, 103, 150)",
-            }}
-          />
-
-          <label>OT Rate (per hour):</label>
-          <input
-            type="number"
-            value={otRate}
-            onChange={(e) => setOtRate(e.target.value)}
-            placeholder="Enter OT Rate"
-            style={{
-              width: "100%",
-              padding: "8px",
-              marginBottom: "10px",
-              borderRadius: "5px",
-              borderStyle: "solid",
-              borderColor: "rgb(28, 103, 150)",
-            }}
-          />
-
-          <label>Bonus / Incentives:</label>
-          <input
-            type="number"
-            value={bonus}
-            onChange={(e) => setBonus(e.target.value)}
-            placeholder="Enter Bonus"
-            style={{
-              width: "100%",
-              padding: "8px",
-              marginBottom: "10px",
-              borderRadius: "5px",
-              borderStyle: "solid",
-              borderColor: "rgb(28, 103, 150)",
-            }}
-          />
-
-          <label>Allowances:</label>
-          <input
-            type="number"
-            value={allowances}
-            onChange={(e) => setAllowances(e.target.value)}
-            placeholder="Enter Allowances"
-            style={{
-              width: "100%",
-              padding: "8px",
-              marginBottom: "10px",
-              borderRadius: "5px",
-              borderStyle: "solid",
-              borderColor: "rgb(28, 103, 150)",
-            }}
-          />
-
-          <label>Addition:</label>
-          <input
-            type="number"
-            value={addition}
-            onChange={(e) => setAddition(e.target.value)}
-            placeholder="Enter Allowances"
-            style={{
-              width: "100%",
-              padding: "8px",
-              marginBottom: "10px",
-              borderRadius: "5px",
-              borderStyle: "solid",
-              borderColor: "rgb(28, 103, 150)",
-            }}
-          />
-
-          <label>Deductions:</label>
-          <input
-            type="number"
-            value={deductions}
-            onChange={(e) => setDeductions(e.target.value)}
-            placeholder="Enter Deductions"
-            style={{
-              width: "100%",
-              padding: "8px",
-              marginBottom: "20px",
-              borderRadius: "5px",
-              borderStyle: "solid",
-              borderColor: "rgb(28, 103, 150)",
-            }}
-          />
           <div
-            className="btn-salary-calculator"
-            style={{ display: "flex", justifyContent: "space-between" }}
+            style={{
+              padding: "20px",
+
+              backgroundColor: "rgb(218, 234, 244)",
+              borderRadius: "12px",
+              boxShadow: "0 0 10px rgba(0,0,0,0.2)",
+            }}
           >
+            <label>Employee:</label>
+            <select
+              className="filter-input"
+              value={selectedEmployee}
+              onChange={(e) => setSelectedEmployee(e.target.value)}
+              style={{
+                width: "100%",
+                padding: "8px",
+                marginBottom: "10px",
+                borderRadius: "5px",
+                borderStyle: "solid",
+                borderColor: "rgb(28, 103, 150)",
+              }}
+            >
+              <option value="" disabled>
+                Select Employee
+              </option>
+              {employee.map((emp) => (
+                <option key={emp.id} value={emp.id}>
+                  {emp.firstName}
+                </option>
+              ))}
+            </select>
+
+            <label>Basic Salary:</label>
+            <input
+              type="number"
+              value={basicSalary}
+              readOnly
+              style={{
+                width: "100%",
+                padding: "8px",
+                marginBottom: "10px",
+                backgroundColor: "#eaeaea",
+                borderRadius: "5px",
+                borderStyle: "solid",
+                borderColor: "rgb(28, 103, 150)",
+              }}
+            />
+
+            <label>OT Hours:</label>
+            <input
+              type="number"
+              value={otHours}
+              onChange={(e) => setOtHours(e.target.value)}
+              placeholder="Enter OT Hours"
+              style={{
+                width: "100%",
+                padding: "8px",
+                marginBottom: "10px",
+                borderRadius: "5px",
+                borderStyle: "solid",
+                borderColor: "rgb(28, 103, 150)",
+              }}
+            />
+
+            <label>OT Rate (per hour):</label>
+            <input
+              type="number"
+              value={otRate}
+              onChange={(e) => setOtRate(e.target.value)}
+              placeholder="Enter OT Rate"
+              style={{
+                width: "100%",
+                padding: "8px",
+                marginBottom: "10px",
+                borderRadius: "5px",
+                borderStyle: "solid",
+                borderColor: "rgb(28, 103, 150)",
+              }}
+            />
+
+            <label>Bonus / Incentives:</label>
+            <input
+              type="number"
+              value={bonus}
+              onChange={(e) => setBonus(e.target.value)}
+              placeholder="Enter Bonus"
+              style={{
+                width: "100%",
+                padding: "8px",
+                marginBottom: "10px",
+                borderRadius: "5px",
+                borderStyle: "solid",
+                borderColor: "rgb(28, 103, 150)",
+              }}
+            />
+
+            <label>Allowances:</label>
+            <input
+              type="number"
+              value={allowances}
+              onChange={(e) => setAllowances(e.target.value)}
+              placeholder="Enter Allowances"
+              style={{
+                width: "100%",
+                padding: "8px",
+                marginBottom: "10px",
+                borderRadius: "5px",
+                borderStyle: "solid",
+                borderColor: "rgb(28, 103, 150)",
+              }}
+            />
+
+            <label>Addition:</label>
+            <input
+              type="number"
+              value={addition}
+              onChange={(e) => setAddition(e.target.value)}
+              placeholder="Enter Allowances"
+              style={{
+                width: "100%",
+                padding: "8px",
+                marginBottom: "10px",
+                borderRadius: "5px",
+                borderStyle: "solid",
+                borderColor: "rgb(28, 103, 150)",
+              }}
+            />
+
+            <label>Deductions:</label>
+            <input
+              type="number"
+              value={deductions}
+              onChange={(e) => setDeductions(e.target.value)}
+              placeholder="Enter Deductions"
+              style={{
+                width: "100%",
+                padding: "8px",
+                marginBottom: "20px",
+                borderRadius: "5px",
+                borderStyle: "solid",
+                borderColor: "rgb(28, 103, 150)",
+              }}
+            />
+            <div
+              className="btn-salary-calculator"
+              style={{ display: "flex", justifyContent: "space-between" }}
+            >
+              <button
+                onClick={calculateSalary}
+                style={{
+                  padding: "10px 10px",
+                  backgroundColor: "#007bff",
+                  color: "#fff",
+                  border: "none",
+                  borderRadius: "6px",
+                  width: "100px",
+                  fontSize: "12px",
+                }}
+              >
+                Calculate
+              </button>
+              <button
+                onClick={() => Navigate("/reports/salary")}
+                style={{
+                  padding: "10px 20px",
+                  backgroundColor: "rgb(189, 75, 75)",
+                  color: "#fff",
+                  border: "none",
+                  width: "100px",
+                  borderRadius: "6px",
+                }}
+              >
+                Cancel
+              </button>
+
+              <button
+                style={{
+                  padding: "10px 20px",
+                  backgroundColor: "rgb(24, 81, 48)",
+                  color: "#fff",
+                  border: "none",
+                  width: "100px",
+                  borderRadius: "6px",
+                }}
+                onClick={handleSave}
+              >
+                Save
+              </button>
+            </div>
+
+            {finalSalary !== null && (
+              <div style={{ marginTop: "20px", fontSize: "18px" }}>
+                <strong>Final Salary: Rs. {finalSalary}</strong>
+              </div>
+            )}
+          </div>
+        </div>
+        <div
+          className="othours-calculator"
+          style={{
+            flex: 1,
+            padding: "25px",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              backgroundColor: "rgb(218, 234, 244)",
+              padding: "20px",
+              borderRadius: "12px",
+              boxShadow: "0 0 10px rgba(0,0,0,0.2)",
+            }}
+          >
+            <label htmlFor="">From:</label>
+            <input
+              type="date"
+              style={{
+                width: "100%",
+                padding: "8px",
+                marginBottom: "10px",
+                backgroundColor: "#eaeaea",
+                borderRadius: "5px",
+                borderStyle: "solid",
+                borderColor: "rgb(28, 103, 150)",
+              }}
+              value={fromDate}
+              onChange={(e) => setFromDate(e.target.value)}
+            />
+            <label htmlFor="">To:</label>
+            <input
+              type="date"
+              style={{
+                width: "100%",
+                padding: "8px",
+                marginBottom: "10px",
+                backgroundColor: "#eaeaea",
+                borderRadius: "5px",
+                borderStyle: "solid",
+                borderColor: "rgb(28, 103, 150)",
+              }}
+              value={toDate}
+              onChange={(e) => setToDate(e.target.value)}
+            />
             <button
-              onClick={calculateSalary}
               style={{
                 padding: "10px 10px",
                 backgroundColor: "#007bff",
                 color: "#fff",
                 border: "none",
                 borderRadius: "6px",
-                width: "100px",
-                fontSize: "12px",
+                marginTop: "15px",
+                marginBottom: "20px",
               }}
+              onClick={handleCalculateOTHours}
             >
-              Calculate
+              Calculate OT Hours
             </button>
-            <button
-              onClick={() => Navigate("/reports/salary")}
-              style={{
-                padding: "10px 20px",
-                backgroundColor: "rgb(189, 75, 75)",
-                color: "#fff",
-                border: "none",
-                width: "100px",
-                borderRadius: "6px",
-              }}
-            >
-              Cancel
-            </button>
-
-            <button
-              style={{
-                padding: "10px 20px",
-                backgroundColor: "rgb(24, 81, 48)",
-                color: "#fff",
-                border: "none",
-                width: "100px",
-                borderRadius: "6px",
-              }}
-              onClick={handleSave}
-            >
-              Save
-            </button>
+            <label htmlFor="">OT Hours:</label>
+            <p>{otHours} hours</p>
           </div>
-
-          {finalSalary !== null && (
-            <div style={{ marginTop: "20px", fontSize: "18px" }}>
-              <strong>Final Salary: Rs. {finalSalary}</strong>
-            </div>
-          )}
-        </div>
-      </div>
-      <div
-        className="othours-calculator"
-        style={{
-          flex: 1,
-          padding: "25px",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            backgroundColor: "rgb(218, 234, 244)",
-            padding: "20px",
-            borderRadius: "12px",
-            boxShadow: "0 0 10px rgba(0,0,0,0.2)",
-          }}
-        >
-          <label htmlFor="">From:</label>
-          <input
-            type="date"
-            style={{
-              width: "100%",
-              padding: "8px",
-              marginBottom: "10px",
-              backgroundColor: "#eaeaea",
-              borderRadius: "5px",
-              borderStyle: "solid",
-              borderColor: "rgb(28, 103, 150)",
-            }}
-            value={fromDate}
-            onChange={(e) => setFromDate(e.target.value)}
-          />
-          <label htmlFor="">To:</label>
-          <input
-            type="date"
-            style={{
-              width: "100%",
-              padding: "8px",
-              marginBottom: "10px",
-              backgroundColor: "#eaeaea",
-              borderRadius: "5px",
-              borderStyle: "solid",
-              borderColor: "rgb(28, 103, 150)",
-            }}
-            value={toDate}
-            onChange={(e) => setToDate(e.target.value)}
-          />
-          <button
-            style={{
-              padding: "10px 10px",
-              backgroundColor: "#007bff",
-              color: "#fff",
-              border: "none",
-              borderRadius: "6px",
-              marginTop: "15px",
-              marginBottom: "20px",
-            }}
-            onClick={handleCalculateOTHours}
-          >
-            Calculate OT Hours
-          </button>
-          <label htmlFor="">OT Hours:</label>
-          <p>{otHours} hours</p>
         </div>
       </div>
     </div>

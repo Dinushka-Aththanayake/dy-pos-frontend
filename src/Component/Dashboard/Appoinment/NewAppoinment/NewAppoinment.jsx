@@ -24,7 +24,6 @@ function NewAppointment() {
       setNumPlate(editAppointment.numPlate || "");
       setCustomerName(editAppointment.customerName || "");
       setcustomerTelephone(editAppointment.customerTelephone || "");
-      
 
       if (editAppointment.datetime) {
         const datetime = new Date(editAppointment.datetime);
@@ -51,7 +50,7 @@ function NewAppointment() {
       customerTelephone,
       branchId: branchInt,
     };
-    
+
     // Include ID for update
     if (editAppointment?.id) {
       requestData.id = editAppointment.id;
@@ -135,93 +134,98 @@ function NewAppointment() {
   };
 
   return (
-    <div className="new-appointment-container">
-      <div className="appointment-form-box">
-        <form onSubmit={(e) => e.preventDefault()}>
-          <div className="form-group">
-            <label>Number Plate:</label>
-            <input
-              type="text"
-              value={numPlate}
-              onChange={(e) => setNumPlate(e.target.value.toUpperCase())}
-            />
+    <div>
+      <h2 style={{ color: "rgb(0, 51, 102)", marginBottom: "10px" }}>
+        New Appointment
+      </h2>
+      <div className="new-appointment-container">
+        <div className="appointment-form-box">
+          <form onSubmit={(e) => e.preventDefault()}>
+            <div className="form-group">
+              <label>Number Plate:</label>
+              <input
+                type="text"
+                value={numPlate}
+                onChange={(e) => setNumPlate(e.target.value.toUpperCase())}
+              />
+            </div>
+            <div className="form-group">
+              <label>Date:</label>
+              <input
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+              />
+            </div>
+            <div className="form-group">
+              <label>Time:</label>
+              <input
+                type="time"
+                value={time}
+                onChange={(e) => setTime(e.target.value)}
+              />
+            </div>
+            <div className="form-group">
+              <label>Customer Name:</label>
+              <input
+                type="text"
+                value={customerName}
+                onChange={(e) => setCustomerName(e.target.value)}
+              />
+            </div>
+            <div className="form-group">
+              <label>Mobile Number:</label>
+              <input
+                type="text"
+                value={customerTelephone}
+                onChange={(e) => setcustomerTelephone(e.target.value)}
+              />
+            </div>
+          </form>
+          <div className="button-group">
+            <button className="confirm-btn9" onClick={handleConfirm}>
+              {editAppointment ? "Update" : "Confirm"}
+            </button>
+            <button
+              className="cancel-btn9"
+              onClick={() => navigate("/appoinment")}
+            >
+              Cancel
+            </button>
           </div>
-          <div className="form-group">
-            <label>Date:</label>
-            <input
-              type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-            />
-          </div>
-          <div className="form-group">
-            <label>Time:</label>
-            <input
-              type="time"
-              value={time}
-              onChange={(e) => setTime(e.target.value)}
-            />
-          </div>
-          <div className="form-group">
-            <label>Customer Name:</label>
-            <input
-              type="text"
-              value={customerName}
-              onChange={(e) => setCustomerName(e.target.value)}
-            />
-          </div>
-          <div className="form-group">
-            <label>Mobile Number:</label>
-            <input
-              type="text"
-              value={customerTelephone}
-              onChange={(e) => setcustomerTelephone(e.target.value)}
-            />
-          </div>
-        </form>
-        <div className="button-group">
-          <button className="confirm-btn9" onClick={handleConfirm}>
-            {editAppointment ? "Update" : "Confirm"}
-          </button>
-          <button
-            className="cancel-btn9"
-            onClick={() => navigate("/appoinment")}
-          >
-            Cancel
-          </button>
         </div>
-      </div>
 
-      <div className="appointment-list-box">
-        <div className="new-appointment-header">
-          <h2>Appointments</h2>
-        </div>
-        <table className="appointment-table">
-          <thead>
-            <tr>
-              <th>Number Plate</th>
-              <th>Time</th>
-              <th>Branch</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredAppointments.length > 0 ? (
-              filteredAppointments.map((appointment, index) => (
-                <tr key={index}>
-                  <td>{appointment.numPlate}</td>
-                  <td>{formatDate(appointment.datetime).time}</td>
-                  <td>{appointment.branch?.name || "N/A"}</td>
-                </tr>
-              ))
-            ) : (
+        <div className="appointment-list-box">
+          <div className="new-appointment-header">
+            <h2>Appointments</h2>
+          </div>
+          <table className="appointment-table">
+            <thead>
               <tr>
-                <td colSpan="3" style={{ textAlign: "center" }}>
-                  No appointments for selected date.
-                </td>
+                <th>Number Plate</th>
+                <th>Time</th>
+                <th>Branch</th>
               </tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {filteredAppointments.length > 0 ? (
+                filteredAppointments.map((appointment, index) => (
+                  <tr key={index}>
+                    <td>{appointment.numPlate}</td>
+                    <td>{formatDate(appointment.datetime).time}</td>
+                    <td>{appointment.branch?.name || "N/A"}</td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="3" style={{ textAlign: "center" }}>
+                    No appointments for selected date.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

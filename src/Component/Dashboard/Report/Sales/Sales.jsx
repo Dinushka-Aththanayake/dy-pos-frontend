@@ -59,18 +59,20 @@ function Sales() {
     fetchSalesData(filters);
   };
 
-  const totalPrice = data.reduce((sum, item) => sum + (item.price || 0), 0);
-  const totalSalePrice = data.reduce(
-    (sum, item) => sum + (item.salesPrice || 0),
+  const totalPrice = (data?.reduce((sum, item) => sum + (parseFloat(item?.inventory?.buyPrice) || 0), 0)).toFixed(2);
+  const totalSalePrice = (data.reduce(
+    (sum, item) => sum + (parseFloat(item.unitPrice) || 0),
     0
-  );
-  const totalProfit = data.reduce(
-    (sum, item) => sum + ((item.salesPrice || 0) - (item.price || 0)),
+  )).toFixed(2);
+  const totalProfit = (data.reduce(
+    (sum, item) => sum + ((parseFloat(item.unitPrice) || 0) - (parseFloat(item?.inventory?.buyPrice) || 0)),
     0
-  );
+  )).toFixed(2);
 
   return (
+    <div>
     <div className="sales-report-container">
+      <h2 style={{ color: "rgb(0, 51, 102)",marginBottom:"10px" }}>Sales Item History</h2>
       <div className="sales-filter-section">
         <input
           type="text"
@@ -104,11 +106,10 @@ function Sales() {
         </button>
       </div>
 
-      <div style={{ display: "flex", gap: "15px" }}>
+      <div style={{ display: "flex", gap: "15px", flexDirection:"row" }}>
         <div
           style={{
             marginTop: "20px",
-            overflowX: "auto",
             borderRadius: "10px",
             border: "1px solid #d0e1f9",
             backgroundColor: "#f4faff",
@@ -175,6 +176,7 @@ function Sales() {
             backgroundColor: "#f4faff",
             boxShadow: "0px 4px 8px rgba(0, 123, 255, 0.1)",
             padding: "15px",
+            maxHeight: "400px"
           }}
         >
           <p style={{ marginTop: "15px" }}>Total Buy Price:</p>
@@ -185,6 +187,7 @@ function Sales() {
           <p>{totalProfit}</p>
         </div>
       </div>
+    </div>
     </div>
   );
 }

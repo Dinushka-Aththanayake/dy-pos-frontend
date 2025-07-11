@@ -1,89 +1,85 @@
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   height: 100%;
-  
+  background-color: #16110f;
+
   font-family: Arial, sans-serif;
 }
 
+.login-img {
+  height: 100%;
+}
 
-.login-img{
+.login-container1 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  position: relative;
   
+}
+
+.login-box {
+  background: rgba(255, 255, 255, 0.3);
+  padding: 30px;
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+  text-align: center;
+  color: white;
+  width: 28%;
+  z-index: 10;
+  position: absolute;
+  opacity: 0.9;
+}
+
+.input-field {
   width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
 }
 
-.login-container1{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    position: relative;
-    
+.input-field::placeholder {
+  color: rgba(255, 255, 255, 0.7);
 }
-  
-  .login-box {
-    background: rgba(255, 255, 255, 0.3);
-    padding: 30px;
-    border-radius: 10px;
-    backdrop-filter: blur(10px);
-    text-align: center;
-    color: white;
-    width: 28%;
-    z-index: 10;
-    position: absolute;
-    opacity: 0.9;
 
-    
-  }
-  
-  .input-field {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: none;
-    border-radius: 5px;
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
-  }
-  
-  .input-field::placeholder {
-    color: rgba(255, 255, 255, 0.7);
-  }
-  
-  .login-button {
-    width: 100%;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    background: black;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    transition: 0.3s;
-    opacity: 0.65;
-    margin-top: 20px;
-  }
-  
-  .login-button:hover {
-    background: black ;
-    opacity: 1;
-  }
-  .password-container {
-    position: relative;
-    display: flex;
-    align-items: center;
-  }
-  
-  .password-container .input-field {
-    width: 100%;
-    padding-right: 40px; /* Make space for the icon */
-  }
-  
-  .eye-icon {
-    position: absolute;
-    right: 10px;
-    cursor: pointer;
-    color: #666;
-  }
-  
-  
+.login-button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background: black;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+  opacity: 0.65;
+  margin-top: 20px;
+}
+
+.login-button:hover {
+  background: black;
+  opacity: 1;
+}
+.password-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-container .input-field {
+  width: 100%;
+  padding-right: 40px; /* Make space for the icon */
+}
+
+.eye-icon {
+  position: absolute;
+  right: 10px;
+  cursor: pointer;
+  color: #666;
+}

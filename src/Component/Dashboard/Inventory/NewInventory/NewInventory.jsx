@@ -86,6 +86,10 @@ const NewInventory = () => {
   };
 
   return (
+    <div>
+      <h2 style={{ color: "rgb(0, 51, 102)", marginBottom: "10px" }}>
+          New Inventories
+        </h2>
     <div
       className="new-inventory-container"
       style={{
@@ -96,7 +100,7 @@ const NewInventory = () => {
         backgroundColor: "#f4faff",
         boxShadow: "0px 4px 8px rgba(0, 123, 255, 0.1)",
         padding: "0",
-        minWidth: "1150px",
+        width:"100%"
       }}
     >
       <table
@@ -106,7 +110,7 @@ const NewInventory = () => {
           borderCollapse: "collapse",
           fontFamily: "Arial, sans-serif",
           color: "#003366",
-          minWidth: "500px",
+          
         }}
       >
         <thead style={{ backgroundColor: "#cce5ff", textAlign: "left" }}>
@@ -131,6 +135,7 @@ const NewInventory = () => {
                   onChange={(e) =>
                     handleChange(index, "barcode", e.target.value)
                   }
+                  min="0"
                 />
               </td>
               <td>
@@ -143,6 +148,7 @@ const NewInventory = () => {
                     onChange={(e) =>
                       handleChange(index, "buyPrice", e.target.value)
                     }
+                    min="0"
                   />
                 </div>
               </td>
@@ -156,6 +162,7 @@ const NewInventory = () => {
                     onChange={(e) =>
                       handleChange(index, "sellPrice", e.target.value)
                     }
+                    min="0"
                   />
                 </div>
               </td>
@@ -211,6 +218,7 @@ const NewInventory = () => {
           Cancel
         </button>
       </div>
+    </div>
     </div>
   );
 };
