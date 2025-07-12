@@ -99,7 +99,7 @@ function Services() {
             onClick={handleSearch}
             style={{
               padding: "10px",
-              backgroundColor: "rgb(60, 157, 205)",
+              backgroundColor: "#4682b4",
               color: "white",
             }}
           >

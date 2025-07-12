@@ -81,7 +81,7 @@ html {
 }
 
 .search-btn:hover {
-  background: #1e88e5;
+  opacity: 0.85;
 }
 
 
@@ -126,10 +126,8 @@ html {
 
 /* Buttons */
 .action-btn {
-  
-  
   border: none;
-  background: #42a5f5;
+  background: #4682b4;
   color: white;
   border-radius: 5px;
   font-size: 16px;
@@ -138,7 +136,7 @@ html {
 }
 
 .action-btn:hover {
-  background: #1e88e5;
+    opacity: 0.85;
 }
 
 .action-btn22,
@@ -146,7 +144,7 @@ html {
   
   padding: 12px;
   border: none;
-  background: #42a5f5;
+  background: #4682b4;
   color: white;
   border-radius: 5px;
   font-size: 16px;
@@ -157,7 +155,7 @@ html {
 }
 
 .action-btn22:hover {
-  background: #1e88e5;
+  opacity: 0.85;
 }
 
 .cancel-btn22 {

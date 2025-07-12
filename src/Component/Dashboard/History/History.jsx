@@ -16,7 +16,6 @@ function History() {
   });
   const [searchTriggered, setSearchTriggered] = useState(false);
   const [totalSearchedBillsPrice, setTotalSearchedBillsPrice] = useState(0);
-
   const token = localStorage.getItem("access_token");
 
   // Fetch all bills on initial load
@@ -123,10 +122,12 @@ function History() {
 
   return (
     <div>
-      <h2 style={{ color: "rgb(0, 51, 102)",marginBottom:"10px" }}>Bill History</h2>
+      
 
-      <div style={{ display: "flex", gap: "10px" }}>
+      <div style={{ display: "flex", gap: "10px",flexDirection:"column" }}>
+        
         <div className="sales-report-container">
+          <h2 style={{ color: "rgb(0, 51, 102)",marginBottom:"10px" }}>Bill History</h2>
           <div className="sales-filter-section">
             <input
               type="number"

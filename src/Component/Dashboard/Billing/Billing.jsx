@@ -654,13 +654,14 @@ function Billing() {
           <button className="submit-btn" onClick={handleSave}>
             Save
           </button>
+          <button className="print-btn-bill" onClick={handlePrintAndSave}>
+            Print & Save
+          </button>
           <button className="cancel-btn" onClick={handleCancel}>
             Cancel
           </button>
 
-          <button className="print-btn-bill" onClick={handlePrintAndSave}>
-            Print & Save
-          </button>
+          
           <button className="hold-btn" onClick={handleHold}>
             Hold
           </button>

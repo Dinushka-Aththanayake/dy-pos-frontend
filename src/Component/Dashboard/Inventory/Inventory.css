@@ -55,7 +55,7 @@ body {
 }
 
 .search-button {
-    background-color: #007acc;
+    background-color: #4682b4;
     color: white;
     border: none;
     padding: 8px 12px;
@@ -67,7 +67,7 @@ body {
 }
 
 .search-button:hover {
-    background-color: #005f99;
+    opacity: 0.85;
 }
 
 /* ===== Table Section ===== */
