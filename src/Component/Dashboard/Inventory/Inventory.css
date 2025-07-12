@@ -1,7 +1,6 @@
 /* ===== General Styles ===== */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0f8ff;
     margin: 0;
     padding: 0;
 }
@@ -9,10 +8,8 @@ body {
 .inventory-container {
     width: 100%;
     margin: auto;
-    background-color: #ffffff;
     
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* ===== Header ===== */
@@ -33,10 +30,8 @@ body {
 
 .part1 {
     flex-grow: 2;
-    background-color: white;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* ===== Filter Section ===== */
@@ -55,7 +50,7 @@ body {
 }
 
 .search-button {
-    background-color: #007acc;
+    background-color: #4682b4;
     color: white;
     border: none;
     padding: 8px 12px;
@@ -67,7 +62,7 @@ body {
 }
 
 .search-button:hover {
-    background-color: #005f99;
+    opacity: 0.85;
 }
 
 /* ===== Table Section ===== */
@@ -97,7 +92,6 @@ body {
     background-color: white;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     margin-left: 20px;
 }
 

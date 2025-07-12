@@ -62,7 +62,7 @@ function Salary() {
 
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
+      <div style={{ display: "flex", justifyContent: "space-between",backgroundColor:"#f0f8ff",padding:20}}>
         <h2 style={{ color: "rgb(0, 51, 102)", marginBottom: "10px" }}>
           Salary History
         </h2>

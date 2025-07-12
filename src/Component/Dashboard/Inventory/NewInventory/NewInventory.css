@@ -72,19 +72,23 @@
 }
 
 .add-btn3 {
-  background-color: #4caf50;
+    background-color: #2196f3;
+
 }
 
+
+
 .add-btn3:hover {
-  background-color: #45a049;
+  opacity: 0.85;
 }
 
 .save-btn3 {
-  background-color: #2196f3;
+    background-color: #4caf50;
+
 }
 
 .save-btn3:hover {
-  background-color: #1e88e5;
+  opacity: 0.85;
 }
 
 .cancel-btn3 {
@@ -92,7 +96,7 @@
 }
 
 .cancel-btn3:hover {
-  background-color: #e53935;
+  opacity: 0.85;
 }
 
 .input-wrapper {

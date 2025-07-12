@@ -173,7 +173,7 @@ function Appointment() {
   };
 
   return (
-    <div>
+    <div style={{backgroundColor:"#f0f8ff",padding:"20px",paddingLeft:"20px"}}>
       <div style={{display:"flex",justifyContent:"space-between",marginBottom:"10px"}}>
         <h2 style={{ color: "rgb(0, 51, 102)", marginBottom: "10px" }}>
           Appointments
@@ -192,12 +192,14 @@ function Appointment() {
               className="search-input1"
               value={searchPlate}
               onChange={(e) => setSearchPlate(e.target.value.toUpperCase())}
+              style={{flex:4}}
             />
             <input
               type="date"
               className="date-picker"
               value={selectedDate}
               onChange={handleDateChange}
+              style={{flex:1}}
             />
             <button className="search-btn" onClick={handleSearch}>
               Search

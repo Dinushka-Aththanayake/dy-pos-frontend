@@ -99,7 +99,7 @@ function Sales() {
           className="searchbutton"
           style={{
             padding: "10px",
-            backgroundColor: "rgb(60, 157, 205)",
+            backgroundColor: "#4682b4",
             color: "white",
           }}
           onClick={handleSearch}
@@ -182,11 +182,11 @@ function Sales() {
           }}
         >
           <p style={{ marginTop: "15px" }}>Total Buy Price:</p>
-          <p>{totalPrice}</p>
+          <p style={{ fontSize: "18px", color: "#0077cc" }}>Rs.{totalPrice}</p>
           <p style={{ marginTop: "15px" }}>Total Sale Price:</p>
-          <p>{totalSalePrice}</p>
+          <p style={{ fontSize: "18px", color: "#0077cc" }}>Rs.{totalSalePrice}</p>
           <p style={{ marginTop: "15px" }}>Total Profit:</p>
-          <p>{totalProfit}</p>
+          <p style={{ fontSize: "18px", color: "#0077cc" }}>Rs.{totalProfit}</p>
         </div>
       </div>
     </div>

@@ -2,9 +2,9 @@
 
   .jobcard-content {
     display: flex;
-    background: #e3f2fd;
+    
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    
     overflow: hidden;
     width: 100%;
     padding: 20px;
@@ -42,7 +42,7 @@
   
   .btn-primary {
     padding: 10px 15px;
-    background-color: #64b5f6;
+    background-color: #4682b4;
     border: none;
     border-radius: 5px;
     color: white;
@@ -50,7 +50,7 @@
   }
   
   .btn-primary:hover {
-    background-color: #42a5f5;
+    opacity: 0.85;
   }
   
   /* Job Table */

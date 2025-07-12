@@ -55,24 +55,24 @@ const ProtectedRoute = ({ allowedRoles, children }) => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          height: "100vh",
+          height: "100%",
           backgroundColor: "rgba(255, 255, 255, 0.01)",
         }}
       >
         <div
           style={{
             padding: "2rem",
-            backgroundColor: "rgba(0, 0, 0, 0.1)",
+            
             borderRadius: "8px",
             color: "white",
             textAlign: "center",
-            boxShadow: "0 0 10px rgba(0, 0, 0, 0.5)",
+            
           }}
         >
           <h2 style={{ color: "red", marginBottom: "1rem" }}>
             Unauthorized Access
           </h2>
-          <p style={{color:"black"}}>
+          <p style={{color:"gray"}}>
             You are logged in as <strong>{employee.role}</strong>
           </p>
         </div>

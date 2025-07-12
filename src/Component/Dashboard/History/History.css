@@ -40,6 +40,10 @@
     border-radius: 4px;
     cursor: pointer;
   }
+
+  .searchbutton:hover{
+    opacity:0.85;
+  }
   
   .history-table {
     width: 100%;

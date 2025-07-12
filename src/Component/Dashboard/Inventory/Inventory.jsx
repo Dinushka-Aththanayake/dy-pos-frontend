@@ -46,7 +46,7 @@ function Inventory() {
   });
 
   return (
-    <div>
+    <div style={{backgroundColor:"#eff5fd",padding:"20px"}}>
       <div
         style={{
           display: "flex",
@@ -59,7 +59,7 @@ function Inventory() {
         </h2>
         <button
             className="createnewinventory-btn"
-            style={{ padding: "10px",  backgroundColor:"rgb(27, 122, 195)",
+            style={{ padding: "10px",  backgroundColor:"#4682b4",
               color:"white"
              }}
              onClick={() => Navigate("new")}

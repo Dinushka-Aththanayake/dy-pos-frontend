@@ -66,12 +66,13 @@ function JobCard() {
   };
 
   return (
-    <div>
+    <div style={{backgroundColor:"#eff5fd",padding:"20px"}}>
       <div
         style={{
           display: "flex",
           justifyContent: "space-between",
           marginBottom: "10px",
+          
         }}
       >
         <h2 style={{ color: "rgb(0, 51, 102)", marginBottom: "10px" }}>
@@ -83,6 +84,7 @@ function JobCard() {
       </div>
 
       <div className="jobcard-content">
+        
         <div className="jobcard-left">
           <div style={{ display: "flex", flexDirection: "column" }}>
             <div className="filter-container">
@@ -93,6 +95,7 @@ function JobCard() {
                 onChange={(e) =>
                   setSearchNumPlate(e.target.value.toUpperCase())
                 }
+                style={{flex:5}}
               />{" "}
               <input
                 type="date"
@@ -140,7 +143,8 @@ function JobCard() {
                 <tr style={{ backgroundColor: "#e6f2ff" }}>
                   <th style={{ textAlign: "center" }}>#</th>
                   <th style={{ textAlign: "center" }}>Num Plate</th>
-                  <th style={{ textAlign: "center" }}>Date</th>
+                  <th style={{ textAlign: "center" }}>Created</th>
+                  <th style={{ textAlign: "center" }}>Completed</th>
                   <th style={{ textAlign: "center" }}>Branch</th>
                   <th style={{ textAlign: "center" }}>Status</th>
                 </tr>
@@ -161,6 +165,7 @@ function JobCard() {
                   >
                     <td>{index + 1}</td>
                     <td>{jobCard.numPlate}</td>
+                    <td>{formatDate(jobCard.created).date}</td>
                     <td>{formatDate(jobCard.completed).date}</td>
                     <td>{jobCard.branch?.name || "N/A"}</td>
                     <td>

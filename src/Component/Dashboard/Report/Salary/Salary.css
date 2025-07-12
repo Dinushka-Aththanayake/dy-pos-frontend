@@ -1,6 +1,7 @@
 .salary-main-container{
     width: 100%;
     padding: 15px;
+    background-color: #f0f8ff;
 }
 
 .salary-records-container{
@@ -20,7 +21,7 @@
 
 
 .salary-search-byname{
-    
+    flex:6;
     padding: 8px;
     border-radius: 5px;
     border-style: solid;
@@ -51,7 +52,7 @@
 }
 
 .salary-search-btn{
-    background-color: rgb(37, 117, 183);
+    background-color: #4682b4;
     color: white;
     border: none;
     padding: 8px;
@@ -60,7 +61,7 @@
 .salary-create-btn{
     padding-bottom: 8px;
     padding-top: 8px;
-    background-color: rgb(37, 117, 183);
+    background-color: #4682b4;
     border: none;
     color: white;
 }

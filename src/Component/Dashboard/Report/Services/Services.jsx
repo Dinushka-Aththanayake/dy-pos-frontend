@@ -65,11 +65,10 @@ function Services() {
 
   return (
     <div>
-      <h2 style={{ color: "rgb(0, 51, 102)", marginBottom: "10px" }}>
+      <div className="sales-report-container">
+        <h2 style={{ color: "rgb(0, 51, 102)", marginBottom: "10px" }}>
         Services History
       </h2>
-
-      <div className="sales-report-container">
         <div className="sales-filter-section">
           <select
             style={{ width: "100%" }}
@@ -101,7 +100,7 @@ function Services() {
             onClick={handleSearch}
             style={{
               padding: "10px",
-              backgroundColor: "rgb(60, 157, 205)",
+              backgroundColor: "#4682b4",
               color: "white",
             }}
           >
