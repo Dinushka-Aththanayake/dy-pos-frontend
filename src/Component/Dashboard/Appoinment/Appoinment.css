@@ -172,7 +172,7 @@ html {
   align-items: center;
   display: flex;
   justify-items: space-between;
-  gap:20px;
+  gap:15px;
 }
 
 .status-btn {
