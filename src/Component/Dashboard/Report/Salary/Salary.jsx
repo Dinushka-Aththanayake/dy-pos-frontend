@@ -14,6 +14,7 @@ function Salary() {
   const [selectedEmployee, setSelectedEmployee] = useState("");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
+  const [salary, setSalary] = useState(null);
 
   // Fetch employee list
   useEffect(() => {
@@ -153,6 +154,7 @@ function Salary() {
                     style={{
                       padding: "12px",
                       borderBottom: "2px solid #99ccff",
+                      fontSize: "12px",
                     }}
                   >
                     Date
@@ -161,6 +163,7 @@ function Salary() {
                     style={{
                       padding: "12px",
                       borderBottom: "2px solid #99ccff",
+                      fontSize: "12px",
                     }}
                   >
                     Employee Name
@@ -169,6 +172,7 @@ function Salary() {
                     style={{
                       padding: "12px",
                       borderBottom: "2px solid #99ccff",
+                      fontSize: "12px",
                     }}
                   >
                     OT Hours
@@ -177,6 +181,7 @@ function Salary() {
                     style={{
                       padding: "12px",
                       borderBottom: "2px solid #99ccff",
+                      fontSize: "12px",
                     }}
                   >
                     OT Rate
@@ -185,14 +190,16 @@ function Salary() {
                     style={{
                       padding: "12px",
                       borderBottom: "2px solid #99ccff",
+                      fontSize: "12px",
                     }}
                   >
-                    Bonus/Incentives
+                    Bonus/ Incentives
                   </th>
                   <th
                     style={{
                       padding: "12px",
                       borderBottom: "2px solid #99ccff",
+                      fontSize: "12px",
                     }}
                   >
                     Allowances
@@ -201,6 +208,7 @@ function Salary() {
                     style={{
                       padding: "12px",
                       borderBottom: "2px solid #99ccff",
+                      fontSize: "12px",
                     }}
                   >
                     Additions
@@ -210,6 +218,7 @@ function Salary() {
                     style={{
                       padding: "12px",
                       borderBottom: "2px solid #99ccff",
+                      fontSize: "12px",
                     }}
                   >
                     Deductions
@@ -218,6 +227,7 @@ function Salary() {
                     style={{
                       padding: "12px",
                       borderBottom: "2px solid #99ccff",
+                      fontSize: "12px",
                     }}
                   >
                     Basic Salary
@@ -226,9 +236,19 @@ function Salary() {
                     style={{
                       padding: "12px",
                       borderBottom: "2px solid #99ccff",
+                      fontSize: "12px",
                     }}
                   >
                     Final Salary
+                  </th>
+                  <th
+                    style={{
+                      padding: "12px",
+                      borderBottom: "2px solid #99ccff",
+                      fontSize: "12px",
+                    }}
+                  >
+                    Action
                   </th>
                 </tr>
               </thead>
@@ -249,6 +269,7 @@ function Salary() {
                         style={{
                           padding: "10px",
                           borderBottom: "1px solid #d0e1f9",
+                          fontSize: "14px",
                         }}
                       >
                         {formatDateToLocalString(new Date(record.created))}
@@ -257,6 +278,7 @@ function Salary() {
                         style={{
                           padding: "10px",
                           borderBottom: "1px solid #d0e1f9",
+                          fontSize: "14px",
                         }}
                       >
                         {record.employee?.firstName || "N/A"}
@@ -265,6 +287,7 @@ function Salary() {
                         style={{
                           padding: "10px",
                           borderBottom: "1px solid #d0e1f9",
+                          fontSize: "14px",
                         }}
                       >
                         {record.otHours}
@@ -273,6 +296,7 @@ function Salary() {
                         style={{
                           padding: "10px",
                           borderBottom: "1px solid #d0e1f9",
+                          fontSize: "14px",
                         }}
                       >
                         {record.otPayPerHour}
@@ -281,6 +305,7 @@ function Salary() {
                         style={{
                           padding: "10px",
                           borderBottom: "1px solid #d0e1f9",
+                          fontSize: "14px",
                         }}
                       >
                         {record.bonus}
@@ -289,6 +314,7 @@ function Salary() {
                         style={{
                           padding: "10px",
                           borderBottom: "1px solid #d0e1f9",
+                          fontSize: "14px",
                         }}
                       >
                         {record.allowance}
@@ -297,6 +323,7 @@ function Salary() {
                         style={{
                           padding: "10px",
                           borderBottom: "1px solid #d0e1f9",
+                          fontSize: "14px",
                         }}
                       >
                         {record.additional}
@@ -305,6 +332,7 @@ function Salary() {
                         style={{
                           padding: "10px",
                           borderBottom: "1px solid #d0e1f9",
+                          fontSize: "14px",
                         }}
                       >
                         {record.deduction}
@@ -313,6 +341,7 @@ function Salary() {
                         style={{
                           padding: "10px",
                           borderBottom: "1px solid #d0e1f9",
+                          fontSize: "14px",
                         }}
                       >
                         {record.basic}
@@ -322,6 +351,7 @@ function Salary() {
                           padding: "10px",
                           borderBottom: "1px solid #d0e1f9",
                           fontWeight: "bold",
+                          fontSize: "14px",
                         }}
                       >
                         {(() => {
@@ -343,6 +373,25 @@ function Salary() {
 
                           return parseFloat(final).toFixed(2);
                         })()}
+                      </td>
+                      <td
+                        style={{
+                          padding: "10px",
+                          borderBottom: "1px solid #d0e1f9",
+                          fontSize: "14px",
+                        }}
+                      >
+                        <button
+                          style={{
+                            backgroundColor: "#4682b4",
+                            color: "white",
+                            padding: 10,
+                            fontSize: "14px",
+                          }}
+                          onClick={()=> Navigate("show", { state: { salary: record } })}
+                        >
+                          Print
+                        </button>
                       </td>
                     </tr>
                   ))
