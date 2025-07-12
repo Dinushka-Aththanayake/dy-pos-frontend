@@ -118,18 +118,19 @@ function Billing() {
     }
   }, [searchTerm, inventory]);
 
-  const handleAddProduct = () => {
-    if (!selectedProduct) return;
+  const handleAddProduct = (product) => {
+    if (!product && !selectedProduct) return;
+    const productToAdd = product || selectedProduct;
 
     const existingIndex = products.findIndex(
-      (item) => item.barcode === selectedProduct.product.barCode
+      (item) => item.barcode === productToAdd.product.barCode
     );
 
     const newProduct = {
-      inventoryId: selectedProduct.id,
-      barcode: selectedProduct.product.barCode,
-      name: selectedProduct.product.name,
-      price: Number(selectedProduct.sellPrice),
+      inventoryId: productToAdd.id,
+      barcode: productToAdd.product.barCode,
+      name: productToAdd.product.name,
+      price: Number(productToAdd.sellPrice),
       discount: 0,
       quantity: 1,
     };
@@ -493,10 +494,8 @@ function Billing() {
                       if (selectedProduct) {
                         handleAddProduct();
                       } else if (filteredInventory.length === 1) {
-                        setSelectedProduct(filteredInventory[0]);
-                        handleAddProduct(); // Delay to ensure state is updated
+                        handleAddProduct(filteredInventory[0]);
                         setSearchTerm("");
-                        
                       }
                       e.preventDefault(); // Prevent default Enter behavior
                     }
