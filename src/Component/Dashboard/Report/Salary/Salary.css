@@ -21,7 +21,7 @@
 
 
 .salary-search-byname{
-    
+    flex:6;
     padding: 8px;
     border-radius: 5px;
     border-style: solid;

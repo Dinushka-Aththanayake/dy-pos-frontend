@@ -2,9 +2,9 @@
 
   .jobcard-content {
     display: flex;
-    background: #e3f2fd;
+    
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    
     overflow: hidden;
     width: 100%;
     padding: 20px;
