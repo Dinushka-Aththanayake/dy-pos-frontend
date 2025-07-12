@@ -71,8 +71,14 @@ function RegisterUser() {
       alert("User registered successfully!");
       handleCancel();
     } catch (error) {
+      let msg = error.response?.data?.message;
+
+      if (Array.isArray(msg)) {
+        msg = msg.join("\n");
+      }
+
       console.error("Error creating user:", error);
-      alert("Failed to register user. Check the inputs or try again.");
+      alert(msg || "Failed to register user. Check the inputs or try again.");
     }
   };
 
@@ -166,7 +172,7 @@ function RegisterUser() {
               backgroundColor: "red",
               color: "white",
               marginRight: "10px",
-              padding: "8px 15px"
+              padding: "8px 15px",
             }}
             onClick={handleCancel}
           >
@@ -174,7 +180,12 @@ function RegisterUser() {
           </button>
           <button
             className="edit-button"
-            style={{ backgroundColor: "green", color: "white",padding: "8px 15px",marginTop:"0" }}
+            style={{
+              backgroundColor: "green",
+              color: "white",
+              padding: "8px 15px",
+              marginTop: "0",
+            }}
             onClick={handleCreate}
           >
             Save
