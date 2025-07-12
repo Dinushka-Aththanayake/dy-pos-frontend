@@ -38,7 +38,7 @@ function BillView({ bill, autoPrint = false }) {
                         <div className="company-name-header" style={{ fontSize: 20, fontWeight: 700, letterSpacing: 1}}>Ranawaka Car Audio</div>
                         <div  className="company-name-header" style={{ fontSize: 20, fontWeight: 700, letterSpacing: 1 }}>& </div>
                         <div className="company-name-header" style={{ fontSize: 20, fontWeight: 700, letterSpacing: 1 }}>All Accessories</div>
-                        <div  style={{ fontSize: 14, color: "#555" }}>All accessories and accident painting</div>
+                        <div  style={{ fontSize: 14, color: "#555" }}>All accessories and tint house</div>
                     </div>
                 </div>
                 <div className="bill-header-divider" style={{ borderBottom: "2px solid #1964a2", margin: "5px 0 3px 0" }} />
