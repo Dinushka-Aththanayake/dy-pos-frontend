@@ -180,7 +180,7 @@ function SalaryCalculator() {
       <h2 style={{ color: "rgb(0, 51, 102)", marginBottom: "10px" }}>
         Salary Calculator
       </h2>
-      <div style={{ display: "flex", gap: "10px" }}>
+      <div style={{ display: "flex", gap: "10px", }}>
         <div
           className="salarycal-main-container"
           style={{
@@ -192,8 +192,8 @@ function SalaryCalculator() {
         >
           <div
             style={{
-              padding: "20px",
-
+              padding: "30px",
+              
               backgroundColor: "rgb(218, 234, 244)",
               borderRadius: "12px",
               boxShadow: "0 0 10px rgba(0,0,0,0.2)",
@@ -210,7 +210,8 @@ function SalaryCalculator() {
                 marginBottom: "10px",
                 borderRadius: "5px",
                 borderStyle: "solid",
-                borderColor: "rgb(28, 103, 150)",
+                borderWidth: "1px",
+                borderColor: "#80cfff",
               }}
             >
               <option value="" disabled>
@@ -232,10 +233,10 @@ function SalaryCalculator() {
                 width: "100%",
                 padding: "8px",
                 marginBottom: "10px",
-                backgroundColor: "#eaeaea",
                 borderRadius: "5px",
                 borderStyle: "solid",
-                borderColor: "rgb(28, 103, 150)",
+                borderWidth: "1px",
+                borderColor: "#80cfff",
               }}
             />
 
@@ -251,7 +252,8 @@ function SalaryCalculator() {
                 marginBottom: "10px",
                 borderRadius: "5px",
                 borderStyle: "solid",
-                borderColor: "rgb(28, 103, 150)",
+                borderWidth: "1px",
+                borderColor: "#80cfff",
               }}
             />
 
@@ -267,7 +269,8 @@ function SalaryCalculator() {
                 marginBottom: "10px",
                 borderRadius: "5px",
                 borderStyle: "solid",
-                borderColor: "rgb(28, 103, 150)",
+                borderWidth: "1px",
+                borderColor: "#80cfff",
               }}
             />
 
@@ -283,7 +286,8 @@ function SalaryCalculator() {
                 marginBottom: "10px",
                 borderRadius: "5px",
                 borderStyle: "solid",
-                borderColor: "rgb(28, 103, 150)",
+                borderWidth: "1px",
+                borderColor: "#80cfff",
               }}
             />
 
@@ -299,7 +303,8 @@ function SalaryCalculator() {
                 marginBottom: "10px",
                 borderRadius: "5px",
                 borderStyle: "solid",
-                borderColor: "rgb(28, 103, 150)",
+                borderWidth: "1px",
+                borderColor: "#80cfff",
               }}
             />
 
@@ -315,7 +320,8 @@ function SalaryCalculator() {
                 marginBottom: "10px",
                 borderRadius: "5px",
                 borderStyle: "solid",
-                borderColor: "rgb(28, 103, 150)",
+                borderWidth: "1px",
+                borderColor: "#80cfff",
               }}
             />
 
@@ -331,12 +337,13 @@ function SalaryCalculator() {
                 marginBottom: "20px",
                 borderRadius: "5px",
                 borderStyle: "solid",
-                borderColor: "rgb(28, 103, 150)",
+                borderWidth: "1px",
+                borderColor: "#80cfff",
               }}
             />
             <div
               className="btn-salary-calculator"
-              style={{ display: "flex", justifyContent: "space-between" }}
+              style={{ display: "flex", justifyContent: "space-between",gap:"10px" }}
             >
               <button
                 onClick={calculateSalary}
@@ -346,8 +353,9 @@ function SalaryCalculator() {
                   color: "#fff",
                   border: "none",
                   borderRadius: "6px",
-                  width: "100px",
+                  flex:"1",
                   fontSize: "12px",
+
                 }}
               >
                 Calculate
@@ -359,7 +367,7 @@ function SalaryCalculator() {
                   backgroundColor: "rgb(189, 75, 75)",
                   color: "#fff",
                   border: "none",
-                  width: "100px",
+                  flex:"1",
                   borderRadius: "6px",
                 }}
               >
@@ -372,7 +380,7 @@ function SalaryCalculator() {
                   backgroundColor: "rgb(24, 81, 48)",
                   color: "#fff",
                   border: "none",
-                  width: "100px",
+                  flex:"1",
                   borderRadius: "6px",
                 }}
                 onClick={handleSave}
@@ -415,7 +423,8 @@ function SalaryCalculator() {
                 backgroundColor: "#eaeaea",
                 borderRadius: "5px",
                 borderStyle: "solid",
-                borderColor: "rgb(28, 103, 150)",
+                borderWidth: "1px",
+                borderColor: "#80cfff",
               }}
               value={fromDate}
               onChange={(e) => setFromDate(e.target.value)}
@@ -430,7 +439,8 @@ function SalaryCalculator() {
                 backgroundColor: "#eaeaea",
                 borderRadius: "5px",
                 borderStyle: "solid",
-                borderColor: "rgb(28, 103, 150)",
+                borderWidth: "1px",
+                borderColor: "#80cfff",
               }}
               value={toDate}
               onChange={(e) => setToDate(e.target.value)}
