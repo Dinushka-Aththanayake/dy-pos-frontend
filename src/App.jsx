@@ -40,6 +40,7 @@ import Services from "./Component/Dashboard/Report/Services/Services";
 import ShowBills from "./Component/Dashboard/History/ShowBills/ShowBills";
 import HoldBills from "./Component/Dashboard/Billing/HoldBills/HoldBills";
 import RegisterUser from "./Component/Dashboard/Account/RegisterUser/RegisterUser";
+import ShowSalary from "./Component/Dashboard/Report/Salary/ShowSalary/ShowSalary";
 
 // 🔐 New ProtectedRoute Component
 const ProtectedRoute = ({ allowedRoles, children }) => {
@@ -62,17 +63,16 @@ const ProtectedRoute = ({ allowedRoles, children }) => {
         <div
           style={{
             padding: "2rem",
-            
+
             borderRadius: "8px",
             color: "white",
             textAlign: "center",
-            
           }}
         >
           <h2 style={{ color: "red", marginBottom: "1rem" }}>
             Unauthorized Access
           </h2>
-          <p style={{color:"gray"}}>
+          <p style={{ color: "gray" }}>
             You are logged in as <strong>{employee.role}</strong>
           </p>
         </div>
@@ -344,11 +344,24 @@ export const router = createHashRouter([
             children: [
               {
                 path: "",
-                element: (
-                  <ProtectedRoute allowedRoles={["admin"]}>
-                    <Salary />
-                  </ProtectedRoute>
-                ),
+                children: [
+                  {
+                    path: "",
+                    element: (
+                      <ProtectedRoute allowedRoles={["admin"]}>
+                        <Salary />
+                      </ProtectedRoute>
+                    ),
+                  },
+                  {
+                    path: "show",
+                    element: (
+                      <ProtectedRoute allowedRoles={["admin"]}>
+                        <ShowSalary />
+                      </ProtectedRoute>
+                    )
+                  }
+                ],
               },
               {
                 path: "calculator",
