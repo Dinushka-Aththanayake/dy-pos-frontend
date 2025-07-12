@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Salary.css";
 import { useNavigate } from "react-router-dom";
+import { formatDateToISO } from "../../../../utils";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -40,8 +41,8 @@ function Salary() {
   ) => {
     const url = new URL(`${API_BASE_URL}/salaries/search`);
     if (employeeId) url.searchParams.append("employeeId", employeeId);
-    if (createdAfter) url.searchParams.append("createdAfter", createdAfter);
-    if (createdBefore) url.searchParams.append("createdBefore", createdBefore);
+    if (createdAfter) url.searchParams.append("createdAfter", formatDateToISO(createdAfter, "00:00"));
+    if (createdBefore) url.searchParams.append("createdBefore", formatDateToISO(createdBefore, "23:59"));
 
     fetch(url.toString(), {
       method: "GET",

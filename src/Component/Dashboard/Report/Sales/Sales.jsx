@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Sales.css";
-import { formatDateToLocalString } from "../../../../utils";
+import { formatDateToISO, formatDateToLocalString } from "../../../../utils";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -22,9 +22,9 @@ function Sales() {
 
       if (filters.barCode) queryParams.append("barCode", filters.barCode);
       if (filters.finalizedAfter)
-        queryParams.append("finalizedAfter", filters.finalizedAfter);
+        queryParams.append("finalizedAfter", formatDateToISO(filters.finalizedAfter, "00:00"));
       if (filters.finalizedBefore)
-        queryParams.append("finalizedBefore", filters.finalizedBefore);
+        queryParams.append("finalizedBefore", formatDateToISO(filters.finalizedBefore, "23:59"));
 
       const url = `${API_BASE_URL}/items/search?${queryParams.toString()}`;
 

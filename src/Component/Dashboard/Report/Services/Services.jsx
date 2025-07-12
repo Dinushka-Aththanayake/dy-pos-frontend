@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Services.css";
+import { formatDateToISO } from "../../../../utils";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -51,8 +52,8 @@ function Services() {
   const handleSearch = () => {
     const filters = {};
     if (selectedEmployee) filters.employeeId = selectedEmployee;
-    if (startDate) filters.completedAfter = startDate;
-    if (endDate) filters.completedBefore = endDate;
+    if (startDate) filters.completedAfter = formatDateToISO(startDate, "00:00");
+    if (endDate) filters.completedBefore = formatDateToISO(endDate, "23:59");
 
     fetchJobs(filters); // fetch jobs with query filters
   };

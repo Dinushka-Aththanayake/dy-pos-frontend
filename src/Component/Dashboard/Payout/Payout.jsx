@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Payout.css";
+import { formatDateToISO } from "../../../utils";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -98,8 +99,8 @@ function Payout() {
               onClick={() => {
                 const url = new URL(`${API_BASE_URL}/payouts/search`);
                 if (beforeDate)
-                  url.searchParams.append("beforeDate", beforeDate);
-                if (afterDate) url.searchParams.append("afterDate", afterDate);
+                  url.searchParams.append("beforeDate", formatDateToISO(beforeDate, "23:59"));
+                if (afterDate) url.searchParams.append("afterDate", formatDateToISO(afterDate, "00:00"));
 
                 fetch(url.toString(), {
                   method: "GET",

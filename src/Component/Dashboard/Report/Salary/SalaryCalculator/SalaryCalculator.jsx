@@ -1,6 +1,7 @@
 import { div } from "framer-motion/client";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { formatDateToISO } from "../../../../../utils";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -61,7 +62,7 @@ function SalaryCalculator() {
 
     try {
       const res = await fetch(
-        `${API_BASE_URL}/attendances/search?employeeId=${selectedEmployee}&recordedAfter=${fromDate}&recordedBefore=${toDate}`,
+        `${API_BASE_URL}/attendances/search?employeeId=${selectedEmployee}&recordedAfter=${formatDateToISO(fromDate, "00:00")}&recordedBefore=${toDate, "23:59"}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
