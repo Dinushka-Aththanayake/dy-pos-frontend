@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Product.css";
+import TextField from "@mui/material/TextField";
+import Autocomplete from "@mui/material/Autocomplete";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function Product() {
   const [products, setProducts] = useState([]);
-
   const [searchTerm, setSearchTerm] = useState("");
   const [barCode, setBarCode] = useState("");
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
   const [brand, setBrand] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  const [categories, setCategories] = useState([]);
+  const [brands, setBrands] = useState([]);
   const navigate = useNavigate();
   const token = localStorage.getItem("access_token");
 
@@ -41,6 +44,32 @@ function Product() {
         }
       })
       .catch((error) => console.error("Error fetching products!", error));
+
+    fetch(`${API_BASE_URL}/products/categories`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (Array.isArray(data)) setCategories(data);
+      })
+      .catch((error) => console.error("Error fetching categories!", error));
+
+    fetch(`${API_BASE_URL}/products/brands`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (Array.isArray(data)) setBrands(data);
+      })
+      .catch((error) => console.error("Error fetching brands!", error));
   }, []);
 
   const handleConfirm = async (e) => {
@@ -89,24 +118,24 @@ function Product() {
   };
 
   return (
-    <div style={{backgroundColor:"#eff5fd",padding:"20px"}}>
+    <div style={{ backgroundColor: "#eff5fd", padding: "20px" }}>
       <h2 style={{ color: "rgb(0, 51, 102)", marginBottom: "10px" }}>
         Products
       </h2>
 
-      <div className="inventory-container" style={{backgroundColor:"#eff5fd"}}>
+      <div className="inventory-container" style={{ backgroundColor: "#eff5fd" }}>
         <div className="inventory-content">
           <div className="part1">
-            <div className="filter-section" style={{display:"flex",gap:"15px"}}>
+            <div className="filter-section" style={{ display: "flex", gap: "15px" }}>
               <input
                 type="text"
                 placeholder="Search by Code or Name..."
                 className="search-input1"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                style={{flex:5}}
+                style={{ flex: 5 }}
               />
-              <button className="search-button" style={{flex:1}} >Search</button>
+              <button className="search-button" style={{ flex: 1 }} >Search</button>
             </div>
 
             <div
@@ -165,38 +194,53 @@ function Product() {
             <form className="inventory-form" >
               <div className="form-group2">
                 <label>Barcode:</label>
-                <input
-                  type="text"
+                <TextField
+                  variant="outlined"
+                  size="small"
                   value={barCode}
                   onChange={(e) => setBarCode(e.target.value)}
+                  fullWidth
+                  placeholder="Enter Barcode"
                 />
               </div>
               <div className="form-group2">
                 <label>Name:</label>
-                <input
-                  type="text"
+                <TextField
+                  variant="outlined"
+                  size="small"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
+                  fullWidth
+                  placeholder="Enter Name"
                 />
               </div>
               <div className="form-group2">
-                <label>Category:</label>
-                <input
-                  type="text"
+                <Autocomplete
+                  freeSolo
+                  options={categories}
                   value={category}
-                  onChange={(e) => setCategory(e.target.value)}
+                  onChange={(e, newValue) => setCategory(newValue || "")}
+                  inputValue={category}
+                  onInputChange={(e, newInputValue) => setCategory(newInputValue)}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Category" variant="outlined" size="small" fullWidth />
+                  )}
                 />
               </div>
               <div className="form-group2">
-                <label>Brand:</label>
-                <input
-                  type="text"
+                <Autocomplete
+                  freeSolo
+                  options={brands}
                   value={brand}
-                  onChange={(e) => setBrand(e.target.value)}
+                  onChange={(e, newValue) => setBrand(newValue || "")}
+                  inputValue={brand}
+                  onInputChange={(e, newInputValue) => setBrand(newInputValue)}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Brand" variant="outlined" size="small" fullWidth />
+                  )}
                 />
               </div>
-              <button className="submit-btn" type="submit" onClick={handleConfirm}
-              style={{marginTop:"15px", float:"right"}}>
+              <button className="submit-btn" type="submit" onClick={handleConfirm} style={{ marginTop: "15px", float: "right" }}>
                 Create
               </button>
             </form>
