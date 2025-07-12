@@ -89,12 +89,12 @@ function Product() {
   };
 
   return (
-    <div>
+    <div style={{backgroundColor:"#eff5fd",padding:"20px"}}>
       <h2 style={{ color: "rgb(0, 51, 102)", marginBottom: "10px" }}>
         Products
       </h2>
 
-      <div className="inventory-container">
+      <div className="inventory-container" style={{backgroundColor:"#eff5fd"}}>
         <div className="inventory-content">
           <div className="part1">
             <div className="filter-section" style={{display:"flex",gap:"15px"}}>

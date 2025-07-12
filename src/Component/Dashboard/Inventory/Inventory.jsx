@@ -46,7 +46,7 @@ function Inventory() {
   });
 
   return (
-    <div>
+    <div style={{backgroundColor:"#eff5fd",padding:"20px"}}>
       <div
         style={{
           display: "flex",

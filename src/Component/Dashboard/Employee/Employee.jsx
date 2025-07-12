@@ -178,7 +178,7 @@ const Employee = () => {
   };
 
   return (
-    <div>
+    <div style={{backgroundColor:"#eff5fd",padding:"20px"}}>
       <h2 style={{ color: "rgb(0, 51, 102)", marginBottom: "10px" }}>
           Attendances
         </h2>

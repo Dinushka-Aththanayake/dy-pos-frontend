@@ -211,7 +211,7 @@ const NewInventory = () => {
 
       <div className="inventory-button-group">
         <button onClick={addInventoryRow} className="add-btn3">
-          Add Inventory
+          Add Row
         </button>
         <button onClick={saveInventories} className="save-btn3">
           Save
