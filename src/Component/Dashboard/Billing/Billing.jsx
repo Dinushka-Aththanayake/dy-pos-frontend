@@ -503,7 +503,7 @@ function Billing() {
                 />
               )}
             />
-            <button className="search-btn" onClick={handleAddProduct}>
+            <button className="search-btn" onClick={() => handleAddProduct()}>
               Add Item
             </button>
           </div>
