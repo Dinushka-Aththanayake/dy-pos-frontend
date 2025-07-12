@@ -92,7 +92,7 @@ function NewAppointment() {
 
     try {
       const response = await fetch(
-        `${API_BASE_URL}/appointments/search?date=${selectedDate}`,
+        `${API_BASE_URL}/appointments/search?afterDate=${formatDateToISO(selectedDate, "00:00")}&beforeDate=${formatDateToISO(selectedDate, "23:59")}`,
         {
           method: "GET",
           headers: {

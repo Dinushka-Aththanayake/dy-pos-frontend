@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Appoinment.css";
 import { useNavigate } from "react-router-dom";
+import { formatDateToISO } from "../../../utils";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -77,7 +78,8 @@ function Appointment() {
     }
 
     if (selectedDate) {
-      url.searchParams.append("date", selectedDate);
+      url.searchParams.append("afterDate", formatDateToISO(selectedDate, "00:00"));
+      url.searchParams.append("beforeDate", formatDateToISO(selectedDate, "23:59"));
     }
 
     if (selectedBranch !== "All") {
