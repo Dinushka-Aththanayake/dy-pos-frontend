@@ -113,7 +113,14 @@ function Product() {
       }
     } catch (error) {
       console.error("Error creating product:", error);
-      alert("Error creating product. Please try again.");
+
+      let msg = error.response?.data?.message;
+
+      if (Array.isArray(msg)) {
+        msg = msg.join("\n");
+      }
+
+      alert(msg || "Error creating product. Please try again.");
     }
   };
 

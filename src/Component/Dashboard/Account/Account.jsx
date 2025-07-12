@@ -69,6 +69,14 @@ function Account() {
       })
       .catch((err) => {
         console.error("Error saving employee!", err);
+
+        let msg = err.response?.data?.message;
+
+        if (Array.isArray(msg)) {
+          msg = msg.join("\n");
+        }
+
+        alert(msg || "Error saving employee. Please try again.");
       });
   };
 
