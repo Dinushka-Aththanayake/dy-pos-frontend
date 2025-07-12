@@ -62,7 +62,7 @@ function SalaryCalculator() {
 
     try {
       const res = await fetch(
-        `${API_BASE_URL}/attendances/search?employeeId=${selectedEmployee}&recordedAfter=${formatDateToISO(fromDate, "00:00")}&recordedBefore=${(toDate, "23:59")}`,
+        `${API_BASE_URL}/attendances/search?employeeId=${selectedEmployee}&recordedAfter=${formatDateToISO(fromDate, "00:00")}&recordedBefore=${formatDateToISO(toDate, "23:59")}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
