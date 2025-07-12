@@ -64,11 +64,10 @@ function Services() {
 
   return (
     <div>
-      <h2 style={{ color: "rgb(0, 51, 102)", marginBottom: "10px" }}>
+      <div className="sales-report-container">
+        <h2 style={{ color: "rgb(0, 51, 102)", marginBottom: "10px" }}>
         Services History
       </h2>
-
-      <div className="sales-report-container">
         <div className="sales-filter-section">
           <select
             style={{ width: "100%" }}

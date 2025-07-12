@@ -280,7 +280,7 @@ const Employee = () => {
 
         <div className="form-section">
           <input
-            type="number"
+            type="password"
             placeholder="Barcode"
             value={employeeId}
             onChange={(e) => setEmployeeId(e.target.value)}

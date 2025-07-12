@@ -139,7 +139,7 @@ function JobCard() {
                 <tr style={{ backgroundColor: "#e6f2ff" }}>
                   <th style={{ textAlign: "center" }}>#</th>
                   <th style={{ textAlign: "center" }}>Num Plate</th>
-                  <th style={{ textAlign: "center" }}>Date</th>
+                  <th style={{ textAlign: "center" }}>Completed</th>
                   <th style={{ textAlign: "center" }}>Branch</th>
                   <th style={{ textAlign: "center" }}>Status</th>
                 </tr>

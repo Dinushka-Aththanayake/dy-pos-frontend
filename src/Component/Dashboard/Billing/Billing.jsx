@@ -17,7 +17,7 @@ function Billing() {
   const [filteredInventory, setFilteredInventory] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [discount, setDiscount] = useState(0);
+  const [discount, setDiscount] = useState(bill?.discount || 0);
 
   const [customerTelephone, setCustomerTelephone] = useState(
     jobcard?.customerTelephone || bill?.customerTelephone || ""
@@ -57,14 +57,14 @@ function Billing() {
       employee: job?.employee?.firstName || "",
       price: Number(job.charge || 0),
     })) ||
-    bill?.jobCard?.jobs.map((service) => ({
-      id: service.id,
-      serviceCode: service.id || "",
-      name: service.title || "",
-      employee: service.employee.firstName || "",
-      price: Number(service.charge || 0),
-    })) ||
-    []
+      bill?.jobCard?.jobs.map((service) => ({
+        id: service.id,
+        serviceCode: service.id || "",
+        name: service.title || "",
+        employee: service.employee.firstName || "",
+        price: Number(service.charge || 0),
+      })) ||
+      []
   );
 
   useEffect(() => {
@@ -101,6 +101,7 @@ function Billing() {
     setSelectedProduct(null);
     setJobcard(null);
     setBill(null);
+    setDiscount(0);
   };
 
   useEffect(() => {
@@ -421,7 +422,7 @@ function Billing() {
       state: {
         bill,
         autoPrint: true, // Set to true to trigger auto-print
-      }
+      },
     });
   };
 
@@ -487,7 +488,19 @@ function Billing() {
                   variant="outlined"
                   fullWidth
                   size="small"
-                  onKeyDown={(e) => e.key === "Enter" && handleAddProduct()}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      if (selectedProduct) {
+                        handleAddProduct();
+                      } else if (filteredInventory.length === 1) {
+                        setSelectedProduct(filteredInventory[0]);
+                        handleAddProduct(); // Delay to ensure state is updated
+                        setSearchTerm("");
+                        
+                      }
+                      e.preventDefault(); // Prevent default Enter behavior
+                    }
+                  }}
                 />
               )}
             />
@@ -644,7 +657,7 @@ function Billing() {
           <button className="cancel-btn" onClick={handleCancel}>
             Cancel
           </button>
-          
+
           <button className="print-btn-bill" onClick={handlePrintAndSave}>
             Print & Save
           </button>
