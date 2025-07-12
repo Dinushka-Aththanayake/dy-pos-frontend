@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import "./Employee.css";
+import { formatDateToISO } from "../../../utils";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -153,8 +154,8 @@ const Employee = () => {
 
       if (selectedEmployee) queryParams.append("employeeId", selectedEmployee);
       if (selectedType) queryParams.append("type", selectedType);
-      if (startDate) queryParams.append("recordedAfter", startDate);
-      if (endDate) queryParams.append("recordedBefore", endDate);
+      if (startDate) queryParams.append("recordedAfter", formatDateToISO(startDate, "00:00"));
+      if (endDate) queryParams.append("recordedBefore", formatDateToISO(endDate, "23:59"));
 
       const url = `${API_BASE_URL}/attendances/search?${queryParams.toString()}`;
 

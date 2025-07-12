@@ -2,6 +2,7 @@ import "./JobCard.css";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { div } from "framer-motion/client";
+import { formatDateToISO } from "../../../utils";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -59,8 +60,8 @@ function JobCard() {
   const handleSearch = () => {
     const params = {};
     if (searchNumPlate) params.numPlate = searchNumPlate;
-    if (createdAfter) params.createdAfter = createdAfter;
-    if (createdBefore) params.createdBefore = createdBefore;
+    if (createdAfter) params.createdAfter = formatDateToISO(createdAfter, "00:00");
+    if (createdBefore) params.createdBefore = formatDateToISO(createdBefore, "23:59");
     fetchJobCards(params);
   };
 

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./History.css";
 import { useNavigate } from "react-router-dom";
 import { div } from "framer-motion/client";
+import { formatDateToISO } from "../../../utils";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -84,11 +85,11 @@ function History() {
     }
 
     if (searchParams.finalizedAfter) {
-      url.searchParams.append("finalizedAfter", searchParams.finalizedAfter);
+      url.searchParams.append("finalizedAfter", formatDateToISO(searchParams.finalizedAfter, "00:00"));
     }
 
     if (searchParams.finalizedBefore) {
-      url.searchParams.append("finalizedBefore", searchParams.finalizedBefore);
+      url.searchParams.append("finalizedBefore", formatDateToISO(searchParams.finalizedBefore, "23:59"));
     }
 
     fetch(url.toString(), {
