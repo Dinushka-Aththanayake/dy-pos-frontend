@@ -1,3 +1,9 @@
+@media print {
+  .footer {
+    visibility: hidden;
+  }
+}
+
 .notification-box {
   position: absolute;
   top: 45px;
