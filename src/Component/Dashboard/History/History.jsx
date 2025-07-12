@@ -125,10 +125,10 @@ function History() {
     <div>
       
 
-      <div style={{ display: "flex", gap: "10px",flexDirection:"column" }}>
+      <div style={{ display: "flex", gap: "10px",flexDirection:"row" }}>
         
-        <div className="sales-report-container">
-          <h2 style={{ color: "rgb(0, 51, 102)",marginBottom:"10px" }}>Bill History</h2>
+        <div className="sales-report-container" style={{flex: 3, }}>
+          <h2 style={{ color: "rgb(0, 51, 102)",marginBottom:"10px", }}>Bill History</h2>
           <div className="sales-filter-section">
             <input
               type="number"

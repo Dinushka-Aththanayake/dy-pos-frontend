@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Salary.css";
 import { useNavigate } from "react-router-dom";
-import { formatDateToISO } from "../../../../utils";
+import { formatDateToISO, formatDateToLocalString } from "../../../../utils";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -41,8 +41,16 @@ function Salary() {
   ) => {
     const url = new URL(`${API_BASE_URL}/salaries/search`);
     if (employeeId) url.searchParams.append("employeeId", employeeId);
-    if (createdAfter) url.searchParams.append("createdAfter", formatDateToISO(createdAfter, "00:00"));
-    if (createdBefore) url.searchParams.append("createdBefore", formatDateToISO(createdBefore, "23:59"));
+    if (createdAfter)
+      url.searchParams.append(
+        "createdAfter",
+        formatDateToISO(createdAfter, "00:00")
+      );
+    if (createdBefore)
+      url.searchParams.append(
+        "createdBefore",
+        formatDateToISO(createdBefore, "23:59")
+      );
 
     fetch(url.toString(), {
       method: "GET",
@@ -62,7 +70,14 @@ function Salary() {
 
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "space-between",backgroundColor:"#f0f8ff",padding:20}}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          backgroundColor: "#f0f8ff",
+          padding: 20,
+        }}
+      >
         <h2 style={{ color: "rgb(0, 51, 102)", marginBottom: "10px" }}>
           Salary History
         </h2>
@@ -236,7 +251,7 @@ function Salary() {
                           borderBottom: "1px solid #d0e1f9",
                         }}
                       >
-                        {record.created?.split("T")[0]}
+                        {formatDateToLocalString(new Date(record.created))}
                       </td>
                       <td
                         style={{

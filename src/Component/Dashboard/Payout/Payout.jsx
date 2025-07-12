@@ -10,6 +10,7 @@ function Payout() {
   const [employee, setEmployee] = useState([]);
   const [fetchedPayouts, setfetchedPayouts] = useState([]);
   const [payout, setPayout] = useState({
+    description: "",
     collectedEmployeeId: "",
     amount: "",
   });
@@ -67,7 +68,7 @@ function Payout() {
       })
       .then(() => {
         alert("Payout created successfully!");
-        setPayout({ collectedEmployeeId: "", amount: "" });
+        setPayout({description: "", collectedEmployeeId: "", amount: "" ,});
         fetchPayouts();
       })
       .catch((error) => {
@@ -176,6 +177,7 @@ function Payout() {
             type="text"
             placeholder="Description"
             className="inout-input"
+            value={payout.description}
             onChange={(e) =>
               setPayout({ ...payout, description: e.target.value })
             }

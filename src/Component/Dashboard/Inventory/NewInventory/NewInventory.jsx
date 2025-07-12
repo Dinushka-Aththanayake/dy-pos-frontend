@@ -2,10 +2,13 @@ import React, { useState } from "react";
 import "./NewInventory.css";
 import axios from "axios";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useNavigate } from "react-router-dom";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const NewInventory = () => {
+  const navigate = useNavigate();
+  const token = localStorage.getItem("access_token");
   const [inventories, setInventories] = useState([
     {
       barcode: "",
@@ -54,6 +57,7 @@ const NewInventory = () => {
         supplierPhone: "",
       },
     ]);
+    navigate("/inventory");
   };
 
   const saveInventories = async () => {
@@ -81,6 +85,7 @@ const NewInventory = () => {
 
       alert("Inventories saved successfully!");
       cancelInventories();
+      navigate("/inventory");
     } catch (error) {
       console.error("Error saving inventories:", error);
       alert("Failed to save inventories. Check console for more info.");

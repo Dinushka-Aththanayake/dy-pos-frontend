@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./NewAppoinment.css";
 import { useNavigate, useLocation } from "react-router-dom";
-import { formatDateToISO } from "../../../../utils";
+import { formatDateToISO, formatDateToLocalString } from "../../../../utils";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -28,13 +28,11 @@ function NewAppointment() {
       setcustomerTelephone(editAppointment.customerTelephone || "");
 
       if (editAppointment.datetime) {
-        const datetime = new Date(editAppointment.datetime);
-        const dateStr = datetime.toISOString().split("T")[0];
-        const timeStr = datetime
-          .toTimeString()
-          .split(":")
-          .slice(0, 2)
-          .join(":");
+        const datetime = formatDateToLocalString(
+          new Date(editAppointment.datetime)
+        ).split(" ");
+        const dateStr = datetime[0];
+        const timeStr = datetime[1];
         setDate(dateStr);
         setTime(timeStr);
       }
@@ -59,17 +57,14 @@ function NewAppointment() {
     }
 
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/appointments/upsert`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(requestData),
-        }
-      );
+      const response = await fetch(`${API_BASE_URL}/appointments/upsert`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(requestData),
+      });
 
       if (response.ok) {
         alert(
@@ -88,6 +83,7 @@ function NewAppointment() {
   };
 
   const fetchAppointmentsByDate = async (selectedDate) => {
+    setFilteredAppointments([]);
     if (!selectedDate) return;
 
     try {
