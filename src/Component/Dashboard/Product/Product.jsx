@@ -73,7 +73,7 @@ function Product() {
   }, []);
 
   const handleConfirm = async (e) => {
-    if(!barCode && !name && !category && !brand){
+    if(!barCode || !name || !category || !brand){
       alert("Fill all fields");
       return;
     }
