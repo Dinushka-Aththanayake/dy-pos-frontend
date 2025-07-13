@@ -9,7 +9,7 @@ const showDialog = async (options) => {
   if (window.electronAPI && window.electronAPI.showMessageBox) {
     await window.electronAPI.showMessageBox(options);
   } else {
-    window.alert(options.message || options.title || '');
+    window.alert(options.message || options.title || "");
   }
 };
 
@@ -56,12 +56,12 @@ function Payout() {
     fetchPayouts();
   }, []);
 
-  const handleCreatePayout = () => {
+  const handleCreatePayout = async () => {
     if (!payout.collectedEmployeeId || !payout.amount || !payout.description) {
       await showDialog({
-        type: 'error',
-        title: 'Missing Fields',
-        message: 'Please fill all fields before submitting.'
+        type: "error",
+        title: "Missing Fields",
+        message: "Please fill all fields before submitting.",
       });
       return;
     }
@@ -79,27 +79,29 @@ function Payout() {
           throw new Error("Failed to create payout");
         }
       })
-      .then(() => {
+      .then(async () => {
         await showDialog({
-          type: 'info',
-          message: 'Payout created successfully!'
+          type: "info",
+          message: "Payout created successfully!",
         });
-        setPayout({description: "", collectedEmployeeId: "", amount: "" ,});
+        setPayout({ description: "", collectedEmployeeId: "", amount: "" });
         fetchPayouts();
       })
-      .catch((error) => {
+      .catch(async (error) => {
         console.error("Error creating payout:", error);
         await showDialog({
-          type: 'error',
-          title: 'Error',
-          message: error.message || 'Error creating payout. Please try again.'
+          type: "error",
+          title: "Error",
+          message: error.message || "Error creating payout. Please try again.",
         });
       });
   };
 
   return (
-    <div style={{backgroundColor:"#eff5fd",padding:"20px"}} >
-      <h2 style={{color:"rgb(0, 51, 102)",marginBottom:"10px"}}>Payouts</h2>
+    <div style={{ backgroundColor: "#eff5fd", padding: "20px" }}>
+      <h2 style={{ color: "rgb(0, 51, 102)", marginBottom: "10px" }}>
+        Payouts
+      </h2>
       <div className="employee-layout">
         <div className="table-section">
           <div className="emfilter-section">
@@ -117,31 +119,37 @@ function Payout() {
             />
             <button
               className="search-btn1"
-              onClick={() => {
+              onClick={async () => {
                 const url = new URL(`${API_BASE_URL}/payouts/search`);
                 if (beforeDate)
-                  url.searchParams.append("beforeDate", formatDateToISO(beforeDate, "23:59"));
-                if (afterDate) url.searchParams.append("afterDate", formatDateToISO(afterDate, "00:00"));
+                  url.searchParams.append(
+                    "beforeDate",
+                    formatDateToISO(beforeDate, "23:59")
+                  );
+                if (afterDate)
+                  url.searchParams.append(
+                    "afterDate",
+                    formatDateToISO(afterDate, "00:00")
+                  );
 
-                fetch(url.toString(), {
-                  method: "GET",
-                  headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                  },
-                })
-                  .then((res) => res.json())
-                  .then((data) =>
-                    setfetchedPayouts(Array.isArray(data) ? data : [])
-                  )
-                  .catch((err) => {
-                    console.error("Error filtering payouts!", err);
-                    await showDialog({
-                      type: 'error',
-                      title: 'Error',
-                      message: 'Failed to filter payouts. Please try again.'
-                    });
+                try {
+                  const res = await fetch(url.toString(), {
+                    method: "GET",
+                    headers: {
+                      "Content-Type": "application/json",
+                      Authorization: `Bearer ${token}`,
+                    },
                   });
+                  const data = await res.json();
+                  setfetchedPayouts(Array.isArray(data) ? data : []);
+                } catch (err) {
+                  console.error("Error filtering payouts!", err);
+                  await showDialog({
+                    type: "error",
+                    title: "Error",
+                    message: "Failed to filter payouts. Please try again.",
+                  });
+                }
               }}
             >
               Search

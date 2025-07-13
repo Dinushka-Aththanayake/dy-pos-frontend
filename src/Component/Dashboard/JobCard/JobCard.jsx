@@ -11,7 +11,7 @@ const showDialog = async (options) => {
   if (window.electronAPI && window.electronAPI.showMessageBox) {
     await window.electronAPI.showMessageBox(options);
   } else {
-    window.alert(options.message || options.title || '');
+    window.alert(options.message || options.title || "");
   }
 };
 
@@ -69,19 +69,20 @@ function JobCard() {
   const handleSearch = () => {
     const params = {};
     if (searchNumPlate) params.numPlate = searchNumPlate;
-    if (createdAfter) params.createdAfter = formatDateToISO(createdAfter, "00:00");
-    if (createdBefore) params.createdBefore = formatDateToISO(createdBefore, "23:59");
+    if (createdAfter)
+      params.createdAfter = formatDateToISO(createdAfter, "00:00");
+    if (createdBefore)
+      params.createdBefore = formatDateToISO(createdBefore, "23:59");
     fetchJobCards(params);
   };
 
   return (
-    <div style={{backgroundColor:"#eff5fd",padding:"20px"}}>
+    <div style={{ backgroundColor: "#eff5fd", padding: "20px" }}>
       <div
         style={{
           display: "flex",
           justifyContent: "space-between",
           marginBottom: "10px",
-          
         }}
       >
         <h2 style={{ color: "rgb(0, 51, 102)", marginBottom: "10px" }}>
@@ -93,7 +94,6 @@ function JobCard() {
       </div>
 
       <div className="jobcard-content">
-        
         <div className="jobcard-left">
           <div style={{ display: "flex", flexDirection: "column" }}>
             <div className="filter-container">
@@ -104,7 +104,7 @@ function JobCard() {
                 onChange={(e) =>
                   setSearchNumPlate(e.target.value.toUpperCase())
                 }
-                style={{flex:5}}
+                style={{ flex: 5 }}
               />{" "}
               <input
                 type="date"
@@ -294,18 +294,19 @@ function JobCard() {
                   disabled={
                     !selectedJobCard || selectedJobCard.status === "COMPLETED"
                   }
-                  onClick={() => {
+                  onClick={async () => {
                     if (!selectedJobCard) {
                       await showDialog({
-                        type: 'error',
-                        title: 'No Selection',
-                        message: 'Please select a Job Card first.'
+                        type: "error",
+                        title: "No Selection",
+                        message: "Please select a Job Card first.",
                       });
                     } else if (selectedJobCard.status === "COMPLETED") {
                       await showDialog({
-                        type: 'error',
-                        title: 'Cannot Edit',
-                        message: 'Completed bill cannot be edited or billed again.'
+                        type: "error",
+                        title: "Cannot Edit",
+                        message:
+                          "Completed bill cannot be edited or billed again.",
                       });
                     } else {
                       Navigate("/billing", {
@@ -323,18 +324,19 @@ function JobCard() {
                   disabled={
                     !selectedJobCard || selectedJobCard.status === "COMPLETED"
                   }
-                  onClick={() => {
+                  onClick={async () => {
                     if (!selectedJobCard) {
                       await showDialog({
-                        type: 'error',
-                        title: 'No Selection',
-                        message: 'Please select a Job Card first.'
+                        type: "error",
+                        title: "No Selection",
+                        message: "Please select a Job Card first.",
                       });
                     } else if (selectedJobCard.status === "COMPLETED") {
                       await showDialog({
-                        type: 'error',
-                        title: 'Cannot Edit',
-                        message: 'Completed bill cannot be edited or billed again.'
+                        type: "error",
+                        title: "Cannot Edit",
+                        message:
+                          "Completed bill cannot be edited or billed again.",
                       });
                     } else {
                       Navigate("new", { state: { jobcard: selectedJobCard } });
