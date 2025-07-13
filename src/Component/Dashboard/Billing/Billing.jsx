@@ -480,8 +480,8 @@ function Billing() {
     }
   };
 
-  const handleCancel = () => {
-    const confirm = showConfirm({
+  const handleCancel = async () => {
+    const confirm = await showConfirm({
       type: "warning",
       title: "Cancel Bill",
       message: "Are you sure you want to cancel this bill?",
