@@ -10,7 +10,7 @@ const showDialog = async (options) => {
   if (window.electronAPI && window.electronAPI.showMessageBox) {
     await window.electronAPI.showMessageBox(options);
   } else {
-    window.alert(options.message || options.title || '');
+    window.alert(options.message || options.title || "");
   }
 };
 
@@ -76,18 +76,18 @@ function NewAppointment() {
       });
 
       if (response.ok) {
-        showDialog({
-          type: 'info',
+        await showDialog({
+          type: "info",
           message: editAppointment
-            ? 'Appointment updated successfully!'
-            : 'Appointment created successfully!'
+            ? "Appointment updated successfully!"
+            : "Appointment created successfully!",
         });
         navigate("/appoinment");
       } else {
-        showDialog({
-          type: 'error',
-          title: 'Save Failed',
-          message: 'Failed to save appointment. Please try again.'
+        await showDialog({
+          type: "error",
+          title: "Save Failed",
+          message: "Failed to save appointment. Please try again.",
         });
       }
     } catch (error) {
@@ -99,10 +99,10 @@ function NewAppointment() {
         msg = msg.join("\n");
       }
 
-      showDialog({
-        type: 'error',
-        title: 'Error',
-        message: msg || 'Error saving appointment. Please try again.'
+      await showDialog({
+        type: "error",
+        title: "Error",
+        message: msg || "Error saving appointment. Please try again.",
       });
     }
   };

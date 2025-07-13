@@ -45,7 +45,7 @@ function SalaryCalculator() {
       .then((data) => setEmployee(Array.isArray(data) ? data : []))
       .catch((error) => {
         console.error("Error fetching employees!", error);
-        showDialog({
+        await showDialog({
           type: 'error',
           title: 'Error',
           message: 'Error fetching employees. Please try again later.' 
@@ -72,7 +72,7 @@ function SalaryCalculator() {
   // OT Hours Calculation Logic
   const handleCalculateOTHours = async () => {
     if (!selectedEmployee || !fromDate || !toDate) {
-      showDialog({
+      await showDialog({
         type: 'error',
         title: 'Error',
         message: 'Please select employee, from date and to date!'
@@ -131,7 +131,7 @@ function SalaryCalculator() {
       setOtHours(totalOTHours);
     } catch (err) {
       console.error("Error calculating OT Hours", err);
-      showDialog({
+      await showDialog({
         type: 'error',
         title: 'Error',
         message: 'Failed to calculate OT Hours. Please try again.'
@@ -159,7 +159,7 @@ function SalaryCalculator() {
 
   const handleSave = async () => {
     if (!selectedEmployee) {
-      showDialog({
+      await showDialog({
         type: 'error',
         title: 'Error',
         message: 'Please select an employee to save the salary.'
@@ -189,14 +189,14 @@ function SalaryCalculator() {
       });
 
       if (res.ok) {
-        showDialog({
+        await showDialog({
           title: 'Success',
           message: 'Salary saved successfully.',
         });
         Navigate("/reports/salary");
       } else {
         const errorData = await res.json();
-        showDialog({
+        await showDialog({
           type: 'error',
           title: 'Error',
           message: 'Failed to save salary: ' + (errorData.message || "Unknown error.")
@@ -204,7 +204,7 @@ function SalaryCalculator() {
       }
     } catch (err) {
       console.error("Error saving salary:", err);
-      showDialog({
+      await showDialog({
         type: 'error',
         title: 'Error',
         message: 'Error occurred while saving salary. Please try again.'

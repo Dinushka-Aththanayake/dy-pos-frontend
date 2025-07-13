@@ -11,7 +11,7 @@ const showDialog = async (options) => {
   if (window.electronAPI && window.electronAPI.showMessageBox) {
     await window.electronAPI.showMessageBox(options);
   } else {
-    window.alert(options.message || options.title || '');
+    window.alert(options.message || options.title || "");
   }
 };
 
@@ -82,11 +82,11 @@ function Product() {
   }, []);
 
   const handleConfirm = async (e) => {
-    if(!barCode || !name || !category || !brand){
-      showDialog({
-        type: 'error',
-        title: 'Missing Fields',
-        message: 'Please fill all required fields.'
+    if (!barCode || !name || !category || !brand) {
+      await showDialog({
+        type: "error",
+        title: "Missing Fields",
+        message: "Please fill all required fields.",
       });
       return;
     }
@@ -103,32 +103,29 @@ function Product() {
       });
 
       if (response.ok) {
-        showDialog({
-          type: 'info',
-          message: 'Product created successfully!'
+        await showDialog({
+          type: "info",
+          message: "Product created successfully!",
         });
         setBarCode("");
         setName("");
         setCategory("");
         setBrand("");
 
-        const updatedProducts = await fetch(
-          `${API_BASE_URL}/products/search`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        ).then((res) => res.json());
+        const updatedProducts = await fetch(`${API_BASE_URL}/products/search`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }).then((res) => res.json());
 
         setProducts(updatedProducts);
       } else {
-        showDialog({
-          type: 'error',
-          title: 'Create Failed',
-          message: 'Failed to create product. Please try again.'
+        await showDialog({
+          type: "error",
+          title: "Create Failed",
+          message: "Failed to create product. Please try again.",
         });
       }
     } catch (error) {
@@ -140,10 +137,10 @@ function Product() {
         msg = msg.join("\n");
       }
 
-      showDialog({
-        type: 'error',
-        title: 'Error',
-        message: msg || 'Error creating product. Please try again.'
+      await showDialog({
+        type: "error",
+        title: "Error",
+        message: msg || "Error creating product. Please try again.",
       });
     }
   };
@@ -154,10 +151,16 @@ function Product() {
         Products
       </h2>
 
-      <div className="inventory-container" style={{ backgroundColor: "#eff5fd" }}>
+      <div
+        className="inventory-container"
+        style={{ backgroundColor: "#eff5fd" }}
+      >
         <div className="inventory-content">
           <div className="part1">
-            <div className="filter-section" style={{ display: "flex", gap: "15px" }}>
+            <div
+              className="filter-section"
+              style={{ display: "flex", gap: "15px" }}
+            >
               <input
                 type="text"
                 placeholder="Search by Code or Name..."
@@ -166,7 +169,9 @@ function Product() {
                 onChange={(e) => setSearchTerm(e.target.value)}
                 style={{ flex: 5 }}
               />
-              <button className="search-button" style={{ flex: 1 }} >Search</button>
+              <button className="search-button" style={{ flex: 1 }}>
+                Search
+              </button>
             </div>
 
             <div
@@ -222,7 +227,7 @@ function Product() {
 
           <div className="form-section-inventory">
             <div className="image-placeholder">Image</div>
-            <form className="inventory-form" >
+            <form className="inventory-form">
               <div className="form-group2">
                 <label>Barcode:</label>
                 <TextField
@@ -252,9 +257,17 @@ function Product() {
                   value={category}
                   onChange={(e, newValue) => setCategory(newValue || "")}
                   inputValue={category}
-                  onInputChange={(e, newInputValue) => setCategory(newInputValue)}
+                  onInputChange={(e, newInputValue) =>
+                    setCategory(newInputValue)
+                  }
                   renderInput={(params) => (
-                    <TextField {...params} label="Category" variant="outlined" size="small" fullWidth />
+                    <TextField
+                      {...params}
+                      label="Category"
+                      variant="outlined"
+                      size="small"
+                      fullWidth
+                    />
                   )}
                 />
               </div>
@@ -267,11 +280,22 @@ function Product() {
                   inputValue={brand}
                   onInputChange={(e, newInputValue) => setBrand(newInputValue)}
                   renderInput={(params) => (
-                    <TextField {...params} label="Brand" variant="outlined" size="small" fullWidth />
+                    <TextField
+                      {...params}
+                      label="Brand"
+                      variant="outlined"
+                      size="small"
+                      fullWidth
+                    />
                   )}
                 />
               </div>
-              <button className="submit-btn" type="submit" onClick={handleConfirm} style={{ marginTop: "15px", float: "right" }}>
+              <button
+                className="submit-btn"
+                type="submit"
+                onClick={handleConfirm}
+                style={{ marginTop: "15px", float: "right" }}
+              >
                 Create
               </button>
             </form>

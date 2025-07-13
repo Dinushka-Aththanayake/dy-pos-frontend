@@ -11,7 +11,7 @@ const showDialog = async (options) => {
   if (window.electronAPI && window.electronAPI.showMessageBox) {
     await window.electronAPI.showMessageBox(options);
   } else {
-    window.alert(options.message || options.title || '');
+    window.alert(options.message || options.title || "");
   }
 };
 
@@ -200,10 +200,10 @@ function Billing() {
         });
       } catch (error) {
         console.error("Error deleting item from DB:", error);
-        showDialog({
-          type: 'error',
-          title: 'Delete Failed',
-          message: 'Failed to delete item from bill.'
+        await showDialog({
+          type: "error",
+          title: "Delete Failed",
+          message: "Failed to delete item from bill.",
         });
         return; // exit early if delete fails
       }
@@ -253,10 +253,10 @@ function Billing() {
 
   const handleSave = async () => {
     if (!customerName && (!customerNumPlate || !customerTelephone)) {
-      showDialog({
-        type: 'error',
-        title: 'Missing Fields',
-        message: 'Please enter customer details'
+      await showDialog({
+        type: "error",
+        title: "Missing Fields",
+        message: "Please enter customer details",
       });
       return;
     }
@@ -355,27 +355,27 @@ function Billing() {
         });
       }
 
-      showDialog({
-        type: 'info',
-        message: 'Bill saved successfully!'
+      await showDialog({
+        type: "info",
+        message: "Bill saved successfully!",
       });
       resetForm();
     } catch (error) {
       console.error("Save error:", error);
-      showDialog({
-        type: 'error',
-        title: 'Error',
-        message: error.message || 'Error saving bill. Please try again.'
+      await showDialog({
+        type: "error",
+        title: "Error",
+        message: error.message || "Error saving bill. Please try again.",
       });
     }
   };
 
   const handleHold = async () => {
     if (!customerName && (!customerNumPlate || !customerTelephone)) {
-      showDialog({
-        type: 'error',
-        title: 'Missing Fields',
-        message: 'Please enter customer details'
+      await showDialog({
+        type: "error",
+        title: "Missing Fields",
+        message: "Please enter customer details",
       });
       return;
     }
@@ -448,17 +448,17 @@ function Billing() {
         });
       }
 
-      showDialog({
-        type: 'info',
-        message: 'Bill held successfully!'
+      await showDialog({
+        type: "info",
+        message: "Bill held successfully!",
       });
       resetForm();
     } catch (error) {
       console.error("Hold error:", error);
-      showDialog({
-        type: 'error',
-        title: 'Error',
-        message: error.message || 'Error holding bill. Please try again.'
+      await showDialog({
+        type: "error",
+        title: "Error",
+        message: error.message || "Error holding bill. Please try again.",
       });
     }
   };
@@ -471,10 +471,10 @@ function Billing() {
 
   const handlePrintAndSave = async () => {
     if (!customerName && (!customerNumPlate || !customerTelephone)) {
-      showDialog({
-        type: 'error',
-        title: 'Missing Fields',
-        message: 'Please enter customer details'
+      await showDialog({
+        type: "error",
+        title: "Missing Fields",
+        message: "Please enter customer details",
       });
       return;
     }
@@ -503,14 +503,14 @@ function Billing() {
             />
           </div>
           <div className="info-bar1">
-            <label className="info-labal">Number Plate  :</label>
+            <label className="info-labal">Number Plate :</label>
             <input
               type="text"
               className="info-input"
               placeholder="Enter Number Plate"
               value={customerNumPlate}
               onChange={(e) => setNumberPlate(e.target.value.toUpperCase())}
-              style={{marginLeft: "16px"}}
+              style={{ marginLeft: "16px" }}
             />
           </div>
           <div className="info-bar1">
@@ -521,7 +521,7 @@ function Billing() {
               placeholder="Enter Mobile Number"
               value={customerTelephone}
               onChange={(e) => setCustomerTelephone(e.target.value)}
-              style={{marginLeft: "8px"}}
+              style={{ marginLeft: "8px" }}
             />
           </div>
         </div>

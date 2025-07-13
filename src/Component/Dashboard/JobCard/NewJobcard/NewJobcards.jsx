@@ -17,7 +17,7 @@ const showDialog = async (options) => {
   if (window.electronAPI && window.electronAPI.showMessageBox) {
     await window.electronAPI.showMessageBox(options);
   } else {
-    window.alert(options.message || options.title || '');
+    window.alert(options.message || options.title || "");
   }
 };
 
@@ -133,17 +133,17 @@ function NewJobcards() {
         });
 
         if (response.ok) {
-          showDialog({
-            type: 'info',
-            message: 'Job deleted successfully!'
+          await showDialog({
+            type: "info",
+            message: "Job deleted successfully!",
           });
         }
       } catch (error) {
         console.error("Error deleting job:", error);
-        showDialog({
-          type: 'error',
-          title: 'Delete Failed',
-          message: 'Failed to delete job. Please try again.'
+        await showDialog({
+          type: "error",
+          title: "Delete Failed",
+          message: "Failed to delete job. Please try again.",
         });
         return;
       }
@@ -170,10 +170,10 @@ function NewJobcards() {
       const jobCardData = await jobCardRes.json();
 
       if (!jobCardRes.ok || !jobCardData?.id) {
-        showDialog({
-          type: 'error',
-          title: 'Error',
-          message: 'Failed to create/update job card.'
+        await showDialog({
+          type: "error",
+          title: "Error",
+          message: "Failed to create/update job card.",
         });
         return;
       }
@@ -208,8 +208,8 @@ function NewJobcards() {
       }
 
       await showDialog({
-        type: 'info',
-        message: 'Job card and jobs submitted successfully!'
+        type: "info",
+        message: "Job card and jobs submitted successfully!",
       });
       navigate("/jobcard");
     } catch (error) {
@@ -221,10 +221,10 @@ function NewJobcards() {
         msg = msg.join("\n");
       }
 
-      showDialog({
-        type: 'error',
-        title: 'Error',
-        message: msg || "Error submitting job card and jobs. Please try again."
+      await showDialog({
+        type: "error",
+        title: "Error",
+        message: msg || "Error submitting job card and jobs. Please try again.",
       });
     }
   };

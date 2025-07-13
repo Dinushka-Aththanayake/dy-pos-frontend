@@ -9,7 +9,7 @@ const showDialog = async (options) => {
   if (window.electronAPI && window.electronAPI.showMessageBox) {
     await window.electronAPI.showMessageBox(options);
   } else {
-    window.alert(options.message || options.title || '');
+    window.alert(options.message || options.title || "");
   }
 };
 
@@ -92,17 +92,14 @@ const Employee = () => {
         }
       }
 
-      const recordResponse = await fetch(
-        `${API_BASE_URL}/attendances/record`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ employeeId: empId, type }),
-        }
-      );
+      const recordResponse = await fetch(`${API_BASE_URL}/attendances/record`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ employeeId: empId, type }),
+      });
 
       if (recordResponse.ok) {
         setMessage(`Attendance marked as ${type}`);
@@ -115,18 +112,18 @@ const Employee = () => {
         setCurrentName(""); // Clear username input
         setPassword(""); // Clear password input
       } else {
-        showDialog({
-          type: 'error',
-          title: 'Attendance Failed',
-          message: 'Failed to record attendance.'
+        await showDialog({
+          type: "error",
+          title: "Attendance Failed",
+          message: "Failed to record attendance.",
         });
       }
     } catch (error) {
       console.error("Error during attendance marking:", error);
-      showDialog({
-        type: 'error',
-        title: 'Error',
-        message: 'An error occurred while marking attendance.'
+      await showDialog({
+        type: "error",
+        title: "Error",
+        message: "An error occurred while marking attendance.",
       });
     }
   };
@@ -148,17 +145,17 @@ const Employee = () => {
         setEmployeeId(empId);
         handleInOutBar(empId);
       } else {
-        showDialog({
-          type: 'error',
-          title: 'Login Failed',
-          message: data.message || "Invalid username or password"
+        await showDialog({
+          type: "error",
+          title: "Login Failed",
+          message: data.message || "Invalid username or password",
         });
       }
     } catch (err) {
-      showDialog({
-        type: 'error',
-        title: 'Error',
-        message: 'Server error. Please try again later.'
+      await showDialog({
+        type: "error",
+        title: "Error",
+        message: "Server error. Please try again later.",
       });
     }
   };
@@ -177,8 +174,13 @@ const Employee = () => {
 
       if (selectedEmployee) queryParams.append("employeeId", selectedEmployee);
       if (selectedType) queryParams.append("type", selectedType);
-      if (startDate) queryParams.append("recordedAfter", formatDateToISO(startDate, "00:00"));
-      if (endDate) queryParams.append("recordedBefore", formatDateToISO(endDate, "23:59"));
+      if (startDate)
+        queryParams.append(
+          "recordedAfter",
+          formatDateToISO(startDate, "00:00")
+        );
+      if (endDate)
+        queryParams.append("recordedBefore", formatDateToISO(endDate, "23:59"));
 
       const url = `${API_BASE_URL}/attendances/search?${queryParams.toString()}`;
 
@@ -202,10 +204,10 @@ const Employee = () => {
   };
 
   return (
-    <div style={{backgroundColor:"#eff5fd",padding:"20px"}}>
+    <div style={{ backgroundColor: "#eff5fd", padding: "20px" }}>
       <h2 style={{ color: "rgb(0, 51, 102)", marginBottom: "10px" }}>
-          Attendances
-        </h2>
+        Attendances
+      </h2>
       <div className="employee-layout">
         <div className="table-section">
           <div className="emfilter-section">

@@ -150,7 +150,7 @@ function Appointment() {
         );
 
         if (response.ok) {
-          showDialog({
+          await showDialog({
             type: 'info',
             message: 'Appointment canceled successfully.'
           });
@@ -164,7 +164,7 @@ function Appointment() {
           setSelectedAppointment(null);
         } else {
           const errorData = await response.json();
-          showDialog({
+          await showDialog({
             type: 'error',
             title: 'Cancel Failed',
             message: `Failed to cancel the appointment: ${errorData.message}`
@@ -172,7 +172,7 @@ function Appointment() {
         }
       } catch (error) {
         console.error("Error canceling appointment:", error);
-        showDialog({
+        await showDialog({
           type: 'error',
           title: 'Error',
           message: 'An error occurred while canceling the appointment.'
@@ -371,7 +371,7 @@ function Appointment() {
                   selectedAppointment.status === "CANCELLED" ||
                   selectedAppointment.status === "COMPLETED"
                 ) {
-                  showDialog({
+                  await showDialog({
                     type: 'warning',
                     message: "Action not allowed for CANCELLED or COMPLETED appointments."
                   });
@@ -391,7 +391,7 @@ function Appointment() {
                   selectedAppointment.status === "CANCELLED" ||
                   selectedAppointment.status === "COMPLETED"
                 ) {
-                  showDialog({
+                  await showDialog({
                     type: 'warning',
                     message: "You cannot create a jobcard for a CANCELLED or COMPLETED appointment."
                   });
@@ -419,7 +419,7 @@ function Appointment() {
                     });
                   } else {
                     const errorData = await response.json();
-                    showDialog({
+                    await showDialog({
                       type: 'error',
                       title: 'Error',
                       message: errorData.message || 'Failed to complete appointment.'
@@ -427,7 +427,7 @@ function Appointment() {
                   }
                 } catch (error) {
                   console.error("Error completing appointment:", error);
-                  showDialog({
+                  await showDialog({
                     type: 'error',
                     title: 'Error',
                     message: error.message || 'Failed to complete appointment.'
@@ -446,7 +446,7 @@ function Appointment() {
                   selectedAppointment.status === "CANCELLED" ||
                   selectedAppointment.status === "COMPLETED"
                 ) {
-                  showDialog({
+                  await showDialog({
                     type: 'warning',
                     message: "You cannot edit a CANCELLED or COMPLETED appointment."
                   });

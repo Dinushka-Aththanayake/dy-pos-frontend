@@ -11,7 +11,7 @@ const showDialog = async (options) => {
   if (window.electronAPI && window.electronAPI.showMessageBox) {
     await window.electronAPI.showMessageBox(options);
   } else {
-    window.alert(options.message || options.title || '');
+    window.alert(options.message || options.title || "");
   }
 };
 
@@ -42,23 +42,25 @@ const Login = () => {
         localStorage.setItem("employee", JSON.stringify(data.employee));
         console.log("Access Token:", data.access_token);
         console.log("employee", JSON.stringify(data.employee));
-        showDialog({
-          type: 'info',
-          message: 'Login successful!'
-        });
+        console.log(
+          await showDialog({
+            type: "info",
+            message: "Login successful!",
+          })
+        );
         navigate("/billing"); // Navigate to DashboardLayout
       } else {
-        showDialog({
-          type: 'error',
-          title: 'Login Failed',
-          message: data.message || "Invalid username or password"
+        await showDialog({
+          type: "error",
+          title: "Login Failed",
+          message: data.message || "Invalid username or password",
         });
       }
     } catch (err) {
-      showDialog({
-        type: 'error',
-        title: 'Error',
-        message: 'Server error. Please try again later.'
+      await showDialog({
+        type: "error",
+        title: "Error",
+        message: "Server error. Please try again later.",
       });
     }
   };

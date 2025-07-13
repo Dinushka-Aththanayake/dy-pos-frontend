@@ -8,7 +8,7 @@ const showDialog = async (options) => {
   if (window.electronAPI && window.electronAPI.showMessageBox) {
     await window.electronAPI.showMessageBox(options);
   } else {
-    window.alert(options.message || options.title || '');
+    window.alert(options.message || options.title || "");
   }
 };
 
@@ -53,10 +53,10 @@ function RegisterUser() {
       !telephone ||
       !basic_salary
     ) {
-      showDialog({
-        type: 'error',
-        title: 'Missing Fields',
-        message: 'Please fill in all required fields.'
+      await showDialog({
+        type: "error",
+        title: "Missing Fields",
+        message: "Please fill in all required fields.",
       });
       return;
     }
@@ -94,10 +94,11 @@ function RegisterUser() {
       }
 
       console.error("Error creating user:", error);
-      showDialog({
-        type: 'error',
-        title: 'Registration Failed',
-        message: msg || 'Failed to register user. Check the inputs or try again.'
+      await showDialog({
+        type: "error",
+        title: "Registration Failed",
+        message:
+          msg || "Failed to register user. Check the inputs or try again.",
       });
     }
   };

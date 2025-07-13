@@ -58,7 +58,7 @@ function Payout() {
 
   const handleCreatePayout = () => {
     if (!payout.collectedEmployeeId || !payout.amount || !payout.description) {
-      showDialog({
+      await showDialog({
         type: 'error',
         title: 'Missing Fields',
         message: 'Please fill all fields before submitting.'
@@ -80,7 +80,7 @@ function Payout() {
         }
       })
       .then(() => {
-        showDialog({
+        await showDialog({
           type: 'info',
           message: 'Payout created successfully!'
         });
@@ -89,7 +89,7 @@ function Payout() {
       })
       .catch((error) => {
         console.error("Error creating payout:", error);
-        showDialog({
+        await showDialog({
           type: 'error',
           title: 'Error',
           message: error.message || 'Error creating payout. Please try again.'
@@ -136,7 +136,7 @@ function Payout() {
                   )
                   .catch((err) => {
                     console.error("Error filtering payouts!", err);
-                    showDialog({
+                    await showDialog({
                       type: 'error',
                       title: 'Error',
                       message: 'Failed to filter payouts. Please try again.'

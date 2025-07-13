@@ -70,13 +70,13 @@ function Account() {
     })
       .then((res) => {
         if (res.ok) {
-          showDialog({
+          await showDialog({
             type: 'info',
             message: 'Employee details updated successfully.'
           });
           setIsEditing(false);
         } else {
-          showDialog({
+          await showDialog({
             type: 'error',
             title: 'Update Failed',
             message: 'Failed to update employee.'
@@ -89,7 +89,7 @@ function Account() {
         if (Array.isArray(msg)) {
           msg = msg.join("\n");
         }
-        showDialog({
+        await showDialog({
           type: 'error',
           title: 'Error',
           message: msg || 'Error saving employee. Please try again.'
@@ -103,7 +103,7 @@ function Account() {
 
     const newPassword = prompt("Enter new password:");
     if (!newPassword || newPassword.trim() === "") {
-      showDialog({
+      await showDialog({
         type: 'error',
         title: 'Invalid Password',
         message: 'Password cannot be empty.'
@@ -124,12 +124,12 @@ function Account() {
     })
       .then((res) => {
         if (res.ok) {
-          showDialog({
+          await showDialog({
             type: 'info',
             message: 'Password changed successfully.'
           });
         } else {
-          showDialog({
+          await showDialog({
             type: 'error',
             title: 'Password Change Failed',
             message: 'Failed to change password.'

@@ -296,13 +296,13 @@ function JobCard() {
                   }
                   onClick={() => {
                     if (!selectedJobCard) {
-                      showDialog({
+                      await showDialog({
                         type: 'error',
                         title: 'No Selection',
                         message: 'Please select a Job Card first.'
                       });
                     } else if (selectedJobCard.status === "COMPLETED") {
-                      showDialog({
+                      await showDialog({
                         type: 'error',
                         title: 'Cannot Edit',
                         message: 'Completed bill cannot be edited or billed again.'
@@ -325,13 +325,13 @@ function JobCard() {
                   }
                   onClick={() => {
                     if (!selectedJobCard) {
-                      showDialog({
+                      await showDialog({
                         type: 'error',
                         title: 'No Selection',
                         message: 'Please select a Job Card first.'
                       });
                     } else if (selectedJobCard.status === "COMPLETED") {
-                      showDialog({
+                      await showDialog({
                         type: 'error',
                         title: 'Cannot Edit',
                         message: 'Completed bill cannot be edited or billed again.'

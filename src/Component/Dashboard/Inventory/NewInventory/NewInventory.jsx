@@ -11,7 +11,7 @@ const showDialog = async (options) => {
   if (window.electronAPI && window.electronAPI.showMessageBox) {
     await window.electronAPI.showMessageBox(options);
   } else {
-    window.alert(options.message || options.title || '');
+    window.alert(options.message || options.title || "");
   }
 };
 
@@ -92,18 +92,18 @@ const NewInventory = () => {
         });
       }
 
-      showDialog({
-        type: 'info',
-        message: 'Inventories saved successfully!'
+      await showDialog({
+        type: "info",
+        message: "Inventories saved successfully!",
       });
       cancelInventories();
       navigate("/inventory");
     } catch (error) {
       console.error("Error saving inventories:", error);
-      showDialog({
-        type: 'error',
-        title: 'Save Failed',
-        message: 'Failed to save inventories.'
+      await showDialog({
+        type: "error",
+        title: "Save Failed",
+        message: "Failed to save inventories.",
       });
     }
   };
@@ -111,137 +111,136 @@ const NewInventory = () => {
   return (
     <div>
       <h2 style={{ color: "rgb(0, 51, 102)", marginBottom: "10px" }}>
-          New Inventories
-        </h2>
-    <div
-      className="new-inventory-container"
-      style={{
-        marginTop: "20px",
-        overflowX: "auto",
-        borderRadius: "10px",
-        border: "1px solid #d0e1f9",
-        backgroundColor: "#f4faff",
-        boxShadow: "0px 4px 8px rgba(0, 123, 255, 0.1)",
-        padding: "0",
-        width:"100%"
-      }}
-    >
-      <table
-        className="inventory-table"
+        New Inventories
+      </h2>
+      <div
+        className="new-inventory-container"
         style={{
+          marginTop: "20px",
+          overflowX: "auto",
+          borderRadius: "10px",
+          border: "1px solid #d0e1f9",
+          backgroundColor: "#f4faff",
+          boxShadow: "0px 4px 8px rgba(0, 123, 255, 0.1)",
+          padding: "0",
           width: "100%",
-          borderCollapse: "collapse",
-          fontFamily: "Arial, sans-serif",
-          color: "#003366",
-          
         }}
       >
-        <thead style={{ backgroundColor: "#cce5ff", textAlign: "left" }}>
-          <tr>
-            <th>Barcode</th>
-            <th>Buy Price</th>
-            <th>Sell Price</th>
-            <th>Quantity</th>
-            <th>Supplier Name</th>
-            <th>Supplier Phone</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {inventories.map((item, index) => (
-            <tr key={index} style={{ backgroundColor: "#e6f2ff" }}>
-              <td>
-                <input
-                  className="newinventory-input"
-                  type="number"
-                  value={item.barcode}
-                  onChange={(e) =>
-                    handleChange(index, "barcode", e.target.value)
-                  }
-                  min="0"
-                />
-              </td>
-              <td>
-                <div className="input-wrapper">
-                  <span className="prefix">Rs.</span>
-                  <input
-                    className="newinventory-input"
-                    type="number"
-                    value={item.buyPrice}
-                    onChange={(e) =>
-                      handleChange(index, "buyPrice", e.target.value)
-                    }
-                    min="0"
-                  />
-                </div>
-              </td>
-              <td>
-                <div className="input-wrapper">
-                  <span className="prefix">Rs.</span>
-                  <input
-                    className="newinventory-input"
-                    type="number"
-                    value={item.sellPrice}
-                    onChange={(e) =>
-                      handleChange(index, "sellPrice", e.target.value)
-                    }
-                    min="0"
-                  />
-                </div>
-              </td>
-              <td>
-                <input
-                  className="newinventory-input"
-                  type="number"
-                  value={item.quantity}
-                  onChange={(e) =>
-                    handleChange(index, "quantity", e.target.value)
-                  }
-                />
-              </td>
-              <td>
-                <input
-                  className="newinventory-input"
-                  type="text"
-                  value={item.supplierName}
-                  onChange={(e) =>
-                    handleChange(index, "supplierName", e.target.value)
-                  }
-                />
-              </td>
-              <td>
-                <input
-                  className="newinventory-input"
-                  type="text"
-                  value={item.supplierPhone}
-                  onChange={(e) =>
-                    handleChange(index, "supplierPhone", e.target.value)
-                  }
-                />
-              </td>
-              <td className="delete-cell">
-                <DeleteIcon
-                  className="delete-icon"
-                  onClick={() => deleteInventoryRow(index)}
-                />
-              </td>
+        <table
+          className="inventory-table"
+          style={{
+            width: "100%",
+            borderCollapse: "collapse",
+            fontFamily: "Arial, sans-serif",
+            color: "#003366",
+          }}
+        >
+          <thead style={{ backgroundColor: "#cce5ff", textAlign: "left" }}>
+            <tr>
+              <th>Barcode</th>
+              <th>Buy Price</th>
+              <th>Sell Price</th>
+              <th>Quantity</th>
+              <th>Supplier Name</th>
+              <th>Supplier Phone</th>
+              <th>Action</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {inventories.map((item, index) => (
+              <tr key={index} style={{ backgroundColor: "#e6f2ff" }}>
+                <td>
+                  <input
+                    className="newinventory-input"
+                    type="number"
+                    value={item.barcode}
+                    onChange={(e) =>
+                      handleChange(index, "barcode", e.target.value)
+                    }
+                    min="0"
+                  />
+                </td>
+                <td>
+                  <div className="input-wrapper">
+                    <span className="prefix">Rs.</span>
+                    <input
+                      className="newinventory-input"
+                      type="number"
+                      value={item.buyPrice}
+                      onChange={(e) =>
+                        handleChange(index, "buyPrice", e.target.value)
+                      }
+                      min="0"
+                    />
+                  </div>
+                </td>
+                <td>
+                  <div className="input-wrapper">
+                    <span className="prefix">Rs.</span>
+                    <input
+                      className="newinventory-input"
+                      type="number"
+                      value={item.sellPrice}
+                      onChange={(e) =>
+                        handleChange(index, "sellPrice", e.target.value)
+                      }
+                      min="0"
+                    />
+                  </div>
+                </td>
+                <td>
+                  <input
+                    className="newinventory-input"
+                    type="number"
+                    value={item.quantity}
+                    onChange={(e) =>
+                      handleChange(index, "quantity", e.target.value)
+                    }
+                  />
+                </td>
+                <td>
+                  <input
+                    className="newinventory-input"
+                    type="text"
+                    value={item.supplierName}
+                    onChange={(e) =>
+                      handleChange(index, "supplierName", e.target.value)
+                    }
+                  />
+                </td>
+                <td>
+                  <input
+                    className="newinventory-input"
+                    type="text"
+                    value={item.supplierPhone}
+                    onChange={(e) =>
+                      handleChange(index, "supplierPhone", e.target.value)
+                    }
+                  />
+                </td>
+                <td className="delete-cell">
+                  <DeleteIcon
+                    className="delete-icon"
+                    onClick={() => deleteInventoryRow(index)}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
-      <div className="inventory-button-group">
-        <button onClick={addInventoryRow} className="add-btn3">
-          Add Row
-        </button>
-        <button onClick={saveInventories} className="save-btn3">
-          Save
-        </button>
-        <button onClick={cancelInventories} className="cancel-btn3">
-          Cancel
-        </button>
+        <div className="inventory-button-group">
+          <button onClick={addInventoryRow} className="add-btn3">
+            Add Row
+          </button>
+          <button onClick={saveInventories} className="save-btn3">
+            Save
+          </button>
+          <button onClick={cancelInventories} className="cancel-btn3">
+            Cancel
+          </button>
+        </div>
       </div>
-    </div>
     </div>
   );
 };
