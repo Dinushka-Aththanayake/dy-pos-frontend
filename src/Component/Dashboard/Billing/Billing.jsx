@@ -19,16 +19,16 @@ const showDialog = async (options) => {
 const showConfirm = async (options) => {
   if (window.electronAPI && window.electronAPI.showMessageBox) {
     const result = await window.electronAPI.showMessageBox({
-      type: options.type || 'question',
-      buttons: options.buttons || ['Yes', 'No'],
-      title: options.title || 'Confirm',
-      message: options.message || '',
+      type: options.type || "question",
+      buttons: options.buttons || ["Yes", "No"],
+      title: options.title || "Confirm",
+      message: options.message || "",
       defaultId: 0,
       cancelId: 1,
     });
     return result.response === 0;
   } else {
-    return window.confirm(options.message || options.title || 'Are you sure?');
+    return window.confirm(options.message || options.title || "Are you sure?");
   }
 };
 
@@ -279,6 +279,9 @@ function Billing() {
     }
 
     try {
+      const jobCardId = jobcard?.id || holdbill?.jobCard?.id || null;
+      console.log("Job Card ID:", jobCardId);
+
       // 1. Create/Update bill
       const billRes = await fetch(`${API_BASE_URL}/bills/upsert`, {
         method: "POST",
@@ -318,8 +321,6 @@ function Billing() {
           }),
         });
       }
-      const jobCardId = jobcard?.id || holdbill?.jobCard?.id || null;
-      console.log("Job Card ID:", jobCardId);
 
       // 3. Upsert each service/job
       for (const service of services) {
