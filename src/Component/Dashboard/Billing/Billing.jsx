@@ -6,6 +6,22 @@ import Autocomplete from "@mui/material/Autocomplete";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+// Utility for showing dialogs
+const showDialog = async (options) => {
+  if (window.electronAPI && window.electronAPI.showMessageBox) {
+    await window.electronAPI.showMessageBox(options);
+  } else {
+    window.alert(options.message || options.title || '');
+  }
+};
+const showError = async (title, message) => {
+  if (window.electronAPI && window.electronAPI.showErrorBox) {
+    await window.electronAPI.showErrorBox(title, message);
+  } else {
+    window.alert(message || title || '');
+  }
+};
+
 function Billing() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -191,7 +207,7 @@ function Billing() {
         });
       } catch (error) {
         console.error("Error deleting item from DB:", error);
-        alert("Failed to delete item from database.");
+        window.electronAPI.showErrorBox('Delete Failed', 'Failed to delete item from database.');
         return; // exit early if delete fails
       }
     }
@@ -240,7 +256,7 @@ function Billing() {
 
   const handleSave = async () => {
     if (!customerName && (!customerNumPlate || !customerTelephone)) {
-      alert("Please enter customer details");
+      showError('Missing Fields', 'Please enter customer details');
       return;
     }
 
@@ -338,17 +354,20 @@ function Billing() {
         });
       }
 
-      alert("Bill saved successfully");
+      showDialog({
+        type: 'info',
+        message: 'Bill saved successfully!'
+      });
       resetForm();
     } catch (error) {
       console.error("Save error:", error);
-      alert(error.message || "An error occurred");
+      showError('Error', error.message || 'An error occurred while saving the bill.');
     }
   };
 
   const handleHold = async () => {
     if (!customerName && (!customerNumPlate || !customerTelephone)) {
-      alert("Please enter customer details");
+      showError('Missing Fields', 'Please enter customer details');
       return;
     }
 
@@ -420,11 +439,14 @@ function Billing() {
         });
       }
 
-      alert("Bill held successfully");
+      showDialog({
+        type: 'info',
+        message: 'Bill held successfully!'
+      });
       resetForm();
     } catch (error) {
       console.error("Hold error:", error);
-      alert(error.message || "An error occurred while holding the bill");
+      showError('Error', error.message || 'An error occurred while holding the bill.');
     }
   };
 
@@ -436,7 +458,7 @@ function Billing() {
 
   const handlePrintAndSave = async () => {
     if (!customerName && (!customerNumPlate || !customerTelephone)) {
-      alert("Please enter customer details");
+      showError('Missing Fields', 'Please enter customer details');
       return;
     }
     await handleSave();

@@ -287,9 +287,9 @@ function JobCard() {
                   }
                   onClick={() => {
                     if (!selectedJobCard) {
-                      alert("Please select a Job Card first.");
+                      window.electronAPI.showErrorBox('No Selection', 'Please select a Job Card first.');
                     } else if (selectedJobCard.status === "COMPLETED") {
-                      alert("Completed bill cannot be edited or billed again.");
+                      window.electronAPI.showErrorBox('Cannot Edit', 'Completed bill cannot be edited or billed again.');
                     } else {
                       Navigate("/billing", {
                         state: { jobCard: selectedJobCard },
@@ -308,9 +308,9 @@ function JobCard() {
                   }
                   onClick={() => {
                     if (!selectedJobCard) {
-                      alert("Please select a Job Card first.");
+                      window.electronAPI.showErrorBox('No Selection', 'Please select a Job Card first.');
                     } else if (selectedJobCard.status === "COMPLETED") {
-                      alert("Completed bill cannot be edited or billed again.");
+                      window.electronAPI.showErrorBox('Cannot Edit', 'Completed bill cannot be edited or billed again.');
                     } else {
                       Navigate("new", { state: { jobcard: selectedJobCard } });
                     }

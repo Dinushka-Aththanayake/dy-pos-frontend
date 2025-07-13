@@ -5,6 +5,22 @@ import { formatDateToISO } from "../../../utils";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+// Utility for showing dialogs
+const showDialog = async (options) => {
+  if (window.electronAPI && window.electronAPI.showMessageBox) {
+    await window.electronAPI.showMessageBox(options);
+  } else {
+    window.alert(options.message || options.title || '');
+  }
+};
+const showError = async (title, message) => {
+  if (window.electronAPI && window.electronAPI.showErrorBox) {
+    await window.electronAPI.showErrorBox(title, message);
+  } else {
+    window.alert(message || title || '');
+  }
+};
+
 function Appointment() {
   const Navigate = useNavigate();
   const [branches, setBranches] = useState([]);
@@ -141,7 +157,10 @@ function Appointment() {
         );
 
         if (response.ok) {
-          alert("Appointment canceled successfully.");
+          window.electronAPI.showMessageBox({
+            type: 'info',
+            message: 'Appointment canceled successfully.'
+          });
           fetchAppointments();
           setAppointments((prev) =>
             prev.filter((appointment) => appointment.id !== appointmentId)
@@ -152,11 +171,11 @@ function Appointment() {
           setSelectedAppointment(null);
         } else {
           const errorData = await response.json();
-          alert(`Failed to cancel the appointment: ${errorData.message}`);
+          window.electronAPI.showErrorBox('Cancel Failed', `Failed to cancel the appointment: ${errorData.message}`);
         }
       } catch (error) {
         console.error("Error canceling appointment:", error);
-        alert("An error occurred while canceling the appointment.");
+        window.electronAPI.showErrorBox('Error', 'An error occurred while canceling the appointment.');
       }
     }
   };
@@ -351,9 +370,10 @@ function Appointment() {
                   selectedAppointment.status === "CANCELLED" ||
                   selectedAppointment.status === "COMPLETED"
                 ) {
-                  alert(
-                    "Action not allowed for CANCELLED or COMPLETED appointments."
-                  );
+                  showDialog({
+                    type: 'warning',
+                    message: "Action not allowed for CANCELLED or COMPLETED appointments."
+                  });
                   return;
                 }
                 handleCancel(selectedAppointment.id);
@@ -370,9 +390,10 @@ function Appointment() {
                   selectedAppointment.status === "CANCELLED" ||
                   selectedAppointment.status === "COMPLETED"
                 ) {
-                  alert(
-                    "You cannot create a jobcard for a CANCELLED or COMPLETED appointment."
-                  );
+                  showDialog({
+                    type: 'warning',
+                    message: "You cannot create a jobcard for a CANCELLED or COMPLETED appointment."
+                  });
                   return;
                 }
 
@@ -397,11 +418,11 @@ function Appointment() {
                     });
                   } else {
                     const errorData = await response.json();
-                    alert(`${response.message}`);
+                    showError('Error', errorData.message || 'Failed to complete appointment.');
                   }
                 } catch (error) {
                   console.error("Error completing appointment:", error);
-                  alert(`${response.message}`);
+                  showError('Error', error.message || 'Failed to complete appointment.');
                 }
               }}
             >
@@ -416,9 +437,10 @@ function Appointment() {
                   selectedAppointment.status === "CANCELLED" ||
                   selectedAppointment.status === "COMPLETED"
                 ) {
-                  alert(
-                    "You cannot edit a CANCELLED or COMPLETED appointment."
-                  );
+                  showDialog({
+                    type: 'warning',
+                    message: "You cannot edit a CANCELLED or COMPLETED appointment."
+                  });
                   return;
                 }
                 Navigate("new", {

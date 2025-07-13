@@ -67,14 +67,15 @@ function NewAppointment() {
       });
 
       if (response.ok) {
-        alert(
-          editAppointment
-            ? "Appointment updated successfully!"
-            : "Appointment created successfully!"
-        );
+        window.electronAPI.showMessageBox({
+          type: 'info',
+          message: editAppointment
+            ? 'Appointment updated successfully!'
+            : 'Appointment created successfully!'
+        });
         navigate("/appoinment");
       } else {
-        alert("Failed to save appointment.");
+        window.electronAPI.showErrorBox('Save Failed', 'Failed to save appointment.');
       }
     } catch (error) {
       console.error("Error saving appointment:", error);
@@ -85,7 +86,7 @@ function NewAppointment() {
         msg = msg.join("\n");
       }
 
-      alert(msg || "Error saving appointment. Please try again.");
+      window.electronAPI.showErrorBox('Error', msg || 'Error saving appointment. Please try again.');
     }
   };
 

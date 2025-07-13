@@ -97,22 +97,20 @@ const Employee = () => {
 
       if (recordResponse.ok) {
         setMessage(`Attendance marked as ${type}`);
-
         // Hide after 1 second
         setTimeout(() => {
           setMessage("");
         }, 1000);
-
         fetchRecords();
         setEmployeeId(""); // Clear barcode input
         setCurrentName(""); // Clear username input
         setPassword(""); // Clear password input
       } else {
-        alert("Failed to record attendance.");
+        window.electronAPI.showErrorBox('Attendance Failed', 'Failed to record attendance.');
       }
     } catch (error) {
       console.error("Error during attendance marking:", error);
-      alert("An error occurred while marking attendance.");
+      window.electronAPI.showErrorBox('Error', 'An error occurred while marking attendance.');
     }
   };
 

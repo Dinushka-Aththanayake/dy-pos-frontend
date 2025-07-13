@@ -33,7 +33,10 @@ const Login = () => {
         localStorage.setItem("employee", JSON.stringify(data.employee));
         console.log("Access Token:", data.access_token);
         console.log("employee", JSON.stringify(data.employee));
-        alert("Login successful!");
+        window.electronAPI.showMessageBox({
+          type: 'info',
+          message: 'Login successful!'
+        });
         navigate("/billing"); // Navigate to DashboardLayout
       } else {
         setError(data.message || "Invalid username or password");

@@ -44,7 +44,10 @@ function RegisterUser() {
       !telephone ||
       !basic_salary
     ) {
-      alert("Please fill in all required fields.");
+      window.electronAPI.showErrorBox(
+        "Missing Fields",
+        "Please fill in all required fields."
+      );
       return;
     }
 
@@ -68,7 +71,10 @@ function RegisterUser() {
           },
         }
       );
-      alert("User registered successfully!");
+      window.electronAPI.showMessageBox({
+        type: "info",
+        message: "User registered successfully!",
+      });
       handleCancel();
     } catch (error) {
       let msg = error.response?.data?.message;
@@ -78,7 +84,10 @@ function RegisterUser() {
       }
 
       console.error("Error creating user:", error);
-      alert(msg || "Failed to register user. Check the inputs or try again.");
+      window.electronAPI.showErrorBox(
+        "Registration Failed",
+        msg || "Failed to register user. Check the inputs or try again."
+      );
     }
   };
 

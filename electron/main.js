@@ -1,5 +1,5 @@
 // electron/main.js (ESM version)
-import { app, BrowserWindow, Menu } from 'electron';
+import { app, BrowserWindow, Menu, dialog, ipcMain } from 'electron';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -16,6 +16,7 @@ function createWindow() {
       nodeIntegration: false,
       contextIsolation: true,
       devTools: false,
+      preload: path.join(__dirname, 'preload.js'), // Add preload script
     },
   });
 
@@ -39,3 +40,11 @@ app.on('activate', () => {
 });
 
 Menu.setApplicationMenu(null);
+
+// IPC handlers for dialogs
+ipcMain.handle('show-message-box', async (event, options) => {
+  return await dialog.showMessageBox(options);
+});
+ipcMain.handle('show-error-box', (event, title, content) => {
+  dialog.showErrorBox(title, content);
+});

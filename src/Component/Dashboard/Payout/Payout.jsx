@@ -4,6 +4,22 @@ import { formatDateToISO } from "../../../utils";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+// Utility for showing dialogs
+const showDialog = async (options) => {
+  if (window.electronAPI && window.electronAPI.showMessageBox) {
+    await window.electronAPI.showMessageBox(options);
+  } else {
+    window.alert(options.message || options.title || '');
+  }
+};
+const showError = async (title, message) => {
+  if (window.electronAPI && window.electronAPI.showErrorBox) {
+    await window.electronAPI.showErrorBox(title, message);
+  } else {
+    window.alert(message || title || '');
+  }
+};
+
 function Payout() {
   const token = localStorage.getItem("access_token");
 
@@ -49,7 +65,7 @@ function Payout() {
 
   const handleCreatePayout = () => {
     if (!payout.collectedEmployeeId || !payout.amount || !payout.description) {
-      alert("Please fill all required fields");
+      window.electronAPI.showErrorBox('Missing Fields', 'Please fill all required fields');
       return;
     }
 
@@ -67,13 +83,16 @@ function Payout() {
         }
       })
       .then(() => {
-        alert("Payout created successfully!");
+        window.electronAPI.showMessageBox({
+          type: 'info',
+          message: 'Payout created successfully!'
+        });
         setPayout({description: "", collectedEmployeeId: "", amount: "" ,});
         fetchPayouts();
       })
       .catch((error) => {
         console.error("Error creating payout:", error);
-        alert("Error creating payout!");
+        window.electronAPI.showErrorBox('Error', 'Error creating payout!');
       });
   };
 
@@ -116,7 +135,7 @@ function Payout() {
                   )
                   .catch((err) => {
                     console.error("Error filtering payouts!", err);
-                    alert("Failed to fetch filtered payouts");
+                    showError('Error', 'Failed to fetch filtered payouts');
                   });
               }}
             >

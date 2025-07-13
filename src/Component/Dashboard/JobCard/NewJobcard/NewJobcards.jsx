@@ -12,6 +12,22 @@ import {
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+// Utility for showing dialogs
+const showDialog = async (options) => {
+  if (window.electronAPI && window.electronAPI.showMessageBox) {
+    await window.electronAPI.showMessageBox(options);
+  } else {
+    window.alert(options.message || options.title || '');
+  }
+};
+const showError = async (title, message) => {
+  if (window.electronAPI && window.electronAPI.showErrorBox) {
+    await window.electronAPI.showErrorBox(title, message);
+  } else {
+    window.alert(message || title || '');
+  }
+};
+
 function NewJobcards() {
   const navigate = useNavigate();
   const token = localStorage.getItem("access_token");
@@ -128,7 +144,7 @@ function NewJobcards() {
         }
       } catch (error) {
         console.error("Error deleting job:", error);
-        alert("Failed to delete job. Please try again.");
+        window.electronAPI.showErrorBox('Delete Failed', 'Failed to delete job. Please try again.');
         return;
       }
     }
@@ -154,7 +170,7 @@ function NewJobcards() {
       const jobCardData = await jobCardRes.json();
 
       if (!jobCardRes.ok || !jobCardData?.id) {
-        alert("Failed to create/update job card.");
+        await showError('Error', 'Failed to create/update job card.');
         return;
       }
 
@@ -187,7 +203,10 @@ function NewJobcards() {
         }
       }
 
-      alert("Job card and jobs submitted successfully!");
+      await showDialog({
+        type: 'info',
+        message: 'Job card and jobs submitted successfully!'
+      });
       navigate("/jobcard");
     } catch (error) {
       console.error("Error submitting job card:", error);
@@ -198,7 +217,7 @@ function NewJobcards() {
         msg = msg.join("\n");
       }
 
-      alert(msg || "Error submitting job card and jobs. Please try again.");
+      await showError('Error', msg || "Error submitting job card and jobs. Please try again.");
     }
   };
 

@@ -83,12 +83,15 @@ const NewInventory = () => {
         });
       }
 
-      alert("Inventories saved successfully!");
+      window.electronAPI.showMessageBox({
+        type: 'info',
+        message: 'Inventories saved successfully!'
+      });
       cancelInventories();
       navigate("/inventory");
     } catch (error) {
       console.error("Error saving inventories:", error);
-      alert("Failed to save inventories. Check console for more info.");
+      window.electronAPI.showErrorBox('Save Failed', 'Failed to save inventories. Check console for more info.');
     }
   };
 

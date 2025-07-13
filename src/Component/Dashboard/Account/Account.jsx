@@ -61,22 +61,22 @@ function Account() {
     })
       .then((res) => {
         if (res.ok) {
-          alert("Employee details updated successfully.");
+          window.electronAPI.showMessageBox({
+            type: 'info',
+            message: 'Employee details updated successfully.'
+          });
           setIsEditing(false);
         } else {
-          alert("Failed to update employee.");
+          window.electronAPI.showErrorBox('Update Failed', 'Failed to update employee.');
         }
       })
       .catch((err) => {
         console.error("Error saving employee!", err);
-
         let msg = err.response?.data?.message;
-
         if (Array.isArray(msg)) {
           msg = msg.join("\n");
         }
-
-        alert(msg || "Error saving employee. Please try again.");
+        window.electronAPI.showErrorBox('Error', msg || 'Error saving employee. Please try again.');
       });
   };
 
@@ -85,7 +85,7 @@ function Account() {
 
     const newPassword = prompt("Enter new password:");
     if (!newPassword || newPassword.trim() === "") {
-      alert("Password cannot be empty.");
+      window.electronAPI.showErrorBox('Invalid Password', 'Password cannot be empty.');
       return;
     }
 
@@ -102,9 +102,12 @@ function Account() {
     })
       .then((res) => {
         if (res.ok) {
-          alert("Password changed successfully.");
+          window.electronAPI.showMessageBox({
+            type: 'info',
+            message: 'Password changed successfully.'
+          });
         } else {
-          alert("Failed to change password.");
+          window.electronAPI.showErrorBox('Password Change Failed', 'Failed to change password.');
         }
       })
       .catch((err) => {

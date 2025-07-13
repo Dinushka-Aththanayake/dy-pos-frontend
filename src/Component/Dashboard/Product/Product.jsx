@@ -74,7 +74,7 @@ function Product() {
 
   const handleConfirm = async (e) => {
     if(!barCode || !name || !category || !brand){
-      alert("Fill all fields");
+      window.electronAPI.showErrorBox('Missing Fields', 'Fill all fields');
       return;
     }
     e.preventDefault();
@@ -90,7 +90,10 @@ function Product() {
       });
 
       if (response.ok) {
-        alert("Product created successfully!");
+        window.electronAPI.showMessageBox({
+          type: 'info',
+          message: 'Product created successfully!'
+        });
         setBarCode("");
         setName("");
         setCategory("");
@@ -109,7 +112,7 @@ function Product() {
 
         setProducts(updatedProducts);
       } else {
-        alert("Failed to create product.");
+        window.electronAPI.showErrorBox('Create Failed', 'Failed to create product.');
       }
     } catch (error) {
       console.error("Error creating product:", error);
@@ -120,7 +123,7 @@ function Product() {
         msg = msg.join("\n");
       }
 
-      alert(msg || "Error creating product. Please try again.");
+      window.electronAPI.showErrorBox('Error', msg || 'Error creating product. Please try again.');
     }
   };
 
