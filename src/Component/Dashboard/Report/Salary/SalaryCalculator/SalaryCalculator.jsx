@@ -180,7 +180,7 @@ function SalaryCalculator() {
       <h2 style={{ color: "rgb(0, 51, 102)", marginBottom: "10px" }}>
         Salary Calculator
       </h2>
-      <div style={{ display: "flex", gap: "10px", }}>
+      <div style={{ display: "flex", gap: "10px" }}>
         <div
           className="salarycal-main-container"
           style={{
@@ -193,7 +193,7 @@ function SalaryCalculator() {
           <div
             style={{
               padding: "30px",
-              
+
               backgroundColor: "rgb(218, 234, 244)",
               borderRadius: "12px",
               boxShadow: "0 0 10px rgba(0,0,0,0.2)",
@@ -343,19 +343,22 @@ function SalaryCalculator() {
             />
             <div
               className="btn-salary-calculator"
-              style={{ display: "flex", justifyContent: "space-between",gap:"10px" }}
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                gap: "10px",
+              }}
             >
               <button
                 onClick={calculateSalary}
                 style={{
                   padding: "10px 10px",
-                  backgroundColor: "#007bff",
+                  backgroundColor: "#1964a2",
                   color: "#fff",
                   border: "none",
                   borderRadius: "6px",
-                  flex:"1",
+                  flex: "1",
                   fontSize: "12px",
-
                 }}
               >
                 Calculate
@@ -367,7 +370,7 @@ function SalaryCalculator() {
                   backgroundColor: "rgb(189, 75, 75)",
                   color: "#fff",
                   border: "none",
-                  flex:"1",
+                  flex: "1",
                   borderRadius: "6px",
                 }}
               >
@@ -380,7 +383,7 @@ function SalaryCalculator() {
                   backgroundColor: "rgb(24, 81, 48)",
                   color: "#fff",
                   border: "none",
-                  flex:"1",
+                  flex: "1",
                   borderRadius: "6px",
                 }}
                 onClick={handleSave}
@@ -448,7 +451,7 @@ function SalaryCalculator() {
             <button
               style={{
                 padding: "10px 10px",
-                backgroundColor: "#007bff",
+                backgroundColor: "#1964a2",
                 color: "#fff",
                 border: "none",
                 borderRadius: "6px",

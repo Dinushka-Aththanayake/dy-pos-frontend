@@ -169,24 +169,24 @@ body {
     padding: 20px;
     border-radius: 10px;
     margin-bottom: 20px;
-    display: grid;
-    grid-template-columns: 10% 90%;
-    grid-template-rows: repeat(2, 1fr); /* 2 rows */
-    gap: 20px; /* Adds space between elements */
+    display: flex;
+    flex-direction: column;
+   gap: 10px;
     
 }
 
 .info-bar1 {
     display: flex;
     align-items: center;
-    flex: 1; /* Ensures equal width for both divs */
+     /* Ensures equal width for both divs */
 }
 
 .info-labal {
     font-size: 14px;
     font-weight: bold;
     color: #080e23;
-    white-space: nowrap; /* Prevents label from breaking into multiple lines */
+    
+    flex:1; /* Prevents label from breaking into multiple lines */
 }
 
 .info-input {
@@ -194,8 +194,8 @@ body {
     border: 1px solid #90caf9;
     border-radius: 5px;
     margin-left: 5px;
-    width: 100%; /* Ensures equal input width */
-    margin-right: 20px;
+    flex: 7;
+    
 }
 
 .searchbar-section-service-table{

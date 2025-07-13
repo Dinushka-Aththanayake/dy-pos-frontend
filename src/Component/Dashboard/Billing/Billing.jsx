@@ -455,8 +455,6 @@ function Billing() {
         <div className="info-bar">
           <div className="info-bar1">
             <label className="info-labal">Customer Name:</label>
-          </div>
-          <div className="info-bar1">
             <input
               type="text"
               className="info-input"
@@ -467,8 +465,6 @@ function Billing() {
           </div>
           <div className="info-bar1">
             <label className="info-labal">Number Plate:</label>
-          </div>
-          <div className="info-bar1">
             <input
               type="text"
               className="info-input"
@@ -479,8 +475,6 @@ function Billing() {
           </div>
           <div className="info-bar1">
             <label className="info-labal">Mobile Number:</label>
-          </div>
-          <div className="info-bar1">
             <input
               type="text"
               className="info-input"
