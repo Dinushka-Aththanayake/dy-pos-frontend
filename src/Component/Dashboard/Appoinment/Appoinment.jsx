@@ -365,7 +365,7 @@ function Appointment() {
           <div className="buttongroupap">
             <button
               className="cancel-btn22"
-              onClick={() => {
+              onClick={async () => {
                 if (
                   !selectedAppointment ||
                   selectedAppointment.status === "CANCELLED" ||
@@ -440,7 +440,7 @@ function Appointment() {
 
             <button
               className="action-btn22"
-              onClick={() => {
+              onClick={async () => {
                 if (
                   !selectedAppointment ||
                   selectedAppointment.status === "CANCELLED" ||

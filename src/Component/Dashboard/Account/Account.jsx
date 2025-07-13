@@ -68,7 +68,7 @@ function Account() {
       },
       body: JSON.stringify(employeeData),
     })
-      .then((res) => {
+      .then(async (res) => {
         if (res.ok) {
           await showDialog({
             type: 'info',
@@ -83,7 +83,7 @@ function Account() {
           });
         }
       })
-      .catch((err) => {
+      .catch(async (err) => {
         console.error("Error saving employee!", err);
         let msg = err.response?.data?.message;
         if (Array.isArray(msg)) {
@@ -98,7 +98,7 @@ function Account() {
       })
   };
 
-  const handleChangePassword = () => {
+  const handleChangePassword = async () => {
     if (!selectedEmployee?.id) return;
 
     const newPassword = prompt("Enter new password:");
@@ -122,7 +122,7 @@ function Account() {
         newPassword,
       }),
     })
-      .then((res) => {
+      .then(async (res) => {
         if (res.ok) {
           await showDialog({
             type: 'info',

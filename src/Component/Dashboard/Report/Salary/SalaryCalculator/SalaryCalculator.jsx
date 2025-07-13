@@ -43,7 +43,7 @@ function SalaryCalculator() {
     })
       .then((res) => res.json())
       .then((data) => setEmployee(Array.isArray(data) ? data : []))
-      .catch((error) => {
+      .catch(async (error) => {
         console.error("Error fetching employees!", error);
         await showDialog({
           type: 'error',
