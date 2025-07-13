@@ -11,7 +11,7 @@ function Footer() {
 
   const dummyNotifications = [
     "No Notifications..",
-    
+
   ];
 
   return (
@@ -41,7 +41,11 @@ function Footer() {
           <NotificationsIcon />
         </IconButton>
 
-        <IconButton sx={{ color: "white" , backgroundColor:"red"}} onClick={() => navigate("/")}>
+        <IconButton sx={{ color: "white", backgroundColor: "red" }} onClick={() => {
+          localStorage.removeItem("access_token");
+          localStorage.removeItem("employee");
+          navigate("/")
+        }}>
           <LogoutIcon />
         </IconButton>
       </Box>
