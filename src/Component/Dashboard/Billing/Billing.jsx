@@ -464,13 +464,14 @@ function Billing() {
             />
           </div>
           <div className="info-bar1">
-            <label className="info-labal">Number Plate:</label>
+            <label className="info-labal">Number Plate  :</label>
             <input
               type="text"
               className="info-input"
               placeholder="Enter Number Plate"
               value={customerNumPlate}
               onChange={(e) => setNumberPlate(e.target.value.toUpperCase())}
+              style={{marginLeft: "16px"}}
             />
           </div>
           <div className="info-bar1">
@@ -481,6 +482,7 @@ function Billing() {
               placeholder="Enter Mobile Number"
               value={customerTelephone}
               onChange={(e) => setCustomerTelephone(e.target.value)}
+              style={{marginLeft: "8px"}}
             />
           </div>
         </div>

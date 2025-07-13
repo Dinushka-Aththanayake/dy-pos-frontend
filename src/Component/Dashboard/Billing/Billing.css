@@ -185,8 +185,9 @@ body {
     font-size: 14px;
     font-weight: bold;
     color: #080e23;
-    
-    flex:1; /* Prevents label from breaking into multiple lines */
+    width: auto;
+    margin-right: 15px;
+     /* Prevents label from breaking into multiple lines */
 }
 
 .info-input {
@@ -194,7 +195,7 @@ body {
     border: 1px solid #90caf9;
     border-radius: 5px;
     margin-left: 5px;
-    flex: 7;
+    flex: 1;
     
 }
 
