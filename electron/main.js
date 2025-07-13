@@ -2,6 +2,7 @@
 import { app, BrowserWindow, Menu, dialog, ipcMain } from 'electron';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import prompt from 'electron-prompt';
 
 // ESM replacement for __dirname
 const __filename = fileURLToPath(import.meta.url);
@@ -46,4 +47,19 @@ Menu.setApplicationMenu(null);
 // IPC handlers for messages
 ipcMain.handle('show-message-box', async (event, options) => {
   return await dialog.showMessageBox(mainWindow, options);
+});
+
+// IPC handler for prompt dialog
+ipcMain.handle('show-prompt-box', async (event, options) => {
+  const result = await prompt({
+    title: options.title || 'Input',
+    label: options.message || 'Please enter a value:',
+    value: options.defaultValue || null,
+    inputAttrs: {
+      type: 'text',
+    },
+    type: 'input',
+  }, mainWindow);
+  
+  return result; // Returns the input value or null if cancelled
 });

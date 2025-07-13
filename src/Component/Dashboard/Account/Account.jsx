@@ -13,6 +13,15 @@ const showDialog = async (options) => {
   }
 };
 
+// Utility for showing prompt dialogs
+const showPrompt = async (options) => {
+  if (window.electronAPI && window.electronAPI.showPromptBox) {
+    return await window.electronAPI.showPromptBox(options);
+  } else {
+    return window.prompt(options.message || options.title || '', options.defaultValue || '');
+  }
+};
+
 function Account() {
   const navigation = useNavigate();
   const [employees, setEmployees] = useState([]);
@@ -101,7 +110,11 @@ function Account() {
   const handleChangePassword = async () => {
     if (!selectedEmployee?.id) return;
 
-    const newPassword = prompt("Enter new password:");
+    const newPassword = await showPrompt({
+      title: 'Change Password',
+      message: 'Enter new password:',
+      defaultValue: ''
+    });
     if (!newPassword || newPassword.trim() === "") {
       await showDialog({
         type: 'error',
