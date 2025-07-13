@@ -36,8 +36,8 @@ function Billing() {
   const navigate = useNavigate();
   const location = useLocation();
   const { jobCard, holdbill } = location.state || {};
-  console.log("Job Card:", jobCard);
-  console.log("Hold Bill:", holdbill);
+  // console.log("Job Card:", jobCard);
+  // console.log("Hold Bill:", holdbill);
   const [bill, setBill] = useState(holdbill);
   const [jobcard, setJobcard] = useState(jobCard);
   const token = localStorage.getItem("access_token");
@@ -47,7 +47,7 @@ function Billing() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [discount, setDiscount] = useState(bill?.discount || 0);
   const jobCardId = jobcard?.id || holdbill?.jobCard?.id;
-  console.log("Job Card ID:", jobCardId);
+  // console.log("Job Card ID:", jobCardId);
 
   const [customerTelephone, setCustomerTelephone] = useState(
     jobcard?.customerTelephone || bill?.customerTelephone || ""
@@ -67,7 +67,7 @@ function Billing() {
       name: item.inventory.product.name,
       price: Number(item.unitPrice),
       inventorySellPrice: Number(item.inventory.sellPrice),
-      discount: Number(item.inventory.sellPrice) - Number(item.unitPrice),
+      discount: 0,
       quantity: item.quantity,
     })) || [
       {
@@ -191,10 +191,8 @@ function Billing() {
     console.log("Updating product:", product, "Field:", field, "Value:", value);
     if (field === "discount") {
       product.discount = Number(value) || 0;
-      product.price = Number(product.inventorySellPrice) - product.discount;
     } else if (field === "price") {
       product.price = Number(value) || 0;
-      product.discount = Number(product.inventorySellPrice) - product.price;
     } else {
       updated[index][field] = Number(value) || 0;
     }
@@ -317,7 +315,7 @@ function Billing() {
             billId,
             inventoryId: product.inventoryId,
             quantity: product.quantity,
-            unitPrice: product.price,
+            unitPrice: product.price-product.discount,
           }),
         });
       }
@@ -434,7 +432,7 @@ function Billing() {
             billId,
             inventoryId: product.inventoryId,
             quantity: product.quantity,
-            unitPrice: product.price,
+            unitPrice: product.price-product.discount,
           }),
         });
       }
