@@ -10,6 +10,8 @@ function Billing() {
   const navigate = useNavigate();
   const location = useLocation();
   const { jobCard, holdbill } = location.state || {};
+  console.log("Job Card:", jobCard);
+  console.log("Hold Bill:", holdbill);
   const [bill, setBill] = useState(holdbill);
   const [jobcard, setJobcard] = useState(jobCard);
   const token = localStorage.getItem("access_token");
@@ -18,6 +20,8 @@ function Billing() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [discount, setDiscount] = useState(bill?.discount || 0);
+  const jobCardId = jobcard?.id || holdbill?.jobCard?.id;
+  console.log("Job Card ID:", jobCardId);
 
   const [customerTelephone, setCustomerTelephone] = useState(
     jobcard?.customerTelephone || bill?.customerTelephone || ""
@@ -36,6 +40,7 @@ function Billing() {
       barcode: item.inventory.product.barCode,
       name: item.inventory.product.name,
       price: Number(item.unitPrice),
+      inventorySellPrice: Number(item.inventory.sellPrice),
       discount: Number(item.inventory.sellPrice) - Number(item.unitPrice),
       quantity: item.quantity,
     })) || [
@@ -48,6 +53,7 @@ function Billing() {
       },
     ]
   );
+  console.log("Products:", products);
 
   const [services, setServices] = useState(
     jobCard?.jobs?.map((job) => ({
@@ -66,6 +72,7 @@ function Billing() {
       })) ||
       []
   );
+  console.log("Services:", services);
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/inventories/search?available=true`, {
@@ -154,7 +161,17 @@ function Billing() {
 
   const handleUpdateProduct = (index, field, value) => {
     const updated = [...products];
-    updated[index][field] = Number(value) || 0;
+    const product = updated[index];
+    console.log("Updating product:", product, "Field:", field, "Value:", value);
+    if (field === "discount") {
+      product.discount = Number(value) || 0;
+      product.price = Number(product.inventorySellPrice) - product.discount;
+    } else if (field === "price") {
+      product.price = Number(value) || 0;
+      product.discount = Number(product.inventorySellPrice) - product.price;
+    } else {
+      updated[index][field] = Number(value) || 0;
+    }
     setProducts(updated);
   };
 
@@ -240,7 +257,7 @@ function Billing() {
           customerName,
           customerTelephone,
           customerNumPlate,
-          jobCardId: jobcard?.id || null,
+          jobCardId: jobCardId || null,
           branchId: 1,
           discount: parseFloat(discount) || 0,
         }),
@@ -263,11 +280,13 @@ function Billing() {
             billId,
             inventoryId: product.inventoryId,
             quantity: product.quantity,
-            unitPrice: product.price - product.discount,
+            unitPrice: product.price,
           }),
         });
       }
-      const jobCardId = jobcard?.id || bill?.jobCard?.id;
+      const jobCardId = jobcard?.id || holdbill?.jobCard?.id || null;
+      console.log("Job Card ID:", jobCardId);
+
       // 3. Upsert each service/job
       for (const service of services) {
         const job =
@@ -369,7 +388,7 @@ function Billing() {
             billId,
             inventoryId: product.inventoryId,
             quantity: product.quantity,
-            unitPrice: product.price - product.discount,
+            unitPrice: product.price,
           }),
         });
       }
@@ -388,13 +407,15 @@ function Billing() {
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
+            jobCardId: jobCardId,
             id: job.id,
             title: job.title,
-            employeeId: job.employeeId,
+            employeeId: job.employee.id,
             startTime: job.startTime,
             expectedEndTime: job.expectedEndTime,
             endTime: job.endTime,
-            charge: service.price, // Updated charge
+            charge: service.price,
+            // Updated charge
           }),
         });
       }
@@ -434,8 +455,6 @@ function Billing() {
         <div className="info-bar">
           <div className="info-bar1">
             <label className="info-labal">Customer Name:</label>
-          </div>
-          <div className="info-bar1">
             <input
               type="text"
               className="info-input"
@@ -446,8 +465,6 @@ function Billing() {
           </div>
           <div className="info-bar1">
             <label className="info-labal">Number Plate:</label>
-          </div>
-          <div className="info-bar1">
             <input
               type="text"
               className="info-input"
@@ -458,8 +475,6 @@ function Billing() {
           </div>
           <div className="info-bar1">
             <label className="info-labal">Mobile Number:</label>
-          </div>
-          <div className="info-bar1">
             <input
               type="text"
               className="info-input"
@@ -660,7 +675,6 @@ function Billing() {
             Cancel
           </button>
 
-          
           <button className="hold-btn" onClick={handleHold}>
             Hold
           </button>
