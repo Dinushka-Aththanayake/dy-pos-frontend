@@ -6,6 +6,15 @@ import loginImage from "../../assets/login.png";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+// Utility for showing dialogs
+const showDialog = async (options) => {
+  if (window.electronAPI && window.electronAPI.showMessageBox) {
+    await window.electronAPI.showMessageBox(options);
+  } else {
+    window.alert(options.message || options.title || '');
+  }
+};
+
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -33,16 +42,24 @@ const Login = () => {
         localStorage.setItem("employee", JSON.stringify(data.employee));
         console.log("Access Token:", data.access_token);
         console.log("employee", JSON.stringify(data.employee));
-        window.electronAPI.showMessageBox({
+        showDialog({
           type: 'info',
           message: 'Login successful!'
         });
         navigate("/billing"); // Navigate to DashboardLayout
       } else {
-        setError(data.message || "Invalid username or password");
+        showDialog({
+          type: 'error',
+          title: 'Login Failed',
+          message: data.message || "Invalid username or password"
+        });
       }
     } catch (err) {
-      setError("Server error. Please try again later.");
+      showDialog({
+        type: 'error',
+        title: 'Error',
+        message: 'Server error. Please try again later.'
+      });
     }
   };
 

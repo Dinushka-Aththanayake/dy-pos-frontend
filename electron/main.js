@@ -41,10 +41,7 @@ app.on('activate', () => {
 
 Menu.setApplicationMenu(null);
 
-// IPC handlers for dialogs
+// IPC handlers for messages
 ipcMain.handle('show-message-box', async (event, options) => {
-  return await dialog.showMessageBox(options);
-});
-ipcMain.handle('show-error-box', (event, title, content) => {
-  dialog.showErrorBox(title, content);
+  return await dialog.showMessageBox(mainWindow, options);
 });

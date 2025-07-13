@@ -12,13 +12,6 @@ const showDialog = async (options) => {
     window.alert(options.message || options.title || '');
   }
 };
-const showError = async (title, message) => {
-  if (window.electronAPI && window.electronAPI.showErrorBox) {
-    await window.electronAPI.showErrorBox(title, message);
-  } else {
-    window.alert(message || title || '');
-  }
-};
 
 function Payout() {
   const token = localStorage.getItem("access_token");
@@ -65,7 +58,11 @@ function Payout() {
 
   const handleCreatePayout = () => {
     if (!payout.collectedEmployeeId || !payout.amount || !payout.description) {
-      window.electronAPI.showErrorBox('Missing Fields', 'Please fill all required fields');
+      showDialog({
+        type: 'error',
+        title: 'Missing Fields',
+        message: 'Please fill all fields before submitting.'
+      });
       return;
     }
 
@@ -83,7 +80,7 @@ function Payout() {
         }
       })
       .then(() => {
-        window.electronAPI.showMessageBox({
+        showDialog({
           type: 'info',
           message: 'Payout created successfully!'
         });
@@ -92,7 +89,11 @@ function Payout() {
       })
       .catch((error) => {
         console.error("Error creating payout:", error);
-        window.electronAPI.showErrorBox('Error', 'Error creating payout!');
+        showDialog({
+          type: 'error',
+          title: 'Error',
+          message: error.message || 'Error creating payout. Please try again.'
+        });
       });
   };
 
@@ -135,7 +136,11 @@ function Payout() {
                   )
                   .catch((err) => {
                     console.error("Error filtering payouts!", err);
-                    showError('Error', 'Failed to fetch filtered payouts');
+                    showDialog({
+                      type: 'error',
+                      title: 'Error',
+                      message: 'Failed to filter payouts. Please try again.'
+                    });
                   });
               }}
             >

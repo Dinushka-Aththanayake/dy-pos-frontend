@@ -6,6 +6,15 @@ import { useNavigate } from "react-router-dom";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+// Utility for showing dialogs
+const showDialog = async (options) => {
+  if (window.electronAPI && window.electronAPI.showMessageBox) {
+    await window.electronAPI.showMessageBox(options);
+  } else {
+    window.alert(options.message || options.title || '');
+  }
+};
+
 const NewInventory = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem("access_token");
@@ -83,7 +92,7 @@ const NewInventory = () => {
         });
       }
 
-      window.electronAPI.showMessageBox({
+      showDialog({
         type: 'info',
         message: 'Inventories saved successfully!'
       });
@@ -91,7 +100,11 @@ const NewInventory = () => {
       navigate("/inventory");
     } catch (error) {
       console.error("Error saving inventories:", error);
-      window.electronAPI.showErrorBox('Save Failed', 'Failed to save inventories. Check console for more info.');
+      showDialog({
+        type: 'error',
+        title: 'Save Failed',
+        message: 'Failed to save inventories.'
+      });
     }
   };
 

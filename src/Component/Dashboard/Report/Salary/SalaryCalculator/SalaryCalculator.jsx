@@ -13,13 +13,6 @@ const showDialog = async (options) => {
     window.alert(options.message || options.title || '');
   }
 };
-const showError = async (title, message) => {
-  if (window.electronAPI && window.electronAPI.showErrorBox) {
-    await window.electronAPI.showErrorBox(title, message);
-  } else {
-    window.alert(message || title || '');
-  }
-};
 
 function SalaryCalculator() {
   const Navigate = useNavigate();
@@ -52,7 +45,11 @@ function SalaryCalculator() {
       .then((data) => setEmployee(Array.isArray(data) ? data : []))
       .catch((error) => {
         console.error("Error fetching employees!", error);
-        showError('Error', 'Error fetching employees!');
+        showDialog({
+          type: 'error',
+          title: 'Error',
+          message: 'Error fetching employees. Please try again later.' 
+        });
       });
   }, []);
 
@@ -75,7 +72,11 @@ function SalaryCalculator() {
   // OT Hours Calculation Logic
   const handleCalculateOTHours = async () => {
     if (!selectedEmployee || !fromDate || !toDate) {
-      window.electronAPI.showErrorBox('Error', 'Please select employee, from date and to date!');
+      showDialog({
+        type: 'error',
+        title: 'Error',
+        message: 'Please select employee, from date and to date!'
+      });
       return;
     }
 
@@ -130,7 +131,11 @@ function SalaryCalculator() {
       setOtHours(totalOTHours);
     } catch (err) {
       console.error("Error calculating OT Hours", err);
-      window.electronAPI.showErrorBox('Error', 'Failed to calculate OT Hours.');
+      showDialog({
+        type: 'error',
+        title: 'Error',
+        message: 'Failed to calculate OT Hours. Please try again.'
+      });
     }
   };
 
@@ -154,7 +159,11 @@ function SalaryCalculator() {
 
   const handleSave = async () => {
     if (!selectedEmployee) {
-      showError('Error', 'Please select an employee.');
+      showDialog({
+        type: 'error',
+        title: 'Error',
+        message: 'Please select an employee to save the salary.'
+      });
       return;
     }
 
@@ -187,11 +196,19 @@ function SalaryCalculator() {
         Navigate("/reports/salary");
       } else {
         const errorData = await res.json();
-        showError('Error', 'Failed to save salary: ' + (errorData.message || "Unknown error."));
+        showDialog({
+          type: 'error',
+          title: 'Error',
+          message: 'Failed to save salary: ' + (errorData.message || "Unknown error.")
+        });
       }
     } catch (err) {
       console.error("Error saving salary:", err);
-      showError('Error', 'Error occurred while saving salary.');
+      showDialog({
+        type: 'error',
+        title: 'Error',
+        message: 'Error occurred while saving salary. Please try again.'
+      });
     }
   };
 

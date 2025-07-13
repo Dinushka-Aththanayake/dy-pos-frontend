@@ -4,6 +4,15 @@ import { formatDateToISO } from "../../../utils";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+// Utility for showing dialogs
+const showDialog = async (options) => {
+  if (window.electronAPI && window.electronAPI.showMessageBox) {
+    await window.electronAPI.showMessageBox(options);
+  } else {
+    window.alert(options.message || options.title || '');
+  }
+};
+
 const Employee = () => {
   const [records, setRecords] = useState([]);
   const [filterName, setFilterName] = useState("");
@@ -106,11 +115,19 @@ const Employee = () => {
         setCurrentName(""); // Clear username input
         setPassword(""); // Clear password input
       } else {
-        window.electronAPI.showErrorBox('Attendance Failed', 'Failed to record attendance.');
+        showDialog({
+          type: 'error',
+          title: 'Attendance Failed',
+          message: 'Failed to record attendance.'
+        });
       }
     } catch (error) {
       console.error("Error during attendance marking:", error);
-      window.electronAPI.showErrorBox('Error', 'An error occurred while marking attendance.');
+      showDialog({
+        type: 'error',
+        title: 'Error',
+        message: 'An error occurred while marking attendance.'
+      });
     }
   };
 
@@ -131,10 +148,18 @@ const Employee = () => {
         setEmployeeId(empId);
         handleInOutBar(empId);
       } else {
-        setError(data.message || "Invalid username or password");
+        showDialog({
+          type: 'error',
+          title: 'Login Failed',
+          message: data.message || "Invalid username or password"
+        });
       }
     } catch (err) {
-      setError("Server error. Please try again later.");
+      showDialog({
+        type: 'error',
+        title: 'Error',
+        message: 'Server error. Please try again later.'
+      });
     }
   };
 

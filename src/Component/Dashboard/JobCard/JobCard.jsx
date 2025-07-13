@@ -1,10 +1,19 @@
 import "./JobCard.css";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { div } from "framer-motion/client";
+import { div, s } from "framer-motion/client";
 import { formatDateToISO } from "../../../utils";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+// Utility for showing dialogs
+const showDialog = async (options) => {
+  if (window.electronAPI && window.electronAPI.showMessageBox) {
+    await window.electronAPI.showMessageBox(options);
+  } else {
+    window.alert(options.message || options.title || '');
+  }
+};
 
 function JobCard() {
   const Navigate = useNavigate();
@@ -287,9 +296,17 @@ function JobCard() {
                   }
                   onClick={() => {
                     if (!selectedJobCard) {
-                      window.electronAPI.showErrorBox('No Selection', 'Please select a Job Card first.');
+                      showDialog({
+                        type: 'error',
+                        title: 'No Selection',
+                        message: 'Please select a Job Card first.'
+                      });
                     } else if (selectedJobCard.status === "COMPLETED") {
-                      window.electronAPI.showErrorBox('Cannot Edit', 'Completed bill cannot be edited or billed again.');
+                      showDialog({
+                        type: 'error',
+                        title: 'Cannot Edit',
+                        message: 'Completed bill cannot be edited or billed again.'
+                      });
                     } else {
                       Navigate("/billing", {
                         state: { jobCard: selectedJobCard },
@@ -308,9 +325,17 @@ function JobCard() {
                   }
                   onClick={() => {
                     if (!selectedJobCard) {
-                      window.electronAPI.showErrorBox('No Selection', 'Please select a Job Card first.');
+                      showDialog({
+                        type: 'error',
+                        title: 'No Selection',
+                        message: 'Please select a Job Card first.'
+                      });
                     } else if (selectedJobCard.status === "COMPLETED") {
-                      window.electronAPI.showErrorBox('Cannot Edit', 'Completed bill cannot be edited or billed again.');
+                      showDialog({
+                        type: 'error',
+                        title: 'Cannot Edit',
+                        message: 'Completed bill cannot be edited or billed again.'
+                      });
                     } else {
                       Navigate("new", { state: { jobcard: selectedJobCard } });
                     }

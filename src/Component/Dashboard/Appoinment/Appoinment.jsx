@@ -13,13 +13,6 @@ const showDialog = async (options) => {
     window.alert(options.message || options.title || '');
   }
 };
-const showError = async (title, message) => {
-  if (window.electronAPI && window.electronAPI.showErrorBox) {
-    await window.electronAPI.showErrorBox(title, message);
-  } else {
-    window.alert(message || title || '');
-  }
-};
 
 function Appointment() {
   const Navigate = useNavigate();
@@ -157,7 +150,7 @@ function Appointment() {
         );
 
         if (response.ok) {
-          window.electronAPI.showMessageBox({
+          showDialog({
             type: 'info',
             message: 'Appointment canceled successfully.'
           });
@@ -171,11 +164,19 @@ function Appointment() {
           setSelectedAppointment(null);
         } else {
           const errorData = await response.json();
-          window.electronAPI.showErrorBox('Cancel Failed', `Failed to cancel the appointment: ${errorData.message}`);
+          showDialog({
+            type: 'error',
+            title: 'Cancel Failed',
+            message: `Failed to cancel the appointment: ${errorData.message}`
+          });
         }
       } catch (error) {
         console.error("Error canceling appointment:", error);
-        window.electronAPI.showErrorBox('Error', 'An error occurred while canceling the appointment.');
+        showDialog({
+          type: 'error',
+          title: 'Error',
+          message: 'An error occurred while canceling the appointment.'
+        });
       }
     }
   };
@@ -418,11 +419,19 @@ function Appointment() {
                     });
                   } else {
                     const errorData = await response.json();
-                    showError('Error', errorData.message || 'Failed to complete appointment.');
+                    showDialog({
+                      type: 'error',
+                      title: 'Error',
+                      message: errorData.message || 'Failed to complete appointment.'
+                    });
                   }
                 } catch (error) {
                   console.error("Error completing appointment:", error);
-                  showError('Error', error.message || 'Failed to complete appointment.');
+                  showDialog({
+                    type: 'error',
+                    title: 'Error',
+                    message: error.message || 'Failed to complete appointment.'
+                  });
                 }
               }}
             >

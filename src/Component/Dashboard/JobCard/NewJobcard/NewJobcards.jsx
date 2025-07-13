@@ -20,13 +20,6 @@ const showDialog = async (options) => {
     window.alert(options.message || options.title || '');
   }
 };
-const showError = async (title, message) => {
-  if (window.electronAPI && window.electronAPI.showErrorBox) {
-    await window.electronAPI.showErrorBox(title, message);
-  } else {
-    window.alert(message || title || '');
-  }
-};
 
 function NewJobcards() {
   const navigate = useNavigate();
@@ -139,12 +132,19 @@ function NewJobcards() {
           body: JSON.stringify({ id: jobToDelete.id }),
         });
 
-        if (!response.ok) {
-          throw new Error("Failed to delete job from backend.");
+        if (response.ok) {
+          showDialog({
+            type: 'info',
+            message: 'Job deleted successfully!'
+          });
         }
       } catch (error) {
         console.error("Error deleting job:", error);
-        window.electronAPI.showErrorBox('Delete Failed', 'Failed to delete job. Please try again.');
+        showDialog({
+          type: 'error',
+          title: 'Delete Failed',
+          message: 'Failed to delete job. Please try again.'
+        });
         return;
       }
     }
@@ -170,7 +170,11 @@ function NewJobcards() {
       const jobCardData = await jobCardRes.json();
 
       if (!jobCardRes.ok || !jobCardData?.id) {
-        await showError('Error', 'Failed to create/update job card.');
+        showDialog({
+          type: 'error',
+          title: 'Error',
+          message: 'Failed to create/update job card.'
+        });
         return;
       }
 
@@ -217,7 +221,11 @@ function NewJobcards() {
         msg = msg.join("\n");
       }
 
-      await showError('Error', msg || "Error submitting job card and jobs. Please try again.");
+      showDialog({
+        type: 'error',
+        title: 'Error',
+        message: msg || "Error submitting job card and jobs. Please try again."
+      });
     }
   };
 

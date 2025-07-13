@@ -6,6 +6,15 @@ import Autocomplete from "@mui/material/Autocomplete";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+// Utility for showing dialogs
+const showDialog = async (options) => {
+  if (window.electronAPI && window.electronAPI.showMessageBox) {
+    await window.electronAPI.showMessageBox(options);
+  } else {
+    window.alert(options.message || options.title || '');
+  }
+};
+
 function Product() {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -74,7 +83,11 @@ function Product() {
 
   const handleConfirm = async (e) => {
     if(!barCode || !name || !category || !brand){
-      window.electronAPI.showErrorBox('Missing Fields', 'Fill all fields');
+      showDialog({
+        type: 'error',
+        title: 'Missing Fields',
+        message: 'Please fill all required fields.'
+      });
       return;
     }
     e.preventDefault();
@@ -90,7 +103,7 @@ function Product() {
       });
 
       if (response.ok) {
-        window.electronAPI.showMessageBox({
+        showDialog({
           type: 'info',
           message: 'Product created successfully!'
         });
@@ -112,7 +125,11 @@ function Product() {
 
         setProducts(updatedProducts);
       } else {
-        window.electronAPI.showErrorBox('Create Failed', 'Failed to create product.');
+        showDialog({
+          type: 'error',
+          title: 'Create Failed',
+          message: 'Failed to create product. Please try again.'
+        });
       }
     } catch (error) {
       console.error("Error creating product:", error);
@@ -123,7 +140,11 @@ function Product() {
         msg = msg.join("\n");
       }
 
-      window.electronAPI.showErrorBox('Error', msg || 'Error creating product. Please try again.');
+      showDialog({
+        type: 'error',
+        title: 'Error',
+        message: msg || 'Error creating product. Please try again.'
+      });
     }
   };
 

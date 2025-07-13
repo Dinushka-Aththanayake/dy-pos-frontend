@@ -4,6 +4,15 @@ import { useNavigate } from "react-router-dom";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+// Utility for showing dialogs
+const showDialog = async (options) => {
+  if (window.electronAPI && window.electronAPI.showMessageBox) {
+    await window.electronAPI.showMessageBox(options);
+  } else {
+    window.alert(options.message || options.title || '');
+  }
+};
+
 function Account() {
   const navigation = useNavigate();
   const [employees, setEmployees] = useState([]);
@@ -61,13 +70,17 @@ function Account() {
     })
       .then((res) => {
         if (res.ok) {
-          window.electronAPI.showMessageBox({
+          showDialog({
             type: 'info',
             message: 'Employee details updated successfully.'
           });
           setIsEditing(false);
         } else {
-          window.electronAPI.showErrorBox('Update Failed', 'Failed to update employee.');
+          showDialog({
+            type: 'error',
+            title: 'Update Failed',
+            message: 'Failed to update employee.'
+          });
         }
       })
       .catch((err) => {
@@ -76,8 +89,13 @@ function Account() {
         if (Array.isArray(msg)) {
           msg = msg.join("\n");
         }
-        window.electronAPI.showErrorBox('Error', msg || 'Error saving employee. Please try again.');
-      });
+        showDialog({
+          type: 'error',
+          title: 'Error',
+          message: msg || 'Error saving employee. Please try again.'
+
+        });
+      })
   };
 
   const handleChangePassword = () => {
@@ -85,7 +103,11 @@ function Account() {
 
     const newPassword = prompt("Enter new password:");
     if (!newPassword || newPassword.trim() === "") {
-      window.electronAPI.showErrorBox('Invalid Password', 'Password cannot be empty.');
+      showDialog({
+        type: 'error',
+        title: 'Invalid Password',
+        message: 'Password cannot be empty.'
+      });
       return;
     }
 
@@ -102,12 +124,16 @@ function Account() {
     })
       .then((res) => {
         if (res.ok) {
-          window.electronAPI.showMessageBox({
+          showDialog({
             type: 'info',
             message: 'Password changed successfully.'
           });
         } else {
-          window.electronAPI.showErrorBox('Password Change Failed', 'Failed to change password.');
+          showDialog({
+            type: 'error',
+            title: 'Password Change Failed',
+            message: 'Failed to change password.'
+          });
         }
       })
       .catch((err) => {

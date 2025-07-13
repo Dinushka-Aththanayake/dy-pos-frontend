@@ -14,13 +14,6 @@ const showDialog = async (options) => {
     window.alert(options.message || options.title || '');
   }
 };
-const showError = async (title, message) => {
-  if (window.electronAPI && window.electronAPI.showErrorBox) {
-    await window.electronAPI.showErrorBox(title, message);
-  } else {
-    window.alert(message || title || '');
-  }
-};
 
 function Billing() {
   const navigate = useNavigate();
@@ -207,7 +200,11 @@ function Billing() {
         });
       } catch (error) {
         console.error("Error deleting item from DB:", error);
-        window.electronAPI.showErrorBox('Delete Failed', 'Failed to delete item from database.');
+        showDialog({
+          type: 'error',
+          title: 'Delete Failed',
+          message: 'Failed to delete item from bill.'
+        });
         return; // exit early if delete fails
       }
     }
@@ -256,7 +253,11 @@ function Billing() {
 
   const handleSave = async () => {
     if (!customerName && (!customerNumPlate || !customerTelephone)) {
-      showError('Missing Fields', 'Please enter customer details');
+      showDialog({
+        type: 'error',
+        title: 'Missing Fields',
+        message: 'Please enter customer details'
+      });
       return;
     }
 
@@ -361,13 +362,21 @@ function Billing() {
       resetForm();
     } catch (error) {
       console.error("Save error:", error);
-      showError('Error', error.message || 'An error occurred while saving the bill.');
+      showDialog({
+        type: 'error',
+        title: 'Error',
+        message: error.message || 'Error saving bill. Please try again.'
+      });
     }
   };
 
   const handleHold = async () => {
     if (!customerName && (!customerNumPlate || !customerTelephone)) {
-      showError('Missing Fields', 'Please enter customer details');
+      showDialog({
+        type: 'error',
+        title: 'Missing Fields',
+        message: 'Please enter customer details'
+      });
       return;
     }
 
@@ -446,7 +455,11 @@ function Billing() {
       resetForm();
     } catch (error) {
       console.error("Hold error:", error);
-      showError('Error', error.message || 'An error occurred while holding the bill.');
+      showDialog({
+        type: 'error',
+        title: 'Error',
+        message: error.message || 'Error holding bill. Please try again.'
+      });
     }
   };
 
@@ -458,7 +471,11 @@ function Billing() {
 
   const handlePrintAndSave = async () => {
     if (!customerName && (!customerNumPlate || !customerTelephone)) {
-      showError('Missing Fields', 'Please enter customer details');
+      showDialog({
+        type: 'error',
+        title: 'Missing Fields',
+        message: 'Please enter customer details'
+      });
       return;
     }
     await handleSave();

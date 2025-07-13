@@ -3,6 +3,15 @@ import axios from "axios";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+// Utility for showing dialogs
+const showDialog = async (options) => {
+  if (window.electronAPI && window.electronAPI.showMessageBox) {
+    await window.electronAPI.showMessageBox(options);
+  } else {
+    window.alert(options.message || options.title || '');
+  }
+};
+
 function RegisterUser() {
   const token = localStorage.getItem("access_token");
   const [formData, setFormData] = useState({
@@ -44,10 +53,11 @@ function RegisterUser() {
       !telephone ||
       !basic_salary
     ) {
-      window.electronAPI.showErrorBox(
-        "Missing Fields",
-        "Please fill in all required fields."
-      );
+      showDialog({
+        type: 'error',
+        title: 'Missing Fields',
+        message: 'Please fill in all required fields.'
+      });
       return;
     }
 
@@ -84,10 +94,11 @@ function RegisterUser() {
       }
 
       console.error("Error creating user:", error);
-      window.electronAPI.showErrorBox(
-        "Registration Failed",
-        msg || "Failed to register user. Check the inputs or try again."
-      );
+      showDialog({
+        type: 'error',
+        title: 'Registration Failed',
+        message: msg || 'Failed to register user. Check the inputs or try again.'
+      });
     }
   };
 

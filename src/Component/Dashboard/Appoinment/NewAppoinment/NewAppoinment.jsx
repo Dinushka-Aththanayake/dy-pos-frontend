@@ -5,6 +5,15 @@ import { formatDateToISO, formatDateToLocalString } from "../../../../utils";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+// Utility for showing dialogs
+const showDialog = async (options) => {
+  if (window.electronAPI && window.electronAPI.showMessageBox) {
+    await window.electronAPI.showMessageBox(options);
+  } else {
+    window.alert(options.message || options.title || '');
+  }
+};
+
 function NewAppointment() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -67,7 +76,7 @@ function NewAppointment() {
       });
 
       if (response.ok) {
-        window.electronAPI.showMessageBox({
+        showDialog({
           type: 'info',
           message: editAppointment
             ? 'Appointment updated successfully!'
@@ -75,7 +84,11 @@ function NewAppointment() {
         });
         navigate("/appoinment");
       } else {
-        window.electronAPI.showErrorBox('Save Failed', 'Failed to save appointment.');
+        showDialog({
+          type: 'error',
+          title: 'Save Failed',
+          message: 'Failed to save appointment. Please try again.'
+        });
       }
     } catch (error) {
       console.error("Error saving appointment:", error);
@@ -86,7 +99,11 @@ function NewAppointment() {
         msg = msg.join("\n");
       }
 
-      window.electronAPI.showErrorBox('Error', msg || 'Error saving appointment. Please try again.');
+      showDialog({
+        type: 'error',
+        title: 'Error',
+        message: msg || 'Error saving appointment. Please try again.'
+      });
     }
   };
 
