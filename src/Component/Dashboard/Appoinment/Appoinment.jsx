@@ -8,9 +8,26 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 // Utility for showing dialogs
 const showDialog = async (options) => {
   if (window.electronAPI && window.electronAPI.showMessageBox) {
-    await window.electronAPI.showMessageBox(options);
+    return await window.electronAPI.showMessageBox(options);
   } else {
-    window.alert(options.message || options.title || '');
+    return window.alert(options.message || options.title || '');
+  }
+};
+
+// Utility for showing confirmation dialogs
+const showConfirm = async (options) => {
+  if (window.electronAPI && window.electronAPI.showMessageBox) {
+    const result = await window.electronAPI.showMessageBox({
+      type: options.type || 'question',
+      buttons: options.buttons || ['Yes', 'No'],
+      title: options.title || 'Confirm',
+      message: options.message || '',
+      defaultId: 0,
+      cancelId: 1,
+    });
+    return result.response === 0;
+  } else {
+    return window.confirm(options.message || options.title || 'Are you sure?');
   }
 };
 
@@ -133,51 +150,55 @@ function Appointment() {
 
     const appointmentId = Number(id);
 
-    if (window.confirm("Are you sure you want to cancel this appointment?")) {
-      const token = localStorage.getItem("access_token");
+    const confirmed = await showConfirm({
+      type: 'warning',
+      title: 'Cancel Appointment',
+      message: 'Are you sure you want to cancel this appointment?'
+    });
+    if (!confirmed) return;
 
-      try {
-        const response = await fetch(
-          `${API_BASE_URL}/appointments/cancel`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({ id: appointmentId }),
-          }
-        );
-
-        if (response.ok) {
-          await showDialog({
-            type: 'info',
-            message: 'Appointment canceled successfully.'
-          });
-          fetchAppointments();
-          setAppointments((prev) =>
-            prev.filter((appointment) => appointment.id !== appointmentId)
-          );
-          setFilteredAppointments((prev) =>
-            prev.filter((appointment) => appointment.id !== appointmentId)
-          );
-          setSelectedAppointment(null);
-        } else {
-          const errorData = await response.json();
-          await showDialog({
-            type: 'error',
-            title: 'Cancel Failed',
-            message: `Failed to cancel the appointment: ${errorData.message}`
-          });
+    const token = localStorage.getItem("access_token");
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/appointments/cancel`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ id: appointmentId }),
         }
-      } catch (error) {
-        console.error("Error canceling appointment:", error);
+      );
+
+      if (response.ok) {
+        await showDialog({
+          type: 'info',
+          message: 'Appointment canceled successfully.'
+        });
+        fetchAppointments();
+        setAppointments((prev) =>
+          prev.filter((appointment) => appointment.id !== appointmentId)
+        );
+        setFilteredAppointments((prev) =>
+          prev.filter((appointment) => appointment.id !== appointmentId)
+        );
+        setSelectedAppointment(null);
+      } else {
+        const errorData = await response.json();
         await showDialog({
           type: 'error',
-          title: 'Error',
-          message: 'An error occurred while canceling the appointment.'
+          title: 'Cancel Failed',
+          message: `Failed to cancel the appointment: ${errorData.message}`
         });
       }
+    } catch (error) {
+      console.error("Error canceling appointment:", error);
+      await showDialog({
+        type: 'error',
+        title: 'Error',
+        message: 'An error occurred while canceling the appointment.'
+      });
     }
   };
 
@@ -377,7 +398,7 @@ function Appointment() {
                   });
                   return;
                 }
-                handleCancel(selectedAppointment.id);
+                await handleCancel(selectedAppointment.id);
               }}
             >
               Cancel Appointment

@@ -15,6 +15,23 @@ const showDialog = async (options) => {
   }
 };
 
+// Utility for showing confirmation dialogs
+const showConfirm = async (options) => {
+  if (window.electronAPI && window.electronAPI.showMessageBox) {
+    const result = await window.electronAPI.showMessageBox({
+      type: options.type || 'question',
+      buttons: options.buttons || ['Yes', 'No'],
+      title: options.title || 'Confirm',
+      message: options.message || '',
+      defaultId: 0,
+      cancelId: 1,
+    });
+    return result.response === 0;
+  } else {
+    return window.confirm(options.message || options.title || 'Are you sure?');
+  }
+};
+
 function Billing() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -464,7 +481,13 @@ function Billing() {
   };
 
   const handleCancel = () => {
-    if (window.confirm("Are you sure you want to cancel this bill?")) {
+    const confirm = showConfirm({
+      type: "warning",
+      title: "Cancel Bill",
+      message: "Are you sure you want to cancel this bill?",
+      buttons: ["Yes", "No"],
+    });
+    if (confirm) {
       resetForm();
     }
   };
