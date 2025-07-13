@@ -78,7 +78,14 @@ function NewAppointment() {
       }
     } catch (error) {
       console.error("Error saving appointment:", error);
-      alert("Error saving appointment. Please try again.");
+
+      let msg = error.response?.data?.message;
+
+      if (Array.isArray(msg)) {
+        msg = msg.join("\n");
+      }
+
+      alert(msg || "Error saving appointment. Please try again.");
     }
   };
 

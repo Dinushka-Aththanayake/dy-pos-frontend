@@ -191,7 +191,14 @@ function NewJobcards() {
       navigate("/jobcard");
     } catch (error) {
       console.error("Error submitting job card:", error);
-      alert("Error submitting job card and jobs. Please try again.");
+
+      let msg = error.response?.data?.message;
+
+      if (Array.isArray(msg)) {
+        msg = msg.join("\n");
+      }
+
+      alert(msg || "Error submitting job card and jobs. Please try again.");
     }
   };
 
