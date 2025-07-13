@@ -45,6 +45,31 @@ const Login = () => {
 
   return (
     <div className="login-container1">
+      {/* Exit button for Electron */}
+      <button
+        className="exit-button"
+        onClick={() => {
+          if (window.electronAPI && window.electronAPI.closeWindow) {
+            window.electronAPI.closeWindow();
+          } else {
+            window.close(); // fallback for browser
+          }
+        }}
+        style={{
+          position: "absolute",
+          top: 20,
+          right: 20,
+          background: "transparent",
+          border: "none",
+          color: "white",
+          fontSize: "1.1rem",
+          fontWeight: "bold",
+          cursor: "pointer",
+          zIndex: 1000,
+        }}
+      >
+        Exit
+      </button>
       <img src={loginImage} alt="" className="login-img" />
       <div className="login-box">
         <h2>Login</h2>
