@@ -154,7 +154,6 @@ function JobCard() {
                   <th style={{ textAlign: "center" }}>Num Plate</th>
                   <th style={{ textAlign: "center" }}>Created</th>
                   <th style={{ textAlign: "center" }}>Completed</th>
-                  <th style={{ textAlign: "center" }}>Branch</th>
                   <th style={{ textAlign: "center" }}>Status</th>
                 </tr>
               </thead>
@@ -176,7 +175,6 @@ function JobCard() {
                     <td>{jobCard.numPlate}</td>
                     <td>{formatDate(jobCard.created).date}</td>
                     <td>{formatDate(jobCard.completed).date}</td>
-                    <td>{jobCard.branch?.name || "N/A"}</td>
                     <td>
                       <button
                         className={`status-btn ${jobCard.status.toLowerCase()}`}

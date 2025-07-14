@@ -2,12 +2,9 @@
 
   .jobcard-content {
     display: flex;
-    
     border-radius: 10px;
-    
-    overflow: hidden;
-    width: 100%;
     padding: 20px;
+    gap: 15px;
     
   }
   
@@ -85,11 +82,10 @@
   
   /* Right Section */
   .jobcard-right {
-    flex: 1;
+    flex: 3;
     padding: 20px;
     background-color: white;
     border-radius: 20px;
-    margin-left: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
   }
@@ -106,7 +102,7 @@
   }
   
   .details-table {
-    width: 100%;
+    
     border-collapse: collapse;
     background: white;
   }
