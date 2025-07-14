@@ -198,7 +198,7 @@ function History() {
               <thead style={{ backgroundColor: "#cce5ff", textAlign: "left" }}>
                 <tr>
                   <th>#</th>
-                  <th>Number Plate</th>
+                  <th>Vehicle Number</th>
                   <th>Customer Name</th>
                   <th>Mobile Number</th>
                   <th>Total Price (Rs)</th>
@@ -242,7 +242,7 @@ function History() {
                           }}
                           onClick={() =>
                             navigate("show", {
-                              state: { bill, autoPrint: false },
+                              state: { billid:bill.id, autoprint: false },
                             })
                           }
                         >

@@ -47,6 +47,7 @@ function Billing() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [discount, setDiscount] = useState(bill?.discount || 0);
   const jobCardId = jobcard?.id || holdbill?.jobCard?.id;
+  const [billId, setBillId] = useState(bill?.id || null);
   // console.log("Job Card ID:", jobCardId);
 
   const [customerTelephone, setCustomerTelephone] = useState(
@@ -301,7 +302,7 @@ function Billing() {
       const billData = await billRes.json();
       if (!billRes.ok) throw new Error("Failed to create/update bill");
       const billId = parseInt(billData.id);
-
+      setBillId(billId); // Update state with new bill ID
       // 2. Upsert items
       for (const product of products) {
         await fetch(`${API_BASE_URL}/items/upsert`, {
@@ -376,6 +377,8 @@ function Billing() {
         message: "Bill saved successfully!",
       });
       resetForm();
+
+      return billId; // Return the new bill ID for further use
     } catch (error) {
       console.error("Save error:", error);
       await showDialog({
@@ -500,11 +503,12 @@ function Billing() {
       });
       return;
     }
-    await handleSave();
+    const billId = await handleSave();
+    console.log("Bill ID for printing:", billId);
     navigate("/history/show", {
       state: {
-        bill,
-        autoPrint: true, // Set to true to trigger auto-print
+        billid: billId,
+        autoprint: true, // Set to true to trigger auto-print
       },
     });
   };
@@ -525,7 +529,7 @@ function Billing() {
             />
           </div>
           <div className="info-bar1">
-            <label className="info-labal">Number Plate :</label>
+            <label className="info-labal"> Vehicle Number :</label>
             <input
               type="text"
               className="info-input"
