@@ -16,7 +16,7 @@ html {
 
 .appointment-content {
   background-color: #f0f8ff;
-  width: 100%;
+  
   height: auto;
   display: flex;
   border-radius: 10px;
@@ -97,8 +97,6 @@ html {
 
 /* Right Form Section */
 .appointment-form-container {
-  position: sticky;
-  z-index: 10;
   flex: 1;
   background: white;
   padding: 20px;
@@ -150,7 +148,7 @@ html {
   font-size: 16px;
   cursor: pointer;
   margin-top: 5px;
-  
+  flex: 1;
   
 }
 

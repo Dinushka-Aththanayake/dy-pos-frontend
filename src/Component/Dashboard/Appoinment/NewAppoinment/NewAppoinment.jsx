@@ -25,6 +25,7 @@ function NewAppointment() {
   const [filteredAppointments, setFilteredAppointments] = useState([]);
   const [customerName, setCustomerName] = useState("");
   const [customerTelephone, setcustomerTelephone] = useState("");
+  const [description, setDescription] = useState("");
   const branchId = 1;
 
   const token = localStorage.getItem("access_token");
@@ -58,6 +59,7 @@ function NewAppointment() {
       customerName,
       customerTelephone,
       branchId: branchInt,
+      description,
     };
 
     // Include ID for update
@@ -165,7 +167,7 @@ function NewAppointment() {
         <div className="appointment-form-box">
           <form onSubmit={(e) => e.preventDefault()}>
             <div className="form-group">
-              <label>Number Plate:</label>
+              <label>Vehicle Number:</label>
               <input
                 type="text"
                 value={numPlate}
@@ -202,6 +204,14 @@ function NewAppointment() {
                 type="text"
                 value={customerTelephone}
                 onChange={(e) => setcustomerTelephone(e.target.value)}
+              />
+            </div>
+            <div className="form-group">
+              <label>Description:</label>
+              <input
+                type="text"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
               />
             </div>
           </form>
