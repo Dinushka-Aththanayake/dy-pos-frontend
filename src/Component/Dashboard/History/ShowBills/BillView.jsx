@@ -33,7 +33,7 @@ console.log("Bill ID:", billId);
  
   useEffect(() => {
     if (autoPrint) {
-      setTimeout(() => window.print(), 500);
+      setTimeout(() => window.print(), 1500);
     }
   }, [autoPrint]);
 

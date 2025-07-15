@@ -71,6 +71,11 @@ function Sales() {
     0
   )).toFixed(2);
 
+  const handlePrint = () => {
+  window.print();
+};
+
+
   return (
     <div>
     <div className="sales-report-container">
@@ -187,6 +192,7 @@ function Sales() {
           <p style={{ fontSize: "18px", color: "#0077cc" }}>Rs.{totalSalePrice}</p>
           <p style={{ marginTop: "15px" }}>Total Profit:</p>
           <p style={{ fontSize: "18px", color: "#0077cc" }}>Rs.{totalProfit}</p>
+          <button className="searchbutton" style={{float:"right",padding:"10px 25px 10px 25px"}} onClick={handlePrint}>Print</button>
         </div>
       </div>
     </div>

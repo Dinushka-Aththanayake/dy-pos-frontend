@@ -45,6 +45,7 @@ function Services() {
         const jobList = Array.isArray(data) ? data : [];
         setJobs(jobList);
         setFilteredJobs(jobList);
+        console.log("Fetched jobs:", jobList);
       })
       .catch((err) => console.error("Error fetching jobs!", err));
   };
@@ -63,12 +64,17 @@ function Services() {
     0
   );
 
+    const handlePrint = () => {
+  window.print();
+};
+
+
   return (
     <div>
       <div className="sales-report-container">
         <h2 style={{ color: "rgb(0, 51, 102)", marginBottom: "10px" }}>
-        Services History
-      </h2>
+          Services History
+        </h2>
         <div className="sales-filter-section">
           <select
             style={{ width: "100%" }}
@@ -132,11 +138,14 @@ function Services() {
             >
               <thead style={{ backgroundColor: "#cce5ff", textAlign: "left" }}>
                 <tr>
-                  <th>#</th>
-                  <th>Reference</th>
+                  
+                  <th>Ref</th>
                   <th>Title</th>
                   <th>Price</th>
                   <th>Employee</th>
+                  <th>Start </th>
+                  <th>Expected  </th>
+                  <th>End</th>
                   <th>Date</th>
                 </tr>
               </thead>
@@ -152,11 +161,15 @@ function Services() {
                     const emp = employee.find((e) => e.id === job.employeeId);
                     return (
                       <tr key={job.id}>
-                        <td>{index + 1}</td>
+                        
                         <td>{job.id || "-"}</td>
                         <td>{job.title || "-"}</td>
                         <td>{job.charge || 0}</td>
                         <td>{job.employee.firstName || "-"}</td>
+                        <td>
+                          {new Date(job.startTime).toLocaleDateString()} </td>
+                        <td>{new Date(job.expectedEndTime).toLocaleDateString()}</td>
+                        <td>{new Date(job.endTime).toLocaleDateString()}</td>
                         <td>
                           {new Date(job.jobCard.completed).toLocaleDateString()}
                         </td>
@@ -177,7 +190,7 @@ function Services() {
               backgroundColor: "#f4faff",
               boxShadow: "0px 4px 8px rgba(0, 123, 255, 0.1)",
               padding: "15px",
-              maxHeight:"200px"
+              maxHeight: "200px",
             }}
           >
             <p style={{ marginTop: "15px", fontWeight: "bold" }}>
@@ -187,6 +200,13 @@ function Services() {
               {" "}
               Rs. {totalPrice}.00
             </p>
+            <button
+              className="searchbutton"
+              style={{ float: "right", padding: "10px 25px 10px 25px" }}
+              onClick={handlePrint}
+            >
+              Print
+            </button>
           </div>
         </div>
       </div>
