@@ -41,7 +41,7 @@ function Appointment() {
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedBranch, setSelectedBranch] = useState("All");
-  const [isPending, setIsPending] = useState(true);
+  const [isPending, setIsPending] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("access_token");
