@@ -115,8 +115,8 @@ function Appointment() {
       );
     }
 
-    if (isPending !== null) {
-      url.searchParams.append("isPending", isPending);
+    if (isPending !== null && !isPending) {
+      url.searchParams.append("status", "PENDING");
     }
 
     if (selectedBranch !== "All") {
