@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Services.css";
-import { formatDateToISO } from "../../../../utils";
+import { formatDateToISO, formatDateToLocalString, formatDateToTime } from "../../../../utils";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -167,11 +167,11 @@ function Services() {
                         <td>{job.charge || 0}</td>
                         <td>{job.employee.firstName || "-"}</td>
                         <td>
-                          {new Date(job.startTime).toLocaleDateString()} </td>
-                        <td>{new Date(job.expectedEndTime).toLocaleDateString()}</td>
-                        <td>{new Date(job.endTime).toLocaleDateString()}</td>
+                          {job.startTime ? formatDateToTime(new Date(job.startTime)) : "-"} </td>
+                        <td>{job.expectedEndTime ? formatDateToTime(new Date(job.expectedEndTime)) : "-"}</td>
+                        <td>{job.endTime ? formatDateToTime(new Date(job.endTime)) : "-"}</td>
                         <td>
-                          {new Date(job.jobCard.completed).toLocaleDateString()}
+                          {job.jobCard.completed ? formatDateToLocalString(new Date(job.jobCard.completed)) : "-"}
                         </td>
                       </tr>
                     );
