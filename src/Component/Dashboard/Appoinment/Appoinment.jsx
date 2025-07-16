@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Appoinment.css";
 import { useNavigate } from "react-router-dom";
 import { formatDateToISO } from "../../../utils";
+import { CheckBox } from "@mui/icons-material";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -40,6 +41,7 @@ function Appointment() {
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedBranch, setSelectedBranch] = useState("All");
+  const [isPending, setIsPending] = useState(true);
 
   useEffect(() => {
     const token = localStorage.getItem("access_token");
@@ -111,6 +113,10 @@ function Appointment() {
         "beforeDate",
         formatDateToISO(selectedDate, "23:59")
       );
+    }
+
+    if (isPending !== null) {
+      url.searchParams.append("isPending", isPending);
     }
 
     if (selectedBranch !== "All") {
@@ -262,6 +268,18 @@ function Appointment() {
               onChange={handleDateChange}
               style={{ flex: 1 }}
             />
+            <input
+              type="checkbox"
+              checked={isPending}
+              onChange={(e) => {
+                setIsPending(e.target.checked);
+                handleSearch(); // call immediately on change
+              }}
+              style={{
+                accentColor: "#003366", // blue theme
+                flex: 0.3,
+              }}
+            />
             <button className="search-btn" onClick={handleSearch}>
               Search
             </button>
@@ -295,7 +313,7 @@ function Appointment() {
                 }}
               >
                 <tr style={{ backgroundColor: "#e6f2ff" }}>
-                  <th>Number Plate</th>
+                  <th>Vehicle Number</th>
                   <th>Date</th>
                   <th>Branch</th>
                   <th>Status</th>
@@ -518,7 +536,7 @@ function Appointment() {
                       state: { appointmentsss: selectedAppointment },
                     });
                   }}
-                  style={{flex: 1}}
+                  style={{ flex: 1 }}
                 >
                   Edit
                 </button>
