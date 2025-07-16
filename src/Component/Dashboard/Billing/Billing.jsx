@@ -573,17 +573,21 @@ function Billing() {
                   size="small"
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
+                      e.preventDefault(); // Prevent default Enter behavior
                       if (selectedProduct) {
                         handleAddProduct();
+                        setSelectedProduct(null);
                       } else if (filteredInventory.length === 1) {
                         handleAddProduct(filteredInventory[0]);
                         setSearchTerm("");
                       }
-                      e.preventDefault(); // Prevent default Enter behavior
                     }
                   }}
+                  {...params.inputProps}
                 />
               )}
+              blurOnSelect
+              clearOnBlur={false}
             />
             <button className="search-btn" onClick={() => handleAddProduct()}>
               Add Item
