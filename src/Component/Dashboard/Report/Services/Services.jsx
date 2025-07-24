@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import "./Services.css";
-import { formatDateToISO, formatDateToLocalString, formatDateToTime } from "../../../../utils";
+import {
+  formatDateToISO,
+  formatDateToLocalString,
+  formatDateToTime,
+} from "../../../../utils";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -66,10 +70,9 @@ function Services() {
     0
   );
 
-    const handlePrint = () => {
-  window.print();
-};
-
+  const handlePrint = () => {
+    window.print();
+  };
 
   return (
     <div>
@@ -91,7 +94,7 @@ function Services() {
               </option>
             ))}
           </select>
-           <input
+          <input
             type="number"
             className="date-picker"
             placeholder="Job Reference"
@@ -147,13 +150,12 @@ function Services() {
             >
               <thead style={{ backgroundColor: "#cce5ff", textAlign: "left" }}>
                 <tr>
-                  
                   <th>Ref</th>
                   <th>Title</th>
                   <th>Price</th>
                   <th>Employee</th>
                   <th>Start </th>
-                  <th>Expected  </th>
+                  <th>Expected </th>
                   <th>End</th>
                   <th>Date</th>
                 </tr>
@@ -170,17 +172,31 @@ function Services() {
                     const emp = employee.find((e) => e.id === job.employeeId);
                     return (
                       <tr key={job.id}>
-                        
                         <td>{job.id || "-"}</td>
                         <td>{job.title || "-"}</td>
-                        <td>{job.charge || 0}</td>
+                        <td>{(job.charge || 0).toFixed(2)}</td>
                         <td>{job.employee.firstName || "-"}</td>
                         <td>
-                          {job.startTime ? formatDateToTime(new Date(job.startTime)) : "-"} </td>
-                        <td>{job.expectedEndTime ? formatDateToTime(new Date(job.expectedEndTime)) : "-"}</td>
-                        <td>{job.endTime ? formatDateToTime(new Date(job.endTime)) : "-"}</td>
+                          {job.startTime
+                            ? formatDateToTime(new Date(job.startTime))
+                            : "-"}{" "}
+                        </td>
                         <td>
-                          {job.jobCard.completed ? formatDateToLocalString(new Date(job.jobCard.completed)) : "-"}
+                          {job.expectedEndTime
+                            ? formatDateToTime(new Date(job.expectedEndTime))
+                            : "-"}
+                        </td>
+                        <td>
+                          {job.endTime
+                            ? formatDateToTime(new Date(job.endTime))
+                            : "-"}
+                        </td>
+                        <td>
+                          {job.jobCard.completed
+                            ? formatDateToLocalString(
+                                new Date(job.jobCard.completed)
+                              )
+                            : "-"}
                         </td>
                       </tr>
                     );
