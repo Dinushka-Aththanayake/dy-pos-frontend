@@ -149,7 +149,8 @@ console.log("Bill ID:", billId);
         <thead>
           <tr>
             <th>#</th>
-            <th>Inventory Ref</th>
+            <th>Item Ref</th>
+            <th>In Ref</th>
             <th>Barcode</th>
             <th>Name</th>
             <th>Unit Price</th>
@@ -161,9 +162,10 @@ console.log("Bill ID:", billId);
           {bill.items?.map((item, idx) => (
             <tr key={idx}>
               <td>{idx + 1}</td>
+              <td>{item.id}</td>
               <td>{item.inventory.id}</td>
               <td>{item.inventory.product.barCode}</td>
-              <td>{item.inventory.product.name}</td>
+              <td style={{fontSize:11}}>{item.inventory.product.name}</td>
               <td>{parseFloat(item.unitPrice).toFixed(2)}</td>
               <td>{item.quantity}</td>
               <td>{(item.quantity * parseFloat(item.unitPrice)).toFixed(2)}</td>
@@ -173,7 +175,7 @@ console.log("Bill ID:", billId);
       </table>
       {bill.jobCard?.jobs && bill.jobCard.jobs.length > 0 && (
         <>
-          <h4 style={{ marginTop: 10 }}>Jobs</h4>
+          <h4 style={{ marginTop: 10,fontSize: "13px" }}>Services</h4>
           <table className="print-table">
             <thead>
               <tr>
