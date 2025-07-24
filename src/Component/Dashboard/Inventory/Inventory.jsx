@@ -37,7 +37,8 @@ function Inventory() {
   const filteredInventory = inventory.filter((item) => {
     const matchesSearch =
       item.product.barCode.toString().includes(searchTerm) ||
-      item.product.name.toLowerCase().includes(searchTerm.toLowerCase());
+      item.product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.id.toString().includes(searchTerm);
 
     const matchesBranch =
       branchFilter === "All" || item.branch.name === branchFilter;
@@ -76,11 +77,12 @@ function Inventory() {
           <div className="filter-section11" style={{display:"flex"}}>
             <input
               type="text"
-              placeholder="Search by Code or Name..."
+              placeholder="Search by Code or Name or Reference Id ..."
               className="search-input1"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
+            
             <button className="search-button">Search</button>
             
           </div>
@@ -114,6 +116,7 @@ function Inventory() {
                 }}
               >
                 <tr>
+                  <th>Ref</th>
                   <th>Barcode</th>
                   <th>Name</th>
                   <th>Price</th>
@@ -129,6 +132,7 @@ function Inventory() {
                     className="clickable-row"
                     style={{ backgroundColor: "#e6f2ff" }}
                   >
+                    <td>{item.id}</td>
                     <td>{item.product.barCode}</td>
                     <td>{item.product.name}</td>
                     <td>{`Rs. ${item.sellPrice}`}</td>
