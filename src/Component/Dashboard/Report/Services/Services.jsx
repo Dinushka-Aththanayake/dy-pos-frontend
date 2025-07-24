@@ -11,6 +11,8 @@ function Services() {
   const [selectedEmployee, setSelectedEmployee] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [jobReference, setJobReference] = useState("");
+
   const token = localStorage.getItem("access_token");
 
   // Fetch employees
@@ -55,7 +57,7 @@ function Services() {
     if (selectedEmployee) filters.employeeId = selectedEmployee;
     if (startDate) filters.completedAfter = formatDateToISO(startDate, "00:00");
     if (endDate) filters.completedBefore = formatDateToISO(endDate, "23:59");
-
+    if (jobReference) filters.id = jobReference;
     fetchJobs(filters); // fetch jobs with query filters
   };
 
@@ -89,6 +91,13 @@ function Services() {
               </option>
             ))}
           </select>
+           <input
+            type="number"
+            className="date-picker"
+            placeholder="Job Reference"
+            value={jobReference}
+            onChange={(e) => setJobReference(e.target.value)}
+          />
           <input
             type="date"
             className="date-picker"
