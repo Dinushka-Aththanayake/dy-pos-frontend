@@ -124,7 +124,7 @@ const demoTheme = extendTheme({
   colorSchemes: { light: true, dark: false },
   colorSchemeSelector: "class",
   breakpoints: {
-    values: { xs: 0, sm: 600, md: 600, lg: 1200, xl: 1536 },
+    values: { xs: 0, sm: 600, md: 600, xl: 1536 },
   },
 });
 
