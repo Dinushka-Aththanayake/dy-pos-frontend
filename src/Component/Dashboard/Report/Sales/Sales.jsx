@@ -61,13 +61,13 @@ function Sales() {
     fetchSalesData(filters);
   };
 
-  const totalPrice = (data?.reduce((sum, item) => sum + (parseFloat(item?.inventory?.buyPrice) || 0), 0)).toFixed(2);
+  const totalPrice = (data?.reduce((sum, item) => sum + ((parseFloat(item?.inventory?.buyPrice)*item?.quantity) || 0), 0)).toFixed(2);
   const totalSalePrice = (data.reduce(
-    (sum, item) => sum + (parseFloat(item.unitPrice) || 0),
+    (sum, item) => sum + ((parseFloat(item.unitPrice) || 0) * (item?.quantity || 0)) ,
     0
   )).toFixed(2);
   const totalProfit = (data.reduce(
-    (sum, item) => sum + ((parseFloat(item.unitPrice) || 0) - (parseFloat(item?.inventory?.buyPrice) || 0)),
+    (sum, item) => sum + (((parseFloat(item.unitPrice) || 0) - (parseFloat(item?.inventory?.buyPrice) || 0)) * (item?.quantity || 0)) ,
     0
   )).toFixed(2);
 
@@ -142,11 +142,13 @@ function Sales() {
             >
               <tr>
                 <th>#</th>
-                <th>Reference</th>
+                <th>Ref</th>
                 <th>Barcode</th>
                 <th>Product Name</th>
                 <th>Buy Price</th>
-                <th>Sale Price</th>
+                <th>Unit Price</th>
+                <th>Qnty</th>
+                <th>Subtotal</th>
                 <th>Profit</th>
                 <th>Date</th>
               </tr>
@@ -157,13 +159,16 @@ function Sales() {
                   <td>{index + 1}</td>
                   <td>{item.id}</td>
                   <td>{item.inventory?.product?.barCode || "N/A"}</td>
-                  <td>{item.inventory?.product?.name || "N/A"}</td>
+                  <td style={{fontSize:10}}>{item.inventory?.product?.name || "N/A"}</td>
                   <td>{item.inventory.buyPrice}</td>
                   <td>{item.unitPrice}</td>
+                  <td>{item.quantity}</td>
+                  <td>{(item.unitPrice * item.quantity).toFixed(2)}</td>
                   <td>
-                    {(item.unitPrice - item.inventory.buyPrice).toFixed(2)}
+                    {((item.unitPrice - item.inventory.buyPrice)*item.quantity).toFixed(2)}
                   </td>
-                  <td>
+                  
+                  <td style={{fontSize:10}}>
                     {item.bill.finalized
                       ? formatDateToLocalString(new Date(item.bill.finalized))
                       : "N/A"}
@@ -186,12 +191,12 @@ function Sales() {
             maxHeight: "400px"
           }}
         >
-          <p style={{ marginTop: "15px" }}>Total Buy Price:</p>
-          <p style={{ fontSize: "18px", color: "#0077cc" }}>Rs.{totalPrice}</p>
-          <p style={{ marginTop: "15px" }}>Total Sale Price:</p>
-          <p style={{ fontSize: "18px", color: "#0077cc" }}>Rs.{totalSalePrice}</p>
-          <p style={{ marginTop: "15px" }}>Total Profit:</p>
-          <p style={{ fontSize: "18px", color: "#0077cc" }}>Rs.{totalProfit}</p>
+          <p style={{ marginTop: "15px",fontSize: "15px" }}>Total Buy Price:</p>
+          <p style={{ fontSize: "14px", color: "#0077cc" }}>Rs.{totalPrice}</p>
+          <p style={{ marginTop: "15px",fontSize: "15px"  }}>Total Sale Price:</p>
+          <p style={{ fontSize: "14px", color: "#0077cc" }}>Rs.{totalSalePrice}</p>
+          <p style={{ marginTop: "15px",fontSize: "15px"  }}>Total Profit:</p>
+          <p style={{ fontSize: "14px", color: "#0077cc" }}>Rs.{totalProfit}</p>
           <button className="searchbutton" style={{float:"right",padding:"10px 25px 10px 25px"}} onClick={handlePrint}>Print</button>
         </div>
       </div>
