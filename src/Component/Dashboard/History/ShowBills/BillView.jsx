@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
 import "./BillView.css";
-
+import logo from "../../../../assets/logo.png";
+import kenwood from "../../../../assets/kenwood.png";
+import jbl from "../../../../assets/jbl.png";
+import pioneer from "../../../../assets/pioneer.png";
+import lenovo from "../../../../assets/lenovo.png";
+import zunavi from "../../../../assets/zunavi.jpeg";
 import { useLocation } from "react-router-dom";
+import { log } from "electron-builder";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 function BillView() {
   const location = useLocation();
@@ -59,7 +65,7 @@ function BillView() {
       <div className="bill-header-custom">
         <div className="bill-header-row">
           <div className="bill-header-logo">
-            <img src="src\assets\RANAWAKA.png" alt="Logo" style={{ height: 75 }} />
+            <img src={logo} alt="Logo" style={{ height: 75 }} />
           </div>
           <div
             className="bill-header-title"
@@ -224,19 +230,19 @@ function BillView() {
       </div>
       <div className="footorimgsection">
         <div className="imgsection">
-          <img src="src\assets\KENWOOD.png" alt="" className="billimg" />
+          <img src={kenwood} alt="" className="billimg" />
         </div>
         <div className="imgsection">
-          <img src="src\assets\JBL.png" alt="" className="billimg" />
+          <img src={jbl} alt="" className="billimg" />
         </div>
         <div className="imgsection">
-          <img src="src\assets\PIONEER.png" alt="" className="billimg" />
+          <img src={pioneer} alt="" className="billimg" />
         </div>
         <div className="imgsection">
-          <img src="src\assets\LENOVO.png" alt="" className="billimg" />
+          <img src={lenovo} alt="" className="billimg" />
         </div>
         <div className="imgsection">
-          <img src="src\assets\ZUNAVI1.jpeg" alt="" className="billimg" />
+          <img src={zunavi} alt="" className="billimg" />
         </div>
       </div>
       <div className="print-footer">Thank you for your business!</div>
