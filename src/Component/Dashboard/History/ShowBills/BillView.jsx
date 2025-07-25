@@ -1,36 +1,34 @@
-import React, { useEffect,useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./BillView.css";
-import headerLogo from "../../../../assets/logo.png";
+
 import { useLocation } from "react-router-dom";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 function BillView() {
-const location = useLocation();
-const {billid, autoprint} = location.state || {};
-const billId = billid || location.state?.billid;
-const autoPrint = autoprint || location.state?.autoprint || false;
+  const location = useLocation();
+  const { billid, autoprint } = location.state || {};
+  const billId = billid || location.state?.billid;
+  const autoPrint = autoprint || location.state?.autoprint || false;
   const token = localStorage.getItem("access_token");
 
-const [bill, setBill] = useState({});
-console.log("Bill ID:", billId);
+  const [bill, setBill] = useState({});
+  console.log("Bill ID:", billId);
 
   useEffect(() => {
     if (billId) {
-      fetch(`${API_BASE_URL}/bills/search?id=${billId}`,{
+      fetch(`${API_BASE_URL}/bills/search?id=${billId}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
       })
-
         .then((res) => res.json())
         .then((data) => setBill(data[0]))
         .catch((err) => console.error("Failed to fetch bill:", err));
     }
   }, [billId]);
-          console.log ("Fetched bill data:", bill);
+  console.log("Fetched bill data:", bill);
 
- 
   useEffect(() => {
     if (autoPrint) {
       setTimeout(() => window.print(), 1500);
@@ -61,7 +59,7 @@ console.log("Bill ID:", billId);
       <div className="bill-header-custom">
         <div className="bill-header-row">
           <div className="bill-header-logo">
-            <img src={headerLogo} alt="Logo" style={{ height: 80 }} />
+            <img src="src\assets\RANAWAKA.png" alt="Logo" style={{ height: 75 }} />
           </div>
           <div
             className="bill-header-title"
@@ -104,7 +102,7 @@ console.log("Bill ID:", billId);
           className="bill-header-contact"
           style={{
             textAlign: "center",
-            fontSize: 9,
+            fontSize: 10,
             fontStyle: "italic",
             color: "#555",
           }}
@@ -165,7 +163,7 @@ console.log("Bill ID:", billId);
               <td>{item.id}</td>
               <td>{item.inventory.id}</td>
               <td>{item.inventory.product.barCode}</td>
-              <td style={{fontSize:11}}>{item.inventory.product.name}</td>
+              <td style={{ fontSize: 11 }}>{item.inventory.product.name}</td>
               <td>{parseFloat(item.unitPrice).toFixed(2)}</td>
               <td>{item.quantity}</td>
               <td>{(item.quantity * parseFloat(item.unitPrice)).toFixed(2)}</td>
@@ -175,7 +173,7 @@ console.log("Bill ID:", billId);
       </table>
       {bill.jobCard?.jobs && bill.jobCard.jobs.length > 0 && (
         <>
-          <h4 style={{ marginTop: 10,fontSize: "13px" }}>Services</h4>
+          <h4 style={{ marginTop: 10, fontSize: "13px" }}>Services</h4>
           <table className="print-table">
             <thead>
               <tr>
@@ -222,6 +220,23 @@ console.log("Bill ID:", billId);
         <div className="signature-field">
           <span className="signature-label">Received</span>
           <div className="signature-line" />
+        </div>
+      </div>
+      <div className="footorimgsection">
+        <div className="imgsection">
+          <img src="src\assets\KENWOOD.png" alt="" className="billimg" />
+        </div>
+        <div className="imgsection">
+          <img src="src\assets\JBL.png" alt="" className="billimg" />
+        </div>
+        <div className="imgsection">
+          <img src="src\assets\PIONEER.png" alt="" className="billimg" />
+        </div>
+        <div className="imgsection">
+          <img src="src\assets\LENOVO.png" alt="" className="billimg" />
+        </div>
+        <div className="imgsection">
+          <img src="src\assets\ZUNAVI1.jpeg" alt="" className="billimg" />
         </div>
       </div>
       <div className="print-footer">Thank you for your business!</div>

@@ -202,3 +202,24 @@
     margin-bottom: 0;
   }
 }
+
+.footorimgsection {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.imgsection {
+  flex:1;
+  display: flex;
+  justify-content: center;
+
+}
+
+.billimg {
+  height: 30px;
+  width: auto;
+  margin: 0 10px;
+  border: none;
+  border-radius: 8px;
+}
