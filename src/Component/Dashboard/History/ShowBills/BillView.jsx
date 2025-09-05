@@ -7,7 +7,7 @@ import pioneer from "../../../../assets/pioneer.png";
 import lenovo from "../../../../assets/lenovo.png";
 import zunavi from "../../../../assets/zunavi.jpeg";
 import { useLocation } from "react-router-dom";
-import { log } from "electron-builder";
+
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 function BillView() {
   const location = useLocation();

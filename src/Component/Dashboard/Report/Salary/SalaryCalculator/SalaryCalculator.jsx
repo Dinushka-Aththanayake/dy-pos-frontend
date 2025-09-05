@@ -91,6 +91,7 @@ function SalaryCalculator() {
       );
 
       const records = await res.json();
+      
 
       // Sort records by time
       // records.sort((a, b) => new Date(a.time) - new Date(b.time));
@@ -111,7 +112,7 @@ function SalaryCalculator() {
 
           const inTime = new Date(inRecord.recorded);
           const outTime = new Date(record.recorded);
-          console.log(inTime, outTime);
+          console.log("Attendance Records:",inTime, outTime);
 
           const noon = new Date(inTime);
           noon.setHours(12, 1, 0, 0);
@@ -122,6 +123,8 @@ function SalaryCalculator() {
           // IN must be before 12:01 PM and OUT must be after 7:00 PM
           if (inTime < noon && outTime > baseTime) {
             let otMinutes = (outTime - baseTime) / (1000 * 60);
+            console.log("OT Minutes:", otMinutes);
+            console.log("totalOTMinutes :", totalOTMinutes);
             if (otMinutes > 0) totalOTMinutes += otMinutes;
           }
         }

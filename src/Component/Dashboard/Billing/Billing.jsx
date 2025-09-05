@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./Billing.css";
-import TextField from "@mui/material/TextField";
-import Autocomplete from "@mui/material/Autocomplete";
+import { Autocomplete, TextField, createFilterOptions } from "@mui/material";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -80,7 +79,6 @@ function Billing() {
       },
     ]
   );
-  console.log("Products:", products);
 
   const [services, setServices] = useState(
     jobCard?.jobs?.map((job) => ({
@@ -138,19 +136,28 @@ function Billing() {
     setDiscount(0);
   };
 
-  useEffect(() => {
-    if (searchTerm.trim() === "") {
-      setFilteredInventory([]);
-    } else {
-      setFilteredInventory(
-        inventory.filter(
-          (item) =>
-            item.product.barCode.toString().includes(searchTerm) ||
-            item.product.name.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-      );
-    }
-  }, [searchTerm, inventory]);
+  const options = useMemo(
+    () => (Array.isArray(inventory) ? inventory : []),
+    [inventory]
+  );
+
+  const filter = useMemo(
+    () =>
+      createFilterOptions({
+        stringify: (item) => {
+          if (!item || !item.product) return "";
+          const { barCode, name, brand } = item.product;
+          return [
+            String(barCode ?? ""),
+            String(name ?? ""),
+            String(brand ?? ""),
+            String(item.sellPrice ?? ""),
+          ].join(" ");
+        },
+        // default ignores case and matches substrings
+      }),
+    []
+  );
 
   const handleAddProduct = (product) => {
     if (!product && !selectedProduct) return;
@@ -316,7 +323,7 @@ function Billing() {
             billId,
             inventoryId: product.inventoryId,
             quantity: product.quantity,
-            unitPrice: product.price-product.discount,
+            unitPrice: product.price - product.discount,
           }),
         });
       }
@@ -435,7 +442,7 @@ function Billing() {
             billId,
             inventoryId: product.inventoryId,
             quantity: product.quantity,
-            unitPrice: product.price-product.discount,
+            unitPrice: product.price - product.discount,
           }),
         });
       }
@@ -556,39 +563,37 @@ function Billing() {
         <div className="item-table-container">
           <div className="search-bar" style={{ width: "100%" }}>
             <Autocomplete
-              options={inventory}
-              getOptionLabel={(item) =>
-                `${item.product.barCode} - ${item.product.name} - Rs.${item.sellPrice} - ${item.product.brand}`
+              // IMPORTANT: only matched options allowed
+              freeSolo={false}
+              options={options}
+              filterOptions={filter}
+              getOptionLabel={(item) => {
+                if (!item || !item.product) return "";
+                const { product, sellPrice } = item;
+                return `${product.barCode} - ${product.name} - Rs.${sellPrice} - ${product.brand}`;
+              }}
+              isOptionEqualToValue={
+                (a, b) => !!a && !!b && a.id === b.id // or product.barCode if unique
               }
-              value={selectedProduct}
-              onChange={(e, newValue) => setSelectedProduct(newValue)}
-              inputValue={searchTerm}
-              onInputChange={(e, newInputValue) => setSearchTerm(newInputValue)}
+              value={selectedProduct ?? null}
+              onChange={(e, newValue) => {
+                setSelectedProduct(newValue);
+              }}
+              inputValue={searchTerm ?? ""}
+              onInputChange={(e, v) => setSearchTerm(v ?? "")}
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  label="Search (Barcode or Name)..."
+                  label="Search (Barcode / Name / Brand)…"
                   variant="outlined"
                   fullWidth
                   size="small"
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      e.preventDefault(); // Prevent default Enter behavior
-                      if (selectedProduct) {
-                        handleAddProduct();
-                        setSelectedProduct(null);
-                      } else if (filteredInventory.length === 1) {
-                        handleAddProduct(filteredInventory[0]);
-                        setSearchTerm("");
-                      }
-                    }
-                  }}
-                  {...params.inputProps}
                 />
               )}
-              blurOnSelect
               clearOnBlur={false}
+              autoHighlight
             />
+
             <button className="search-btn" onClick={() => handleAddProduct()}>
               Add Item
             </button>
