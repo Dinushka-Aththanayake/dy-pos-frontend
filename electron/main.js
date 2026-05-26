@@ -18,7 +18,7 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      devTools: false,
+      devTools: true,
       preload: path.join(__dirname, 'preload.js'), // Add preload script
     },
   });
@@ -29,6 +29,10 @@ function createWindow() {
   });
 
   mainWindow.loadFile(path.join(__dirname, '../dist/index.html'));
+  
+  // Auto-open DevTools in production
+  mainWindow.webContents.openDevTools();
+  
   mainWindow.focus();
 }
 

@@ -9,6 +9,7 @@ import {
   formatDateToTime,
   getTodayDate,
 } from "../../../../utils";
+import { fetchJsonSafe } from "../../../../fetchJsonSafe";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -68,14 +69,13 @@ function NewJobcards() {
   });
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/employees/findAll`, {
+    fetchJsonSafe(`${API_BASE_URL}/employees/findAll`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
     })
-      .then((response) => response.json())
       .then((data) => setEmployee(Array.isArray(data) ? data : []))
       .catch((error) => console.error("Error fetching employees!", error));
   }, []);

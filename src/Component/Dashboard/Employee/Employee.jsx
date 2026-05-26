@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import "./Employee.css";
 import { formatDateToISO } from "../../../utils";
+import { fetchAllEmployees } from "../../../employeeService";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+let API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 // Utility for showing dialogs
 const showDialog = async (options) => {
@@ -27,18 +28,14 @@ const Employee = () => {
   const [selectedType, setSelectedType] = useState("");
   const [message, setMessage] = useState("");
 
+  // Load employees using the dedicated service
   useEffect(() => {
-    const token = localStorage.getItem("access_token");
-    fetch(`${API_BASE_URL}/employees/findAll`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => setEmployee(Array.isArray(data) ? data : []))
-      .catch((error) => console.error("Error fetching employees!", error));
+    fetchAllEmployees()
+      .then((data) => setEmployee(data))
+      .catch((error) => {
+        console.error("Failed to load employees:", error);
+        setEmployee([]);
+      });
   }, []);
 
   const fetchRecords = async () => {
