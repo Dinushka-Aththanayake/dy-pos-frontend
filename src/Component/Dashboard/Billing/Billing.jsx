@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./Billing.css";
-import { Autocomplete, TextField, createFilterOptions } from "@mui/material";
+import { Autocomplete, TextField } from "@mui/material";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -41,7 +41,6 @@ function Billing() {
   const [jobcard, setJobcard] = useState(jobCard);
   const token = localStorage.getItem("access_token");
   const [inventory, setInventory] = useState([]);
-  const [filteredInventory, setFilteredInventory] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [discount, setDiscount] = useState(bill?.discount || 0);
@@ -141,31 +140,55 @@ function Billing() {
     [inventory]
   );
 
-  const filter = useMemo(
-    () =>
-      createFilterOptions({
-        stringify: (item) => {
-          if (!item || !item.product) return "";
-          const { barCode, name, brand } = item.product;
-          return [
-            String(barCode ?? ""),
-            String(name ?? ""),
-            String(brand ?? ""),
-            String(item.sellPrice ?? ""),
-          ].join(" ");
-        },
-        // default ignores case and matches substrings
-      }),
-    []
-  );
+  const normalizeSearchText = useCallback((value) => {
+    return String(value ?? "")
+      .trim()
+      .toLocaleLowerCase()
+      .replace(/["']/g, "")
+      .replace(/[^a-z0-9]+/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+  }, []);
+
+  const filter = useCallback((availableOptions, { inputValue }) => {
+    const normalizedInput = normalizeSearchText(inputValue);
+    const searchWords = normalizedInput.split(" ").filter(Boolean);
+
+    if (searchWords.length === 0) return [];
+
+    return availableOptions
+      .filter((item) => {
+        if (!item?.product) return false;
+
+        const searchableFields = [
+          item.product.barCode,
+          item.product.name,
+          item.product.brand,
+        ].map(normalizeSearchText);
+
+        // Root cause: the old search joined barcode, name, and brand into one
+        // string, so a multi-word query could be satisfied by unrelated
+        // fragments spread across different fields. The fix keeps fields
+        // separate and requires every search word to match the same field.
+        return searchableFields.some((field) =>
+          searchWords.every((word) => field.includes(word))
+        );
+      })
+      .reverse();
+  }, [normalizeSearchText]);
+
+  const trimmedSearchTerm = searchTerm.trim();
+
+  // Keep Autocomplete's option list empty while the input is empty so stale
+  // matches from a previous search cannot remain visible.
+  const filteredOptions = useMemo(() => {
+    if (!trimmedSearchTerm) return [];
+    return filter(options, { inputValue: trimmedSearchTerm });
+  }, [filter, options, trimmedSearchTerm]);
 
   const handleAddProduct = (product) => {
     if (!product && !selectedProduct) return;
     const productToAdd = product || selectedProduct;
-
-    const existingIndex = products.findIndex(
-      (item) => item.barcode === productToAdd.product.barCode
-    );
 
     const newProduct = {
       inventoryId: productToAdd.id,
@@ -176,19 +199,28 @@ function Billing() {
       quantity: 1,
     };
 
-    const updatedProducts = [...products];
-    if (existingIndex !== -1) {
-      updatedProducts[existingIndex].quantity += 1;
-    } else {
-      const emptyIndex = products.findIndex((item) => item.barcode === "");
+    setProducts((currentProducts) => {
+      const existingIndex = currentProducts.findIndex(
+        (item) => item.inventoryId === productToAdd.id
+      );
+      const updatedProducts = currentProducts.map((item) => ({ ...item }));
+
+      if (existingIndex !== -1) {
+        updatedProducts[existingIndex].quantity += 1;
+        return updatedProducts;
+      }
+
+      const emptyIndex = currentProducts.findIndex(
+        (item) => item.barcode === ""
+      );
       if (emptyIndex !== -1) {
         updatedProducts[emptyIndex] = newProduct;
       } else {
         updatedProducts.push(newProduct);
       }
-    }
 
-    setProducts(updatedProducts);
+      return updatedProducts;
+    });
     setSelectedProduct(null);
     setSearchTerm("");
   };
@@ -562,25 +594,36 @@ function Billing() {
         {/* Product Section */}
         <div className="item-table-container">
           <div className="search-bar" style={{ width: "100%" }}>
+          
             <Autocomplete
-              // IMPORTANT: only matched options allowed
+              disablePortal
               freeSolo={false}
-              options={options}
-              filterOptions={filter}
+              options={filteredOptions}
+              filterOptions={(matchingOptions) => matchingOptions}
               getOptionLabel={(item) => {
-                if (!item || !item.product) return "";
+                if (!item?.product) return "";
                 const { product, sellPrice } = item;
                 return `${product.barCode} - ${product.name} - Rs.${sellPrice} - ${product.brand}`;
               }}
-              isOptionEqualToValue={
-                (a, b) => !!a && !!b && a.id === b.id // or product.barCode if unique
+              isOptionEqualToValue={(option, value) =>
+                Boolean(option && value && option.id === value.id)
               }
-              value={selectedProduct ?? null}
-              onChange={(e, newValue) => {
-                setSelectedProduct(newValue);
+              value={selectedProduct}
+              inputValue={searchTerm}
+              open={trimmedSearchTerm.length > 0}
+              openOnFocus={false}
+              onInputChange={(event, value, reason) => {
+                if (reason === "input" || reason === "clear") {
+                  setSearchTerm(value ?? "");
+                  if (!(value ?? "").trim()) setSelectedProduct(null);
+                }
               }}
-              inputValue={searchTerm ?? ""}
-              onInputChange={(e, v) => setSearchTerm(v ?? "")}
+              onChange={(event, newValue) => {
+                if (newValue) handleAddProduct(newValue);
+              }}
+              autoHighlight
+              clearOnBlur={false}
+              sx={{ flex: 1 }}
               renderInput={(params) => (
                 <TextField
                   {...params}
@@ -590,11 +633,17 @@ function Billing() {
                   size="small"
                 />
               )}
-              clearOnBlur={false}
-              autoHighlight
             />
 
-            <button className="search-btn" onClick={() => handleAddProduct()}>
+
+
+            <button
+              className="search-btn"
+              onClick={() => {
+                const [firstMatch] = filteredOptions;
+                if (firstMatch) handleAddProduct(firstMatch);
+              }}
+            >
               Add Item
             </button>
           </div>
